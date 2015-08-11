@@ -27,7 +27,6 @@
       "BabymarktExt\\CronBundle": ""
     }
   },
-  "target-dir": "BabymarktExt/CronBundle",
   "extra": {
     "branch-alias": {
       "dev-master": "master"
