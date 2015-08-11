@@ -7,10 +7,14 @@
  * via any medium is strictly prohibited.
  */
 
-namespace BabymarktExt\CronBundle;
+namespace BabymarktExt\CronBundle\Tests\Writer;
 
-use Symfony\Component\HttpKernel\Bundle\Bundle;
-
-class BabymarktExtCronBundle extends Bundle
-{
-}
+/**
+ * Class CrontabWriterTest
+ * @package BabymarktExt\CronBundle\Tests\Writer
+ * @todo Implement crontab writer tests.
+ */
+//class CrontabWriterTest extends \PHPUnit_Framework_TestCase
+//{
+//
+//}

@@ -7,10 +7,13 @@
  * via any medium is strictly prohibited.
  */
 
-namespace BabymarktExt\CronBundle;
+namespace BabymarktExt\CronBundle\Exception;
 
-use Symfony\Component\HttpKernel\Bundle\Bundle;
-
-class BabymarktExtCronBundle extends Bundle
+/**
+ * Class WriteException
+ * @package BabymarktExt\CronBundle\Exception
+ */
+class WriteException extends \RuntimeException
 {
+
 }

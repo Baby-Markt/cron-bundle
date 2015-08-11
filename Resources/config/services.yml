@@ -1,4 +1,33 @@
 services:
-#    babymarkt_ext_cron.example:
-#        class: BabymarktExt\CronBundle\Example
-#        arguments: [@service_id, "plain_value", %parameter%]
+  babymarkt_ext_cron.service.cronentrygenerator:
+    class: BabymarktExt\CronBundle\Service\CronEntryGenerator
+    arguments: [%babymarkt_ext_cron.definitions%, %babymarkt_ext_cron.defaults%, "%kernel.root_dir%/..", %kernel.environment%]
+
+  babymarkt_ext_cron.service.wrapper.shell:
+    class: BabymarktExt\CronBundle\Service\Wrapper\ShellWrapper
+
+  babymarkt_ext_cron.service.writer.crontab:
+    class: BabymarktExt\CronBundle\Service\Writer\CrontabWriter
+    arguments:
+      - @babymarkt_ext_cron.service.wrapper.shell
+      - %babymarkt_ext_cron.crontab%
+
+  babymarkt_ext_cron.service.reader.crontab:
+    class: BabymarktExt\CronBundle\Service\Reader\CrontabReader
+    arguments:
+      - @babymarkt_ext_cron.service.wrapper.shell
+      - %babymarkt_ext_cron.crontab%
+
+  babymarkt_ext_cron.service.crontabeditor:
+    class: BabymarktExt\CronBundle\Service\CrontabEditor
+    arguments:
+      - '%kernel.root_dir%:%kernel.environment%'
+      - @babymarkt_ext_cron.service.reader.crontab
+      - @babymarkt_ext_cron.service.writer.crontab
+
+  babymarkt_ext_cron.service.executionreporter:
+    class: BabymarktExt\CronBundle\Service\CronReport
+    arguments:
+      - @doctrine.orm.babymarkt_ext_cron_entity_manager
+      - %kernel.environment%
+      - %babymarkt_ext_cron.definitions%

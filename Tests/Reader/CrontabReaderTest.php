@@ -7,10 +7,14 @@
  * via any medium is strictly prohibited.
  */
 
-namespace BabymarktExt\CronBundle;
+namespace BabymarktExt\CronBundle\Tests\Reader;
 
-use Symfony\Component\HttpKernel\Bundle\Bundle;
-
-class BabymarktExtCronBundle extends Bundle
-{
-}
+/**
+ * Class CrontabReaderTest
+ * @package BabymarktExt\CronBundle\Tests\Reader
+ * @todo Implement crontab reader tests.
+ */
+//class CrontabReaderTest extends \PHPUnit_Framework_TestCase
+//{
+//
+//}
