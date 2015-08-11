@@ -27,9 +27,54 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('babymarkt_ext_cron');
 
-        // Here you should define the parameters that are allowed to
-        // configure your bundle. See the documentation linked above for
-        // more information on that topic.
+        $rootNode
+            ->children()
+                ->arrayNode('defaults')
+                    ->children()
+                        ->arrayNode('output')
+                            ->addDefaultsIfNotSet()
+                            ->children()
+                                ->scalarNode('file')->defaultValue('/dev/null')->end()
+                                ->booleanNode('append')->defaultFalse()->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
+                ->arrayNode('crontab')
+                    ->children()
+                        ->scalarNode('bin')->defaultValue('crontab')->end()
+                        ->scalarNode('tmpPath')->defaultValue(sys_get_temp_dir())->end()
+                        ->scalarNode('user')->defaultNull()->end()
+                        ->booleanNode('sudo')->defaultFalse()->end()
+                    ->end()
+                ->end()
+                ->arrayNode('crons')
+                    ->requiresAtLeastOneElement()
+                    ->useAttributeAsKey('name')
+                    ->prototype('array')
+                        ->children()
+                            ->scalarNode('minutes')->defaultValue('*')->end()
+                            ->scalarNode('hours')->defaultValue('*')->end()
+                            ->scalarNode('days')->defaultValue('*')->end()
+                            ->scalarNode('months')->defaultValue('*')->end()
+                            ->scalarNode('weekdays')->defaultValue('*')->end()
+                            ->scalarNode('command')->isRequired()->end()
+                            ->booleanNode('enabled')->defaultTrue()->end()
+                            ->arrayNode('output')
+                                ->addDefaultsIfNotSet()
+                                    ->children()
+                                        ->scalarNode('file')->defaultNull()->end()
+                                        ->booleanNode('append')->defaultNull()->end()
+                                    ->end()
+                                ->end()
+                                ->arrayNode('arguments')
+                                    ->prototype('scalar')
+                                ->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
+            ->end();
 
         return $treeBuilder;
     }
