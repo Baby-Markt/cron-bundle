@@ -1,0 +1,3 @@
+babymarkt_ext_cron_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: BabymarktExtCronBundle:Default:index }
