@@ -40,9 +40,16 @@ class BabymarktExtCronExtension extends Extension
             $loader->load('listener.yml');
         }
 
+        // Define cron block id if not set.
+        $id = $config['options']['id'] ?: sprintf('%s:%s',
+            $container->getParameter('kernel.root_dir'),
+            $container->getParameter('kernel.environment')
+        );
+
         $container->setParameter('babymarkt_ext_cron.definitions', $config['crons']);
-        $container->setParameter('babymarkt_ext_cron.defaults', $config['defaults']);
-        $container->setParameter('babymarkt_ext_cron.crontab', $config['crontab']);
+        $container->setParameter('babymarkt_ext_cron.options.output', $config['options']['output']);
+        $container->setParameter('babymarkt_ext_cron.options.crontab', $config['options']['crontab']);
+        $container->setParameter('babymarkt_ext_cron.options.id', $id);
     }
 
     /**

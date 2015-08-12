@@ -23,13 +23,19 @@ class CronEntryGeneratorTest extends \PHPUnit_Framework_TestCase
         'months'    => '*',
         'weekdays'  => '*',
         'enabled'   => true,
-        'output'    => null,
+        'output'    => [
+            'file'   => null,
+            'append' => null
+        ],
         'command'   => null,
         'arguments' => []
     ];
 
     protected $defaults = [
-        'output' => '/dev/null'
+        'output' => [
+            'file'   => '/dev/null',
+            'append' => false
+        ]
     ];
 
     public function testDefaultValues()
@@ -38,7 +44,7 @@ class CronEntryGeneratorTest extends \PHPUnit_Framework_TestCase
 
         $definition = [
             $key => array_merge($this->definitionDefaults, [
-                'command' => 'babymarkt:test:command'
+                'command' => 'babymarktext:test:command'
             ])
         ];
 
@@ -48,8 +54,8 @@ class CronEntryGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $entries);
         $this->assertArrayHasKey($key, $entries);
         $this->assertEquals(
-            sprintf('* * * * * cd %s; php console --env=%s babymarkt:test:command 2>&1 1>%s',
-                self::ROOT_DIR, self::ENVIRONMENT, $this->defaults['output']),
+            sprintf('* * * * * cd %s; php console --env=%s babymarktext:test:command 2>&1 1>%s',
+                self::ROOT_DIR, self::ENVIRONMENT, $this->defaults['output']['file']),
             $entries[$key]
         );
     }
@@ -60,7 +66,7 @@ class CronEntryGeneratorTest extends \PHPUnit_Framework_TestCase
 
         $definition = [
             $key => array_merge($this->definitionDefaults, [
-                'command' => 'babymarkt:test:command',
+                'command' => 'babymarktext:test:command',
                 'enabled' => false
             ])
         ];
@@ -76,9 +82,9 @@ class CronEntryGeneratorTest extends \PHPUnit_Framework_TestCase
         $key = 'cron-def';
 
         $definition = [
-            $key => array_merge($this->definitionDefaults, [
-                'command' => 'babymarkt:test:command',
-                'output'  => '/var/log/log.log'
+            $key => array_replace_recursive($this->definitionDefaults, [
+                'command' => 'babymarktext:test:command',
+                'output'  => ['file' => '/var/log/log.log']
             ])
         ];
 
@@ -99,7 +105,7 @@ class CronEntryGeneratorTest extends \PHPUnit_Framework_TestCase
                 'days'     => '3',
                 'months'   => '4',
                 'weekdays' => '5',
-                'command'  => 'babymarkt:test:command'
+                'command'  => 'babymarktext:test:command'
             ])
         ];
 
@@ -115,7 +121,7 @@ class CronEntryGeneratorTest extends \PHPUnit_Framework_TestCase
 
         $definition = [
             $key => array_merge($this->definitionDefaults, [
-                'command'   => 'babymarkt:test:command',
+                'command'   => 'babymarktext:test:command',
                 'arguments' => ['--arg=5', '-d']
             ])
         ];
@@ -123,7 +129,7 @@ class CronEntryGeneratorTest extends \PHPUnit_Framework_TestCase
         $generator = new CronEntryGenerator($definition, $this->defaults, self::ROOT_DIR, self::ENVIRONMENT);
         $entries   = $generator->generateEntries();
 
-        $this->assertContains('babymarkt:test:command --arg=5 -d', $entries[$key]);
+        $this->assertContains('babymarktext:test:command --arg=5 -d', $entries[$key]);
     }
 
     /**

@@ -31,7 +31,7 @@ class CronEntryGenerator
     /**
      * @var string
      */
-    protected $defaults;
+    protected $outputOptions;
 
     /**
      * @var string
@@ -41,16 +41,16 @@ class CronEntryGenerator
     /**
      * ListGenerator constructor.
      * @param array $definitions
-     * @param array $defaults
+     * @param array $outputOptions
      * @param string $basedir
      * @param string $environment
      */
-    public function __construct(array $definitions, array $defaults, $basedir, $environment)
+    public function __construct(array $definitions, array $outputOptions, $basedir, $environment)
     {
-        $this->definitions = $definitions;
-        $this->defaults    = $defaults;
-        $this->basedir     = realpath($basedir) ?: $basedir;
-        $this->environment = $environment;
+        $this->definitions   = $definitions;
+        $this->outputOptions = $outputOptions;
+        $this->basedir       = realpath($basedir) ?: $basedir;
+        $this->environment   = $environment;
     }
 
     /**
@@ -111,8 +111,8 @@ class CronEntryGenerator
      */
     protected function getOutputString($output = null)
     {
-        $file   = $output['file'] ?: $this->defaults['output']['file'];
-        $append = $output['append'] ?: $this->defaults['output']['append'];
+        $file   = $output['file'] ?: $this->outputOptions['file'];
+        $append = $output['append'] ?: $this->outputOptions['append'];
 
         if ($append) {
             return sprintf('2>&1 1>>%s', $file);
