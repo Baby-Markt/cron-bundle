@@ -40,6 +40,7 @@ class Configuration implements ConfigurationInterface
                             ->end()
                         ->end()
                         ->arrayNode('crontab')
+                            ->addDefaultsIfNotSet()
                             ->children()
                                 ->scalarNode('bin')->defaultValue('crontab')->end()
                                 ->scalarNode('tmpPath')->defaultValue(sys_get_temp_dir())->end()
