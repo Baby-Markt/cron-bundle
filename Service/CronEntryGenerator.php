@@ -66,7 +66,7 @@ class CronEntryGenerator
                 $entry[] = $this->getIntervalString(
                     $def['minutes'], $def['hours'], $def['days'], $def['months'], $def['weekdays']
                 );
-                $entry[] = $this->getCommandString($def['command']);
+                $entry[] = $this->getCommandString($def);
                 $entry[] = $this->getArgumentsString($def['arguments']);
                 $entry[] = $this->getOutputString($def['output']);
 
@@ -123,19 +123,19 @@ class CronEntryGenerator
 
     /**
      * Returns the command part.
-     * @param string $command
+     * @param string $def
      * @return string
      */
-    protected function getCommandString($command)
+    protected function getCommandString($def)
     {
-        if (empty($command)) {
+        if (!isset($def['command']) || !$def['command']) {
             throw new \InvalidArgumentException('Cron command is required.');
         }
 
         return vsprintf('cd %s; php console --env=%s %s', [
             $this->basedir,
             $this->environment,
-            $command
+            $def['command']
         ]);
     }
 
