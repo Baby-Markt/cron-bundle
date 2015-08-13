@@ -53,7 +53,7 @@ class ShellWrapper implements ShellWrapperInterface
      */
     public function getOutputString()
     {
-        return implode(PHP_EOL, $this->output);
+        return trim(implode(PHP_EOL, $this->output));
     }
 
     /**

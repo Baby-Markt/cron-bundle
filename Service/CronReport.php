@@ -59,17 +59,21 @@ class CronReport
     /**
      * Logs a new cron execution.
      *
-     * @param string $cronAlias
+     * @param string $alias
      * @param float $executionTime
      * @param \DateTime $startTime
      * @param bool $failed
      *
      * @return Execution
      */
-    public function logExecution($cronAlias, $executionTime, \DateTime $startTime, $failed = false)
+    public function logExecution($alias, $executionTime, \DateTime $startTime, $failed = false)
     {
+        if (!array_key_exists($alias, $this->definition)) {
+            throw new \InvalidArgumentException('Unknown cron alias "' . $alias . '"');
+        }
+
         $execution = new Execution();
-        $execution->setAlias($cronAlias)
+        $execution->setAlias($alias)
             ->setEnv($this->environment)
             ->setExecutionTime($executionTime)
             ->setExecutionDatetime($startTime)
@@ -142,6 +146,7 @@ class CronReport
 
     /**
      * @return string
+     * @codeCoverageIgnore
      */
     public function getEnvironment()
     {
@@ -150,6 +155,7 @@ class CronReport
 
     /**
      * @return array
+     * @codeCoverageIgnore
      */
     public function getDefinition()
     {
@@ -159,6 +165,7 @@ class CronReport
     /**
      * @param array $definition
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setDefinition(array $definition)
     {

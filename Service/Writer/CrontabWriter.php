@@ -114,6 +114,7 @@ class CrontabWriter implements CrontabWriterInterface
 
     /**
      * @return array
+     * @codeConverageIgnore
      */
     public function getConfig()
     {

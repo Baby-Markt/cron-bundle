@@ -87,6 +87,7 @@ class CrontabReader implements CrontabReaderInterface
 
     /**
      * @return array
+     * @codeCoverageIgnore
      */
     public function getConfig()
     {

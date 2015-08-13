@@ -2,10 +2,8 @@
 
 namespace BabymarktExt\CronBundle\Tests\Service;
 
-use BabymarktExt\CronBundle\DependencyInjection\BabymarktExtCronExtension;
-use BabymarktExt\CronBundle\DependencyInjection\Configuration;
 use BabymarktExt\CronBundle\Service\CronEntryGenerator;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
+use BabymarktExt\CronBundle\Tests\Fixtures\ContainerTrait;
 
 /**
  * Created by PhpStorm.
@@ -16,35 +14,12 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 class CronEntryGeneratorTest extends \PHPUnit_Framework_TestCase
 {
 
-    const ROOT_DIR    = '/root/dir';
-    const ENVIRONMENT = 'test';
+    use ContainerTrait;
 
     /**
      * @var string
      */
     private $root;
-
-    protected $definitionDefaults = [
-        'minutes'   => '*',
-        'hours'     => '*',
-        'days'      => '*',
-        'months'    => '*',
-        'weekdays'  => '*',
-        'enabled'   => true,
-        'output'    => [
-            'file'   => null,
-            'append' => null
-        ],
-        'command'   => null,
-        'arguments' => []
-    ];
-
-    protected $defaults = [
-        'output' => [
-            'file'   => '/dev/null',
-            'append' => false
-        ]
-    ];
 
     public function testDefaultValues()
     {
@@ -62,14 +37,17 @@ class CronEntryGeneratorTest extends \PHPUnit_Framework_TestCase
         $definitions = $container->getParameter($this->root . '.definitions');
         $outputConf  = $container->getParameter($this->root . '.options.output');
 
-        $generator = new CronEntryGenerator($definitions, $outputConf, self::ROOT_DIR, self::ENVIRONMENT);
+        $rootDir     = $container->getParameter('kernel.root_dir');
+        $environment = $container->getParameter('kernel.environment');
+
+        $generator = new CronEntryGenerator($definitions, $outputConf, $rootDir, $environment);
         $entries   = $generator->generateEntries();
 
         $this->assertCount(1, $entries);
         $this->assertArrayHasKey($key, $entries);
         $this->assertEquals(
             sprintf('* * * * * cd %s; php console --env=%s babymarktext:test:command 2>&1 1>%s',
-                self::ROOT_DIR, self::ENVIRONMENT, $outputConf['file']),
+                $rootDir, $environment, $outputConf['file']),
             $entries[$key]
         );
     }
@@ -87,37 +65,47 @@ class CronEntryGeneratorTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
-        $container   = $this->getContainer($config);
-        $definitions = $container->getParameter($this->root . '.definitions');
-        $outputConf  = $container->getParameter($this->root . '.options.output');
-
-        $generator = new CronEntryGenerator($definitions, $outputConf, self::ROOT_DIR, self::ENVIRONMENT);
+        $generator = $this->createGenerator($config);
         $entries   = $generator->generateEntries();
 
         $this->assertCount(0, $entries);
     }
 
-    public function testIndividualOutputRedirection()
+    public function testOutputRedirection()
     {
-        $key = 'cron_def';
+        $key  = 'cron_def';
+        $key1 = 'cron_append';
+        $key2 = 'cron_replace';
 
         $config = [
             'crons' => [
-                $key => [
+                $key  => [
                     'command' => 'babymarktext:test:command',
                     'output'  => ['file' => '/var/log/log.log']
+                ],
+                $key1 => [
+                    'command' => 'babymarktext:test:command',
+                    'output'  => [
+                        'file'   => 'test',
+                        'append' => true
+                    ]
+                ],
+                $key2 => [
+                    'command' => 'babymarktext:test:command',
+                    'output'  => [
+                        'file'   => 'test',
+                        'append' => false
+                    ]
                 ]
             ]
         ];
 
-        $container   = $this->getContainer($config);
-        $definitions = $container->getParameter($this->root . '.definitions');
-        $outputConf  = $container->getParameter($this->root . '.options.output');
-
-        $generator = new CronEntryGenerator($definitions, $outputConf, self::ROOT_DIR, self::ENVIRONMENT);
+        $generator = $this->createGenerator($config);
         $entries   = $generator->generateEntries();
 
         $this->assertStringEndsWith('2>&1 1>/var/log/log.log', $entries[$key]);
+        $this->assertContains("2>&1 1>>test", $entries[$key1]);
+        $this->assertContains("2>&1 1>test", $entries[$key2]);
     }
 
     public function testCronInterval()
@@ -137,11 +125,7 @@ class CronEntryGeneratorTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
-        $container   = $this->getContainer($config);
-        $definitions = $container->getParameter($this->root . '.definitions');
-        $outputConf  = $container->getParameter($this->root . '.options.output');
-
-        $generator = new CronEntryGenerator($definitions, $outputConf, self::ROOT_DIR, self::ENVIRONMENT);
+        $generator = $this->createGenerator($config);
         $entries   = $generator->generateEntries();
 
         $this->assertStringStartsWith('1 2 3 4 5', $entries[$key]);
@@ -160,11 +144,7 @@ class CronEntryGeneratorTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
-        $container   = $this->getContainer($config);
-        $definitions = $container->getParameter($this->root . '.definitions');
-        $outputConf  = $container->getParameter($this->root . '.options.output');
-
-        $generator = new CronEntryGenerator($definitions, $outputConf, self::ROOT_DIR, self::ENVIRONMENT);
+        $generator = $this->createGenerator($config);
         $entries   = $generator->generateEntries();
 
         $this->assertContains('babymarktext:test:command --arg=5 -d', $entries[$key]);
@@ -192,8 +172,29 @@ class CronEntryGeneratorTest extends \PHPUnit_Framework_TestCase
         // Remove command to test exception
         unset($definitions[$key]['command']);
 
-        $generator = new CronEntryGenerator($definitions, $outputConf, self::ROOT_DIR, self::ENVIRONMENT);
+        $rootDir     = $container->getParameter('kernel.root_dir');
+        $environment = $container->getParameter('kernel.environment');
+
+        $generator = new CronEntryGenerator($definitions, $outputConf, $rootDir, $environment);
         $generator->generateEntries();
+    }
+
+    /**
+     * @param $config
+     * @return CronEntryGenerator
+     */
+    protected function createGenerator($config)
+    {
+        $container   = $this->getContainer($config);
+        $definitions = $container->getParameter($this->root . '.definitions');
+        $outputConf  = $container->getParameter($this->root . '.options.output');
+
+        $rootDir     = $container->getParameter('kernel.root_dir');
+        $environment = $container->getParameter('kernel.environment');
+
+        $generator = new CronEntryGenerator($definitions, $outputConf, $rootDir, $environment);
+
+        return $generator;
     }
 
     /**
@@ -205,23 +206,5 @@ class CronEntryGeneratorTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
 
         $this->root = 'babymarkt_ext_cron';
-    }
-
-
-    /**
-     * @param array $config
-     * @return ContainerBuilder
-     */
-    protected function getContainer($config = [])
-    {
-        $ext  = new BabymarktExtCronExtension();
-        $cont = new ContainerBuilder();
-        $cont->setParameter('kernel.bundles', []);
-        $cont->setParameter('kernel.root_dir', self::ROOT_DIR);
-        $cont->setParameter('kernel.environment', self::ENVIRONMENT);
-
-        $ext->load([$config], $cont);
-
-        return $cont;
     }
 }
