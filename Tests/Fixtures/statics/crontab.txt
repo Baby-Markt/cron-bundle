@@ -1,0 +1,17 @@
+# Crontab comment
+* * * * * /execute/some/command --arg=value -b hello 2>&1 1>/dev/null
+### CRONTAB-EDITOR-START testFoo ###
+1 2 3 4 5 cd /path/to/console1 && php console babymarkt:test:command1 -a --arg=value --env=dev 2>&1 1>/dev/null
+1 2 3 4 5 cd /path/to/console1 && php console babymarkt:test:command2 -a --arg=value --env=dev 2>&1 1>/dev/null
+1 2 3 4 5 cd /path/to/console1 && php console babymarkt:test:command3 -a --arg=value --env=dev 2>&1 1>/dev/null
+### CRONTAB-EDITOR-END testFoo ###
+* * * * * /execute/some/command --arg=value -b hello 2>&1 1>/dev/null
+### CRONTAB-EDITOR-START testBar ###
+1 2 3 4 5 cd /path/to/console2 && php console babymarkt:test:command1 -a --arg=value --env=dev 2>&1 1>/dev/null
+1 2 3 4 5 cd /path/to/console2 && php console babymarkt:test:command2 -a --arg=value --env=dev 2>&1 1>/dev/null
+1 2 3 4 5 cd /path/to/console2 && php console babymarkt:test:command3 -a --arg=value --env=dev 2>&1 1>/dev/null
+### CRONTAB-EDITOR-END testBar ###
+* * * * * /execute/some/command --arg=value -b hello 2>&1 1>/dev/null
+# another comment
+* * * * * /execute/some/command --arg=value -b hello 2>&1 1>/dev/null
+# last line
