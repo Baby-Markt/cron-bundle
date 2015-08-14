@@ -23,6 +23,10 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class ReportCommand extends ContainerAwareCommand
 {
+    const
+        STATUS_DOCTRINE_REQUIRED = 1,
+        STATUS_INVALID_ARGUMENT = 2;
+
     /**
      * Configures the current command.
      */
@@ -57,7 +61,7 @@ class ReportCommand extends ContainerAwareCommand
     {
         if (!$this->getContainer()->getParameter('babymarkt_ext_cron.report.enabled')) {
             $output->writeln('<error>DoctrineBundle is required for cron execution reports.</error>');
-            exit(1);
+            return self::STATUS_DOCTRINE_REQUIRED;
         }
 
         $alias = $input->getArgument('alias');
@@ -68,7 +72,7 @@ class ReportCommand extends ContainerAwareCommand
 
         } else {
             if ($alias) {
-                $this->printAliasReport($input, $output);
+                return $this->printAliasReport($input, $output);
 
             } else {
                 $this->printEnvironmentReport($input, $output);
@@ -87,8 +91,13 @@ class ReportCommand extends ContainerAwareCommand
 
         $result = $report->clearStats();
 
-        if ($result) {
-            $output->writeln('<info>' . $result . ' records for environment "' . $report->getEnvironment() . '" successfully cleared!</info>');
+        if ($result > 0) {
+            if (1 == $result) {
+                $output->writeln('<info>1 record for environment "' . $report->getEnvironment() . '" successfully cleared!</info>');
+
+            } else {
+                $output->writeln('<info>' . $result . ' records for environment "' . $report->getEnvironment() . '" successfully cleared!</info>');
+            }
         } else {
             $this->printNoRecords($output, $report->getEnvironment());
         }
@@ -97,6 +106,7 @@ class ReportCommand extends ContainerAwareCommand
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
+     * @return int status code
      */
     protected function printAliasReport(InputInterface $input, OutputInterface $output)
     {
@@ -122,7 +132,7 @@ class ReportCommand extends ContainerAwareCommand
             }
         } catch (\InvalidArgumentException $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
-            exit(1); // Terminate with error code.
+            return self::STATUS_INVALID_ARGUMENT;
         }
     }
 

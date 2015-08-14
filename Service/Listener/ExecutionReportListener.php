@@ -95,12 +95,10 @@ class ExecutionReportListener
      */
     public function onCronFinished(ConsoleTerminateEvent $event)
     {
-        if (!$this->isCronCommand($event->getCommand()->getName())) {
-            return;
+        if (!$this->skipped) {
+            $this->duration  = microtime(true) - $this->start;
+            $this->execution = $this->reporter->logExecution($this->alias, $this->duration, $this->startDatetime);
         }
-
-        $this->duration  = microtime(true) - $this->start;
-        $this->execution = $this->reporter->logExecution($this->alias, $this->duration, $this->startDatetime);
     }
 
     /**
@@ -108,11 +106,9 @@ class ExecutionReportListener
      */
     public function onCronFailed(ConsoleExceptionEvent $event)
     {
-        if (!$this->isCronCommand($event->getCommand()->getName())) {
-            return;
+        if (!$this->skipped) {
+            $this->execution->setFailed(true);
         }
-
-        $this->execution->setFailed(true);
     }
 
 
@@ -136,6 +132,7 @@ class ExecutionReportListener
     }
 
     /**
+     * @codeCoverageIgnore
      * @return int
      */
     public function getDuration()
@@ -144,6 +141,7 @@ class ExecutionReportListener
     }
 
     /**
+     * @codeCoverageIgnore
      * @return string
      */
     public function getAlias()
@@ -153,6 +151,7 @@ class ExecutionReportListener
 
     /**
      * Returns true if the current command is skipped because its not a cron triggered call.
+     * @codeCoverageIgnore
      * @return bool
      */
     public function isSkipped()

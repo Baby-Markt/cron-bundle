@@ -15,7 +15,7 @@ use Doctrine\ORM\EntityRepository;
 /**
  * Class Repository
  * @package BabymarktExt\CronBundle\Model\Report\Execution
- *
+ * @codeCoverageIgnore
  */
 class ExecutionRepository extends EntityRepository
 {

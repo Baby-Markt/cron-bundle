@@ -11,6 +11,7 @@ namespace BabymarktExt\CronBundle\Tests\Command;
 
 
 use BabymarktExt\CronBundle\Command\DumpCommand;
+use BabymarktExt\CronBundle\Service\CronEntryGenerator;
 use BabymarktExt\CronBundle\Tests\Fixtures\ContainerTrait;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -19,30 +20,31 @@ class DumpCommandTest extends \PHPUnit_Framework_TestCase
 {
     use ContainerTrait;
 
+    const SERVICE_ENTRY_GENERATOR = 'babymarkt_ext_cron.service.cronentrygenerator';
+
     public function testDumpEntries()
     {
+        $container = $this->getContainer();
+
+        $generator = $this->getMockBuilder(CronEntryGenerator::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $generator->expects($this->once())
+            ->method('generateEntries')
+            ->willReturn(['Line1', 'Line2']);
+
+        $container->set(self::SERVICE_ENTRY_GENERATOR, $generator);
+
         $cmd = new DumpCommand();
-        $cmd->setContainer($this->getContainer([
-            'crons' => [
-                'test' => [
-                    'command' => 'babymarkt:test:command'
-                ]
-            ]
-        ]));
+        $cmd->setContainer($container);
 
         $app = new Application();
         $app->add($cmd);
 
-        // Check if command is exists.
-        $command = $app->find('babymarktext:cron:dump');
-        $this->assertInstanceOf(DumpCommand::class, $command);
+        $tester = new CommandTester($app->find('babymarktext:cron:dump'));
+        $tester->execute([]);
 
-        $tester = new CommandTester($command);
-        $tester->execute(['command' => $command->getName()]);
-
-        $this->assertEquals(
-            '* * * * * cd /test/path/..; php console --env=test babymarkt:test:command 2>&1 1>/dev/null',
-            trim($tester->getDisplay())
-        );
+        $this->assertEquals('Line1' . PHP_EOL . 'Line2' . PHP_EOL, $tester->getDisplay());
     }
 }

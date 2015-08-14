@@ -18,6 +18,7 @@ use Doctrine\ORM\Mapping\Table;
 /**
  * Class Execution
  * @package BabymarktExt\CronBundle\Model\Report\Execution
+ * @codeCoverageIgnore
  *
  * @Entity(repositoryClass="BabymarktExt\CronBundle\Entity\Report\ExecutionRepository")
  * @Table(name="babymarkt_ext_cron.executions")

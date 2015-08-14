@@ -18,6 +18,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * This silly test command is only for checking the cron report listener.
  * @package BabymarktExt\CronBundle\Command
+ * @codeCoverageIgnore
  */
 class TestCommand extends ContainerAwareCommand
 {

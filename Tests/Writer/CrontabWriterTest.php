@@ -9,9 +9,10 @@
 
 namespace BabymarktExt\CronBundle\Tests\Writer;
 
-use BabymarktExt\CronBundle\DependencyInjection\BabymarktExtCronExtension;
+use BabymarktExt\CronBundle\Service\Wrapper\ShellWrapper;
 use BabymarktExt\CronBundle\Service\Wrapper\ShellWrapperInterface;
 use BabymarktExt\CronBundle\Service\Writer\CrontabWriter;
+use BabymarktExt\CronBundle\Tests\Fixtures\ContainerTrait;
 use BabymarktExt\CronBundle\Tests\Fixtures\StaticsLoaderTrait;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
@@ -24,7 +25,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  */
 class CrontabWriterTest extends \PHPUnit_Framework_TestCase
 {
-    use StaticsLoaderTrait;
+    use StaticsLoaderTrait, ContainerTrait;
 
     const ROOT_DIR    = '/root/dir';
     const ENVIRONMENT = 'test';
@@ -107,13 +108,33 @@ class CrontabWriterTest extends \PHPUnit_Framework_TestCase
      * @expectedException \BabymarktExt\CronBundle\Exception\AccessDeniedException
      * @expectedExceptionCode 1
      */
-    public function testWriteWillFail()
+    public function testAccessDenied()
     {
         $shell = $this->getShell([], true, 1);
 
         $config = $this->container->getParameter('babymarkt_ext_cron.options.crontab');
 
         $writer = new CrontabWriter($shell, $config);
+        $writer->write(['test']);
+    }
+
+    /**
+     * @expectedException \BabymarktExt\CronBundle\Exception\WriteException
+     * @expectedExceptionMessageRegExp /is not writable.$/
+     */
+    public function testNotWritable()
+    {
+        $container = $this->getContainer([
+            'options' => ['crontab' => ['tmpPath' => vfsStream::url('testpath')]]
+        ]);
+
+        /** @var vfsStreamDirectory $root */
+        $root = vfsStreamWrapper::getRoot();
+        $root->chmod(0444);
+
+        $config = $container->getParameter('babymarkt_ext_cron.options.crontab');
+
+        $writer = new CrontabWriter(new ShellWrapper(), $config);
         $writer->write(['test']);
     }
 
@@ -166,23 +187,6 @@ class CrontabWriterTest extends \PHPUnit_Framework_TestCase
         $shell->method('getErrorCode')->willReturn($errorCode);
 
         return $shell;
-    }
-
-    /**
-     * @param array $config
-     * @return ContainerBuilder
-     */
-    protected function getContainer($config = [])
-    {
-        $ext  = new BabymarktExtCronExtension();
-        $cont = new ContainerBuilder();
-        $cont->setParameter('kernel.bundles', []);
-        $cont->setParameter('kernel.root_dir', self::ROOT_DIR);
-        $cont->setParameter('kernel.environment', self::ENVIRONMENT);
-
-        $ext->load([$config], $cont);
-
-        return $cont;
     }
 
     /**

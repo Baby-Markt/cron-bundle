@@ -26,6 +26,11 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class SyncCommand extends ContainerAwareCommand
 {
+    const
+        STATUS_NOT_WRITABLE = 1,
+        STATUS_ACCESS_DENIED = 2;
+
+
     /**
      * Configures the current command.
      */
@@ -67,17 +72,16 @@ class SyncCommand extends ContainerAwareCommand
         try {
             $editor->injectCrons($entries);
             $output->writeln('<info>' . count($entries) . ' crons successfully synced.</info>');
-            exit(0);
+
         } catch (WriteException $e) {
             $output->writeln('<error>Can\'t write to crontab.</error>');
             $output->writeln($e->getMessage());
-            exit(1);
+            return self::STATUS_NOT_WRITABLE;
+
         } catch (AccessDeniedException $e) {
             $output->writeln('<error>Can\'t access crontab.</error>');
             $output->writeln($e->getMessage());
-            exit(2);
+            return self::STATUS_ACCESS_DENIED;
         }
     }
-
-
 }
