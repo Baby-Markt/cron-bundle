@@ -9,3 +9,10 @@ services:
       - {name: kernel.event_listener, event: console.command, method: onCronStart}
       - {name: kernel.event_listener, event: console.terminate, method: onCronFinished}
       - {name: kernel.event_listener, event: console.exception, method: onCronFailed}
+
+  babymarkt_ext_cron.service.executionreporter:
+      class: BabymarktExt\CronBundle\Service\CronReport
+      arguments:
+        - @doctrine.orm.babymarkt_ext_cron_entity_manager
+        - %kernel.environment%
+        - %babymarkt_ext_cron.definitions%

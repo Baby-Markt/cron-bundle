@@ -27,7 +27,7 @@ class ExecutionRepository extends EntityRepository
     public function getByEnvironment($environment)
     {
         $result = $this->getEntityManager()
-            ->createQuery('SELECT e FROM BabymarktCronBundle:Report\Execution e WHERE e.env = :env ORDER BY e.alias')
+            ->createQuery('SELECT e FROM BabymarktExtCronBundle:Report\Execution e WHERE e.env = :env ORDER BY e.alias')
             ->setParameter('env', $environment)
             ->getResult();
 
@@ -44,7 +44,7 @@ class ExecutionRepository extends EntityRepository
         $qb = $this->getEntityManager()->createQueryBuilder();
 
         $result = $qb
-            ->delete('BabymarktCronBundle:Report\Execution', 'e')
+            ->delete('BabymarktExtCronBundle:Report\Execution', 'e')
             ->andWhere($qb->expr()->eq('e.env', ':env'))
             ->setParameter('env', $environment)
             ->getQuery()
@@ -64,7 +64,7 @@ class ExecutionRepository extends EntityRepository
         $result = $this->getEntityManager()
             ->createQuery('
               SELECT e.executionDatetime, e.executionTime, e.env, e.failed
-              FROM BabymarktCronBundle:Report\Execution e
+              FROM BabymarktExtCronBundle:Report\Execution e
               WHERE e.alias = :alias
               ORDER BY e.executionDatetime DESC')
             ->setParameter('alias', $alias)
@@ -91,9 +91,9 @@ class ExecutionRepository extends EntityRepository
                   MAX(e.executionTime) as max_exec_time,
                   SUM(e.executionTime) as total_exec_time,
                   MAX(e.executionDatetime) as last_exec_datetime,
-                  (SELECT COUNT(ef1) FROM BabymarktCronBundle:Report\Execution ef1 WHERE ef1.failed = true AND ef1.alias = e.alias) as exec_count_failed,
-                  (SELECT MAX(ef2.executionDatetime) FROM BabymarktCronBundle:Report\Execution ef2 WHERE ef2.failed = true AND ef2.alias = e.alias) as last_exec_datetime_failed
-                FROM BabymarktCronBundle:Report\Execution e WHERE e.env = :env AND e.failed = false
+                  (SELECT COUNT(ef1) FROM BabymarktExtCronBundle:Report\Execution ef1 WHERE ef1.failed = true AND ef1.alias = e.alias) as exec_count_failed,
+                  (SELECT MAX(ef2.executionDatetime) FROM BabymarktExtCronBundle:Report\Execution ef2 WHERE ef2.failed = true AND ef2.alias = e.alias) as last_exec_datetime_failed
+                FROM BabymarktExtCronBundle:Report\Execution e WHERE e.env = :env AND e.failed = false
                 GROUP BY e.alias
                 ORDER BY e.alias
             ')
