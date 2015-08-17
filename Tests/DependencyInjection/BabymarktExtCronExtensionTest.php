@@ -62,7 +62,7 @@ class BabymarktExtCronExtensionTest extends \PHPUnit_Framework_TestCase
                     'months'    => '4',
                     'weekdays'  => '5',
                     'command'   => 'babymarktext:cron:test',
-                    'enabled'   => false,
+                    'disabled'  => true,
                     'output'    => ['file' => 'test', 'append' => true],
                     'arguments' => ['test1', 'test2', 'test3']
                 ]
@@ -104,7 +104,7 @@ class BabymarktExtCronExtensionTest extends \PHPUnit_Framework_TestCase
             'months'    => '*',
             'weekdays'  => '*',
             'command'   => 'babymarktext:cron:test',
-            'enabled'   => true,
+            'disabled'  => false,
             'output'    => ['file' => null, 'append' => null],
             'arguments' => []
         ];

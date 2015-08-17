@@ -60,7 +60,7 @@ class CronEntryGeneratorTest extends \PHPUnit_Framework_TestCase
             'crons' => [
                 $key => [
                     'command' => 'babymarktext:test:command',
-                    'enabled' => false
+                    'disabled' => true
                 ]
             ]
         ];

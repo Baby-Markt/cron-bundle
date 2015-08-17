@@ -47,7 +47,7 @@ class CronReportTest extends \PHPUnit_Framework_TestCase
         'days'      => '*',
         'months'    => '*',
         'weekdays'  => '*',
-        'enabled'   => true,
+        'disabled'  => false,
         'output'    => null,
         'command'   => null,
         'arguments' => []

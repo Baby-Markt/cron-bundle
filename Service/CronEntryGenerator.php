@@ -61,7 +61,7 @@ class CronEntryGenerator
         $entries = [];
 
         foreach ($this->definitions as $key => $def) {
-            if ($def['enabled']) {
+            if (!$def['disabled']) {
                 $entry   = [];
                 $entry[] = $this->getIntervalString(
                     $def['minutes'], $def['hours'], $def['days'], $def['months'], $def['weekdays']

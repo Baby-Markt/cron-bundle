@@ -65,8 +65,8 @@ Cron definition for weekdays. Defaults to "*".
 #### command
 The symfony command which will be executed.
 
-#### enabled
-If false, the cron will not be synced to crontab. Defaults to "true".
+#### disabled
+If true, the cron will not be synced to crontab. Defaults to "false".
 
 #### arguments
 A list of command arguments.
