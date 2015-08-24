@@ -2,6 +2,7 @@
 
 namespace BabymarktExt\CronBundle\Tests\Service;
 
+use BabymarktExt\CronBundle\Entity\Cron\Definition;
 use BabymarktExt\CronBundle\Service\CronEntryGenerator;
 use BabymarktExt\CronBundle\Tests\Fixtures\ContainerTrait;
 
@@ -40,7 +41,15 @@ class CronEntryGeneratorTest extends \PHPUnit_Framework_TestCase
         $rootDir     = $container->getParameter('kernel.root_dir');
         $environment = $container->getParameter('kernel.environment');
 
-        $generator = new CronEntryGenerator($definitions, $outputConf, $rootDir, $environment);
+        $generator = new CronEntryGenerator(
+            array_map(
+                function ($def) {
+                    return new Definition($def);
+                },
+                $definitions
+            ),
+            $outputConf, $rootDir, $environment
+        );
         $entries   = $generator->generateEntries();
 
         $this->assertCount(1, $entries);
@@ -59,7 +68,7 @@ class CronEntryGeneratorTest extends \PHPUnit_Framework_TestCase
         $config = [
             'crons' => [
                 $key => [
-                    'command' => 'babymarktext:test:command',
+                    'command'  => 'babymarktext:test:command',
                     'disabled' => true
                 ]
             ]
@@ -165,12 +174,20 @@ class CronEntryGeneratorTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
-        $container   = $this->getContainer($config);
+        $container = $this->getContainer($config);
+        /** @var Definition[] $definitions */
         $definitions = $container->getParameter($this->root . '.definitions');
         $outputConf  = $container->getParameter($this->root . '.options.output');
 
+        $definitions = array_map(
+            function ($def) {
+                return new Definition($def);
+            },
+            $definitions
+        );
+
         // Remove command to test exception
-        unset($definitions[$key]['command']);
+        $definitions[$key]->setCommand(null);
 
         $rootDir     = $container->getParameter('kernel.root_dir');
         $environment = $container->getParameter('kernel.environment');
@@ -191,6 +208,13 @@ class CronEntryGeneratorTest extends \PHPUnit_Framework_TestCase
 
         $rootDir     = $container->getParameter('kernel.root_dir');
         $environment = $container->getParameter('kernel.environment');
+
+        $definitions = array_map(
+            function ($def) {
+                return new Definition($def);
+            },
+            $definitions
+        );
 
         $generator = new CronEntryGenerator($definitions, $outputConf, $rootDir, $environment);
 

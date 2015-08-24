@@ -9,6 +9,7 @@
 
 namespace BabymarktExt\CronBundle\Service;
 
+use BabymarktExt\CronBundle\Entity\Cron\Definition;
 use BabymarktExt\CronBundle\Entity\Report\Execution;
 use BabymarktExt\CronBundle\Entity\Report\ExecutionRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -31,21 +32,21 @@ class CronReport
     protected $environment;
 
     /**
-     * @var array
+     * @var Definition[]
      */
-    protected $definition;
+    protected $definitions;
 
     /**
      * ReportWriter constructor.
      * @param EntityManagerInterface $em
      * @param string $environment
-     * @param array $definition
+     * @param array $definitions
      */
-    public function __construct(EntityManagerInterface $em, $environment, array $definition)
+    public function __construct(EntityManagerInterface $em, $environment, array $definitions)
     {
         $this->em          = $em;
         $this->environment = $environment;
-        $this->definition  = $definition;
+        $this->definitions = $definitions;
     }
 
     /**
@@ -68,7 +69,7 @@ class CronReport
      */
     public function logExecution($alias, $executionTime, \DateTime $startTime, $failed = false)
     {
-        if (!array_key_exists($alias, $this->definition)) {
+        if (!array_key_exists($alias, $this->definitions)) {
             throw new \InvalidArgumentException('Unknown cron alias "' . $alias . '"');
         }
 
@@ -97,8 +98,8 @@ class CronReport
         foreach ($execReport as &$exec) {
             $aliasPosition = array_search('alias', array_keys($exec)) + 1;
 
-            if (isset($this->definition[$exec['alias']])) {
-                $command = $this->definition[$exec['alias']]['command'];
+            if (isset($this->definitions[$exec['alias']])) {
+                $command = $this->definitions[$exec['alias']]->getCommand();
 
             } else {
                 // Cron definition is missing. Cannot read command.
@@ -133,7 +134,7 @@ class CronReport
      */
     public function createAliasReport($alias, $limit = null)
     {
-        if (!array_key_exists($alias, $this->definition)) {
+        if (!array_key_exists($alias, $this->definitions)) {
             throw new \InvalidArgumentException('Unknown cron alias "' . $alias . '"');
         }
 
@@ -157,19 +158,19 @@ class CronReport
      * @return array
      * @codeCoverageIgnore
      */
-    public function getDefinition()
+    public function getDefinitions()
     {
-        return $this->definition;
+        return $this->definitions;
     }
 
     /**
-     * @param array $definition
+     * @param array $definitions
      * @return $this
      * @codeCoverageIgnore
      */
-    public function setDefinition(array $definition)
+    public function setDefinitions(array $definitions)
     {
-        $this->definition = $definition;
+        $this->definitions = $definitions;
         return $this;
     }
 

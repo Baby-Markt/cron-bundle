@@ -61,7 +61,7 @@ class BabymarktExtCronExtensionTest extends \PHPUnit_Framework_TestCase
                     'days'      => '3',
                     'months'    => '4',
                     'weekdays'  => '5',
-                    'command'   => 'babymarktext:cron:test',
+                    'command'   => 'babymarktext:cron:validate',
                     'disabled'  => true,
                     'output'    => ['file' => 'test', 'append' => true],
                     'arguments' => ['test1', 'test2', 'test3']
@@ -74,7 +74,11 @@ class BabymarktExtCronExtensionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($config['options']['output'], $this->container->getParameter($this->root . '.options.output'));
         $this->assertEquals($config['options']['crontab'], $this->container->getParameter($this->root . '.options.crontab'));
         $this->assertEquals($config['options']['id'], $this->container->getParameter($this->root . '.options.id'));
-        $this->assertEquals($config['crons'], $this->container->getParameter($this->root . '.definitions'));
+
+        foreach ($this->container->getParameter($this->root . '.definitions') as $alias => $def) {
+            $this->assertArrayHasKey($alias, $config['crons']);
+            $this->assertEquals($config['crons'][$alias], $def);
+        }
     }
 
     /**
@@ -103,7 +107,7 @@ class BabymarktExtCronExtensionTest extends \PHPUnit_Framework_TestCase
             'days'      => '*',
             'months'    => '*',
             'weekdays'  => '*',
-            'command'   => 'babymarktext:cron:test',
+            'command'   => 'babymarktext:cron:validate',
             'disabled'  => false,
             'output'    => ['file' => null, 'append' => null],
             'arguments' => []
@@ -111,7 +115,7 @@ class BabymarktExtCronExtensionTest extends \PHPUnit_Framework_TestCase
 
         $configs = [
             'crons' => [
-                'test-cron' => array_replace_recursive(['command' => 'babymarktext:cron:test'], $definition)
+                'test-cron' => array_replace_recursive(['command' => 'babymarktext:cron:validate'], $definition)
             ]
         ];
 

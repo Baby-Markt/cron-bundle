@@ -8,6 +8,7 @@
  */
 
 namespace BabymarktExt\CronBundle\Service;
+use BabymarktExt\CronBundle\Entity\Cron\Definition;
 
 /**
  * Class ListGenerator
@@ -18,7 +19,7 @@ class CronEntryGenerator
 
     /**
      * Cron configuration
-     * @var array
+     * @var Definition[]
      */
     protected $definitions;
 
@@ -60,17 +61,21 @@ class CronEntryGenerator
     {
         $entries = [];
 
-        foreach ($this->definitions as $key => $def) {
-            if (!$def['disabled']) {
+        foreach ($this->definitions as $alias => $def) {
+            if (!$def->isDisabled()) {
                 $entry   = [];
                 $entry[] = $this->getIntervalString(
-                    $def['minutes'], $def['hours'], $def['days'], $def['months'], $def['weekdays']
+                    $def->getMinutes(),
+                    $def->getHours(),
+                    $def->getDays(),
+                    $def->getMonths(),
+                    $def->getWeekdays()
                 );
                 $entry[] = $this->getCommandString($def);
-                $entry[] = $this->getArgumentsString($def['arguments']);
-                $entry[] = $this->getOutputString($def['output']);
+                $entry[] = $this->getArgumentsString($def->getArguments());
+                $entry[] = $this->getOutputString($def->getOutput());
 
-                $entries[$key] = implode(' ', array_filter($entry));
+                $entries[$alias] = implode(' ', array_filter($entry));
             }
         }
 
@@ -123,20 +128,99 @@ class CronEntryGenerator
 
     /**
      * Returns the command part.
-     * @param string $def
+     * @param Definition $def
      * @return string
      */
-    protected function getCommandString($def)
+    protected function getCommandString(Definition $def)
     {
-        if (!isset($def['command']) || !$def['command']) {
+        if (empty($def->getCommand())) {
             throw new \InvalidArgumentException('Cron command is required.');
         }
 
         return vsprintf('cd %s; php console --env=%s %s', [
             $this->basedir,
             $this->environment,
-            $def['command']
+            $def->getCommand()
         ]);
     }
 
+    /**
+     * @codeCoverageIgnore
+     * @return Definition[]
+     */
+    public function getDefinitions()
+    {
+        return $this->definitions;
+    }
+
+    /**
+     * @codeCoverageIgnore
+     * @param Definition[] $definitions
+     * @return $this
+     */
+    public function setDefinitions(array $definitions)
+    {
+        $this->definitions = $definitions;
+        return $this;
+    }
+
+    /**
+     * @codeCoverageIgnore
+     * @return string
+     */
+    public function getBasedir()
+    {
+        return $this->basedir;
+    }
+
+    /**
+     * @codeCoverageIgnore
+     * @param string $basedir
+     * @return $this
+     */
+    public function setBasedir($basedir)
+    {
+        $this->basedir = realpath($basedir) ?: $basedir;
+        return $this;
+    }
+
+    /**
+     * @codeCoverageIgnore
+     * @return string
+     */
+    public function getOutputOptions()
+    {
+        return $this->outputOptions;
+    }
+
+    /**
+     * @codeCoverageIgnore
+     * @param string $outputOptions
+     * @return $this
+     */
+    public function setOutputOptions($outputOptions)
+    {
+        $this->outputOptions = $outputOptions;
+        return $this;
+    }
+
+    /**
+     * @codeCoverageIgnore
+     * @return string
+     */
+    public function getEnvironment()
+    {
+        return $this->environment;
+    }
+
+    /**
+     * @codeCoverageIgnore
+     * @param string $environment
+     * @return $this
+     */
+    public function setEnvironment($environment)
+    {
+        $this->environment = $environment;
+        return $this;
+    }
 }

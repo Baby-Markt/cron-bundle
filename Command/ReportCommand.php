@@ -87,7 +87,7 @@ class ReportCommand extends ContainerAwareCommand
     protected function printClearStats(OutputInterface $output)
     {
         /** @var CronReport $report */
-        $report = $this->getContainer()->get('babymarkt_ext_cron.service.executionreporter');
+        $report = $this->getContainer()->get('babymarkt_ext_cron.service.cronreport');
 
         $result = $report->clearStats();
 
@@ -111,7 +111,7 @@ class ReportCommand extends ContainerAwareCommand
     protected function printAliasReport(InputInterface $input, OutputInterface $output)
     {
         /** @var CronReport $report */
-        $report = $this->getContainer()->get('babymarkt_ext_cron.service.executionreporter');
+        $report = $this->getContainer()->get('babymarkt_ext_cron.service.cronreport');
 
         $alias = $input->getArgument('alias');
         try {
@@ -143,7 +143,7 @@ class ReportCommand extends ContainerAwareCommand
     protected function printEnvironmentReport(InputInterface $input, OutputInterface $output)
     {
         /** @var CronReport $report */
-        $report = $this->getContainer()->get('babymarkt_ext_cron.service.executionreporter');
+        $report = $this->getContainer()->get('babymarkt_ext_cron.service.cronreport');
 
         $result = $report->createEnvironmentReport();
 

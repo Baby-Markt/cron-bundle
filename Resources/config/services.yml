@@ -1,7 +1,15 @@
 services:
+  babymarkt_ext_cron.service.cronentrygenerator.factory:
+    class: BabymarktExt\CronBundle\Service\Factory\CronEntryGeneratorFactory
+    arguments:
+      - %babymarkt_ext_cron.definitions%
+      - %babymarkt_ext_cron.options.output%
+      - "%kernel.root_dir%/.."
+      - %kernel.environment%
+
   babymarkt_ext_cron.service.cronentrygenerator:
     class: BabymarktExt\CronBundle\Service\CronEntryGenerator
-    arguments: [%babymarkt_ext_cron.definitions%, %babymarkt_ext_cron.options.output%, "%kernel.root_dir%/..", %kernel.environment%]
+    factory: [@babymarkt_ext_cron.service.cronentrygenerator.factory, createWithDefinitions]
 
   babymarkt_ext_cron.service.wrapper.shell:
     class: BabymarktExt\CronBundle\Service\Wrapper\ShellWrapper
@@ -24,5 +32,8 @@ services:
       - %babymarkt_ext_cron.options.id%
       - @babymarkt_ext_cron.service.reader.crontab
       - @babymarkt_ext_cron.service.writer.crontab
+
+  babymarkt_ext_cron.service.definitionchecker:
+    class: BabymarktExt\CronBundle\Service\DefinitionChecker
 
 

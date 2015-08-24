@@ -2,6 +2,7 @@
 
 namespace BabymarktExt\CronBundle\Tests\Listener;
 
+use BabymarktExt\CronBundle\Entity\Cron\Definition;
 use BabymarktExt\CronBundle\Entity\Report\Execution;
 use BabymarktExt\CronBundle\Service\CronReport;
 use BabymarktExt\CronBundle\Service\Listener\ExecutionReportListener;
@@ -76,7 +77,10 @@ class ExecutionReportListenerTest extends \PHPUnit_Framework_TestCase
         ]);
 
         $reporter = new ExecutionReportListener(
-            $container->getParameter('babymarkt_ext_cron.definitions'),
+            array_map(
+                function ($def) {return new Definition($def);},
+                $container->getParameter('babymarkt_ext_cron.definitions')
+            ),
             $this->reporter
         );
 
@@ -103,7 +107,10 @@ class ExecutionReportListenerTest extends \PHPUnit_Framework_TestCase
         ]);
 
         $reporter = new ExecutionReportListener(
-            $container->getParameter('babymarkt_ext_cron.definitions'),
+            array_map(
+                function ($def) {return new Definition($def);},
+                $container->getParameter('babymarkt_ext_cron.definitions')
+            ),
             $this->reporter
         );
 
@@ -128,7 +135,10 @@ class ExecutionReportListenerTest extends \PHPUnit_Framework_TestCase
         ]);
 
         $reporter = new ExecutionReportListener(
-            $container->getParameter('babymarkt_ext_cron.definitions'),
+            array_map(
+                function ($def) {return new Definition($def);},
+                $container->getParameter('babymarkt_ext_cron.definitions')
+            ),
             $this->reporter
         );
 

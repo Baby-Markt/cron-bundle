@@ -9,11 +9,13 @@
 
 namespace BabymarktExt\CronBundle\Service\Listener;
 
+use BabymarktExt\CronBundle\Entity\Cron\Definition;
 use BabymarktExt\CronBundle\Entity\Report\Execution;
 use BabymarktExt\CronBundle\Service\CronReport;
 use Symfony\Component\Console\Event\ConsoleCommandEvent;
 use Symfony\Component\Console\Event\ConsoleExceptionEvent;
 use Symfony\Component\Console\Event\ConsoleTerminateEvent;
+use Symfony\Component\Console\Input\InputInterface;
 
 /**
  * Listen for console command events and create a cron execution entry.
@@ -46,9 +48,9 @@ class ExecutionReportListener
 
     /**
      * Cron's definition
-     * @var array
+     * @var Definition[]
      */
-    protected $definition;
+    protected $definitions;
 
     /**
      * @var bool
@@ -67,12 +69,12 @@ class ExecutionReportListener
 
     /**
      * ExecutionReportListener constructor.
-     * @param array $definition
+     * @param array $definitions
      * @param CronReport $reporter
      */
-    public function __construct(array $definition, CronReport $reporter)
+    public function __construct(array $definitions, CronReport $reporter)
     {
-        $this->definition    = $definition;
+        $this->definitions   = $definitions;
         $this->reporter      = $reporter;
         $this->startDatetime = new \DateTime();
     }
@@ -82,7 +84,7 @@ class ExecutionReportListener
      */
     public function onCronStart(ConsoleCommandEvent $event)
     {
-        if (!$this->isCronCommand($event->getCommand()->getName())) {
+        if (!$this->isCronCommand($event->getCommand()->getName(), $event->getInput())) {
             $this->skipped = true;
             return;
         }
@@ -117,11 +119,11 @@ class ExecutionReportListener
      * @param string $command
      * @return bool
      */
-    protected function isCronCommand($command)
+    protected function isCronCommand($command, InputInterface $input)
     {
-        foreach ($this->definition as $alias => $cron) {
-            if ($cron['command']) {
-                if ($command == $cron['command']) {
+        foreach ($this->definitions as $alias => $def) {
+            if ($def->getCommand()) {
+                if ($command == $def->getCommand()) {
                     $this->alias = $alias;
                     return true;
                 }
@@ -158,5 +160,15 @@ class ExecutionReportListener
     {
         return $this->skipped;
     }
+
+    /**
+     * @codeCoverageIgnore
+     * @return \BabymarktExt\CronBundle\Entity\Cron\Definition[]
+     */
+    public function getDefinitions()
+    {
+        return $this->definitions;
+    }
+
 
 }

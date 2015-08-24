@@ -9,6 +9,7 @@
 
 namespace BabymarktExt\CronBundle\Tests\Service;
 
+use BabymarktExt\CronBundle\Entity\Cron\Definition;
 use BabymarktExt\CronBundle\Entity\Report\Execution;
 use BabymarktExt\CronBundle\Entity\Report\ExecutionRepository;
 use BabymarktExt\CronBundle\Service\CronReport;
@@ -223,10 +224,17 @@ class CronReportTest extends \PHPUnit_Framework_TestCase
             'def2' => ['command' => 'babymarkt:test:command2']
         ]]);
 
+        $definitions = array_map(
+            function ($def) {
+                return new Definition($def);
+            },
+            $this->container->getParameter('babymarkt_ext_cron.definitions')
+        );
+
         $this->report = new CronReport(
             $entityManager,
             $this->container->getParameter('kernel.environment'),
-            $this->container->getParameter('babymarkt_ext_cron.definitions')
+            $definitions
         );
 
         $this->entityManager = $entityManager;

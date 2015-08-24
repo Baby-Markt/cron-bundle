@@ -27,7 +27,7 @@ class ReportCommandTest extends \PHPUnit_Framework_TestCase
         getContainer as parentGetContainer;
     }
 
-    const SERVICE_CRON_REPORT  = 'babymarkt_ext_cron.service.executionreporter';
+    const SERVICE_CRON_REPORT  = 'babymarkt_ext_cron.service.cronreport';
     const PARAM_REPORT_ENABLED = 'babymarkt_ext_cron.report.enabled';
 
     protected function getContainer($config = [])
