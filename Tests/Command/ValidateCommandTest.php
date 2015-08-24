@@ -105,6 +105,36 @@ class ValidateCommandTest extends \PHPUnit_Framework_TestCase
         $this->assertContains(DefinitionChecker::RESULT_INCORRECT_COMMAND, $tester->getDisplay());
     }
 
+    public function testDisabledDefinition()
+    {
+        $checkerStub = $this->getMockBuilder(DefinitionChecker::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $checkerStub->expects($this->never())
+            ->method('check');
+
+        $checkerStub->expects($this->never())
+            ->method('getResult');
+
+        $config = [
+            'crons' => [
+                'test' => ['command' => 'some:command', 'disabled' => true]
+            ]
+        ];
+
+        $container = $this->getContainer($config);
+        $container->set(self::SERVICE_DEF_CHECKER, $checkerStub);
+
+        $tester = $this->getTester($container);
+        $tester->execute([]);
+
+        $this->assertEmpty($tester->getStatusCode());
+        $this->assertContains('test', $tester->getDisplay());
+        $this->assertContains('some:command', $tester->getDisplay());
+        $this->assertContains('Disabled', $tester->getDisplay());
+    }
+
     public function testNoDefinitionsFound()
     {
         $checkerStub = $this->getMockBuilder(DefinitionChecker::class)

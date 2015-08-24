@@ -67,19 +67,27 @@ class ValidateCommand extends ContainerAwareCommand
             foreach ($definitions as $alias => $definition) {
                 $definition = new Definition($definition);
 
-                if (!$checker->check($definition)) {
+                if ($definition->isDisabled()) {
                     $resultList[] = [
                         'alias'   => $alias,
                         'command' => $definition->getCommand(),
-                        'result'  => '<error>' . $checker->getResult() . '</error>'
+                        'result'  => '<comment>Disabled</comment>'
                     ];
-                    $errorFound   = true;
                 } else {
-                    $resultList[] = [
-                        'alias'   => $alias,
-                        'command' => $definition->getCommand(),
-                        'result'  => '<info>OK</info>'
-                    ];
+                    if (!$checker->check($definition)) {
+                        $resultList[] = [
+                            'alias'   => $alias,
+                            'command' => $definition->getCommand(),
+                            'result'  => '<error>' . $checker->getResult() . '</error>'
+                        ];
+                        $errorFound   = true;
+                    } else {
+                        $resultList[] = [
+                            'alias'   => $alias,
+                            'command' => $definition->getCommand(),
+                            'result'  => '<info>OK</info>'
+                        ];
+                    }
                 }
             }
 
