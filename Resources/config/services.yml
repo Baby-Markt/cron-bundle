@@ -9,7 +9,7 @@ services:
 
   babymarkt_ext_cron.service.cronentrygenerator:
     class: BabymarktExt\CronBundle\Service\CronEntryGenerator
-    factory: [@babymarkt_ext_cron.service.cronentrygenerator.factory, createWithDefinitions]
+    factory: [@babymarkt_ext_cron.service.cronentrygenerator.factory, create]
 
   babymarkt_ext_cron.service.wrapper.shell:
     class: BabymarktExt\CronBundle\Service\Wrapper\ShellWrapper
