@@ -71,8 +71,8 @@ class ReportCommandTest extends \PHPUnit_Framework_TestCase
         $tester = $this->getTester($container);
         $tester->execute([]);
 
-        $this->assertContains('DoctrineBundle is required', $tester->getDisplay());
-        $this->assertEquals(ReportCommand::STATUS_DOCTRINE_REQUIRED, $tester->getStatusCode());
+        $this->assertContains('is disabled', $tester->getDisplay());
+        $this->assertEquals(ReportCommand::STATUS_REPORTING_DISABLED, $tester->getStatusCode());
     }
 
     /**

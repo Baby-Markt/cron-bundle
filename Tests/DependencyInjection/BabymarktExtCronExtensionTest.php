@@ -54,6 +54,9 @@ class BabymarktExtCronExtensionTest extends \PHPUnit_Framework_TestCase
                     'sudo'    => true
                 ]
             ],
+            'report' => [
+                'enabled' => true
+            ],
             'crons'   => [
                 'test_cron' => [
                     'minutes'   => '1',
@@ -138,13 +141,14 @@ class BabymarktExtCronExtensionTest extends \PHPUnit_Framework_TestCase
             $this->container->registerExtension($doctrineExtension);
             $this->container->setParameter('kernel.bundles', ['DoctrineBundle' => $doctrineExtension]);
 
-            $this->extension->load([], $this->container);
+            $this->extension->load([['report' => ['enabled' => true]]], $this->container);
             $this->extension->prepend($this->container);
 
-            $this->assertTrue($this->container->hasParameter($this->root . '.database_driver'));
-            $this->assertTrue($this->container->hasParameter($this->root . '.database_user'));
-            $this->assertTrue($this->container->hasParameter($this->root . '.database_password'));
-            $this->assertTrue($this->container->hasParameter($this->root . '.database_path'));
+            $this->assertTrue($this->container->getParameter($this->root . '.report.enabled'));
+            $this->assertTrue($this->container->hasParameter($this->root . '.report.database.driver'));
+            $this->assertTrue($this->container->hasParameter($this->root . '.report.database.user'));
+            $this->assertTrue($this->container->hasParameter($this->root . '.report.database.password'));
+            $this->assertTrue($this->container->hasParameter($this->root . '.report.database.path'));
 
             $config = $this->container->getExtensionConfig('doctrine')[0];
 
@@ -166,10 +170,11 @@ class BabymarktExtCronExtensionTest extends \PHPUnit_Framework_TestCase
         $this->extension->load([], $this->container);
         $this->extension->prepend($this->container);
 
-        $this->assertFalse($this->container->hasParameter($this->root . '.database_driver'));
-        $this->assertFalse($this->container->hasParameter($this->root . '.database_user'));
-        $this->assertFalse($this->container->hasParameter($this->root . '.database_password'));
-        $this->assertFalse($this->container->hasParameter($this->root . '.database_path'));
+        $this->assertFalse($this->container->getParameter($this->root . '.report.enabled'));
+        $this->assertFalse($this->container->hasParameter($this->root . '.report.database.driver'));
+        $this->assertFalse($this->container->hasParameter($this->root . '.report.database.user'));
+        $this->assertFalse($this->container->hasParameter($this->root . '.report.database.password'));
+        $this->assertFalse($this->container->hasParameter($this->root . '.report.database.path'));
 
         $this->assertCount(0, $this->container->getExtensionConfig('doctrine'));
 

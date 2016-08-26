@@ -33,21 +33,31 @@ class BabymarktExtCronExtension extends Extension implements PrependExtensionInt
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');
 
-        // Check if Doctrine is available.
+        // Check if Doctrine is available and reporting is enabled.
         $availableBundles = $container->getParameter('kernel.bundles');
-        $container->setParameter('babymarkt_ext_cron.report.enabled', isset($availableBundles['DoctrineBundle']));
+        $container->setParameter(
+            'babymarkt_ext_cron.report.enabled',
+            isset($availableBundles['DoctrineBundle']) && $config['report']['enabled']
+        );
 
-        if (isset($availableBundles['DoctrineBundle'])) {
+        // Only enable reporting if parameter is set to true.
+        if ($container->getParameter('babymarkt_ext_cron.report.enabled')) {
             $loader->load('services.report.yml');
+
+            $container->setParameter('babymarkt_ext_cron.report.database.user', $config['report']['database']['user']);
+            $container->setParameter('babymarkt_ext_cron.report.database.password', $config['report']['database']['password']);
+            $container->setParameter('babymarkt_ext_cron.report.database.path', $config['report']['database']['path']);
         }
 
         // Define cron block id if not set.
-        $id = $config['options']['id'] ?: sprintf('%s:%s',
+        $id = $config['options']['id'] ?: sprintf(
+            '%s:%s',
             $container->getParameter('kernel.root_dir'),
             $container->getParameter('kernel.environment')
         );
 
         $container->setParameter('babymarkt_ext_cron.definitions', $config['crons']);
+
         $container->setParameter('babymarkt_ext_cron.options.output', $config['options']['output']);
         $container->setParameter('babymarkt_ext_cron.options.crontab', $config['options']['crontab']);
         $container->setParameter('babymarkt_ext_cron.options.id', $id);
@@ -60,9 +70,7 @@ class BabymarktExtCronExtension extends Extension implements PrependExtensionInt
      */
     public function prepend(ContainerBuilder $container)
     {
-        $bundles = $container->getParameter('kernel.bundles');
-
-        if (isset($bundles['DoctrineBundle'])) {
+        if ($container->getParameter('babymarkt_ext_cron.report.enabled')) {
             $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
             $loader->load('doctrine.yml');
         }

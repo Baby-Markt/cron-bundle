@@ -19,12 +19,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class ReportCommand
+ *
  * @package BabymarktExt\CronBundle\Command
  */
 class ReportCommand extends ContainerAwareCommand
 {
     const
-        STATUS_DOCTRINE_REQUIRED = 1,
+        STATUS_REPORTING_DISABLED = 1,
         STATUS_INVALID_ARGUMENT = 2;
 
     /**
@@ -48,7 +49,7 @@ class ReportCommand extends ContainerAwareCommand
      * execute() method, you set the code to execute by passing
      * a Closure to the setCode() method.
      *
-     * @param InputInterface $input An InputInterface instance
+     * @param InputInterface  $input An InputInterface instance
      * @param OutputInterface $output An OutputInterface instance
      *
      * @return null|int null or 0 if everything went fine, or an error code
@@ -60,8 +61,11 @@ class ReportCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         if (!$this->getContainer()->getParameter('babymarkt_ext_cron.report.enabled')) {
-            $output->writeln('<error>DoctrineBundle is required for cron execution reports.</error>');
-            return self::STATUS_DOCTRINE_REQUIRED;
+            $output->writeln(
+                '<error>Reporting is disabled either to configuration or DoctrineBundle is not loaded</error>'
+            );
+
+            return self::STATUS_REPORTING_DISABLED;
         }
 
         $alias = $input->getArgument('alias');
@@ -82,6 +86,7 @@ class ReportCommand extends ContainerAwareCommand
 
     /**
      * Clears the report stats.
+     *
      * @param OutputInterface $output
      */
     protected function printClearStats(OutputInterface $output)
@@ -93,10 +98,15 @@ class ReportCommand extends ContainerAwareCommand
 
         if ($result > 0) {
             if (1 == $result) {
-                $output->writeln('<info>1 record for environment "' . $report->getEnvironment() . '" successfully cleared!</info>');
+                $output->writeln(
+                    '<info>1 record for environment "' . $report->getEnvironment() . '" successfully cleared!</info>'
+                );
 
             } else {
-                $output->writeln('<info>' . $result . ' records for environment "' . $report->getEnvironment() . '" successfully cleared!</info>');
+                $output->writeln(
+                    '<info>' . $result . ' records for environment "' . $report->getEnvironment(
+                    ) . '" successfully cleared!</info>'
+                );
             }
         } else {
             $this->printNoRecords($output, $report->getEnvironment());
@@ -104,8 +114,9 @@ class ReportCommand extends ContainerAwareCommand
     }
 
     /**
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
+     *
      * @return int status code
      */
     protected function printAliasReport(InputInterface $input, OutputInterface $output)
@@ -132,12 +143,13 @@ class ReportCommand extends ContainerAwareCommand
             }
         } catch (\InvalidArgumentException $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
+
             return self::STATUS_INVALID_ARGUMENT;
         }
     }
 
     /**
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
      */
     protected function printEnvironmentReport(InputInterface $input, OutputInterface $output)
@@ -153,9 +165,20 @@ class ReportCommand extends ContainerAwareCommand
         } else {
             if (count($result)) {
                 $table = new Table($output);
-                $table->setHeaders([
-                    'Alias', 'Command', 'Count', 'Avg', 'Min', 'Max', 'Total', 'Last run', 'Failed count', 'Last failed'
-                ]);
+                $table->setHeaders(
+                    [
+                        'Alias',
+                        'Command',
+                        'Count',
+                        'Avg',
+                        'Min',
+                        'Max',
+                        'Total',
+                        'Last run',
+                        'Failed count',
+                        'Last failed',
+                    ]
+                );
                 $table->addRows($result);
                 $table->render();
             } else {
@@ -166,8 +189,9 @@ class ReportCommand extends ContainerAwareCommand
 
     /**
      * Writes a "no records found" message to output.
+     *
      * @param OutputInterface $output
-     * @param null $env
+     * @param null            $env
      */
     protected function printNoRecords(OutputInterface $output, $env = null)
     {

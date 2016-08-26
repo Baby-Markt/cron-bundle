@@ -83,22 +83,22 @@ class CrontabWriterTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 $this->getShell([], false, 0, true),
-                clone $this->container,
+                $this->container,
                 []
             ],
             [
                 $this->getShell(['sudo' => true]),
-                clone $this->container,
+                $this->container,
                 ['test']
             ],
             [
                 $this->getShell(['user' => 'testuser']),
-                clone $this->container,
+                $this->container,
                 ['test']
             ],
             [
                 $this->getShell(['bin' => '/check/this/out/crontab']),
-                clone $this->container,
+                $this->container,
                 ['test']
             ]
         ];

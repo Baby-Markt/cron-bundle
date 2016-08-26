@@ -1,17 +1,14 @@
 parameters:
-  babymarkt_ext_cron.database_driver: pdo_sqlite
-  babymarkt_ext_cron.database_user: crons
-  babymarkt_ext_cron.database_password: $secret
-  babymarkt_ext_cron.database_path: '%kernel.root_dir%/../data/babymarkt_ext_cron.sqlite'
+  babymarkt_ext_cron.report.database.driver: pdo_sqlite
 
 doctrine:
   dbal:
     connections:
       babymarkt_ext_cron:
-        driver: %babymarkt_ext_cron.database_driver%
-        user: %babymarkt_ext_cron.database_user%
-        password: %babymarkt_ext_cron.database_password%
-        path: %babymarkt_ext_cron.database_path%
+        driver: %babymarkt_ext_cron.report.database.driver%
+        user: %babymarkt_ext_cron.report.database.user%
+        password: %babymarkt_ext_cron.report.database.password%
+        path: %babymarkt_ext_cron.report.database.path%
   orm:
     entity_managers:
       babymarkt_ext_cron:
