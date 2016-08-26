@@ -70,7 +70,9 @@ class BabymarktExtCronExtension extends Extension implements PrependExtensionInt
      */
     public function prepend(ContainerBuilder $container)
     {
-        if ($container->getParameter('babymarkt_ext_cron.report.enabled')) {
+        $bundles = $container->getParameter('kernel.bundles');
+
+        if (isset($bundles['DoctrineBundle'])) {
             $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
             $loader->load('doctrine.yml');
         }
