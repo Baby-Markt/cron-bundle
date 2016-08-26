@@ -2,7 +2,7 @@ parameters:
   babymarkt_ext_cron.database_driver: pdo_sqlite
   babymarkt_ext_cron.database_user: crons
   babymarkt_ext_cron.database_password: $secret
-  babymarkt_ext_cron.database_path: '%%kernel.root_dir%/../data/babymarkt_ext_cron.sqlite'
+  babymarkt_ext_cron.database_path: '%kernel.root_dir%/../data/babymarkt_ext_cron.sqlite'
 
 doctrine:
   dbal:
