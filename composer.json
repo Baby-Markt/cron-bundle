@@ -1,6 +1,6 @@
 {
-  "name": "babymarktext/cron-bundle",
-  "description": "Symfony CronBundle",
+  "name": "babymarkt/cron-bundle",
+  "description": "A simple Symfony cron bundle to edit the system crontab.",
   "type": "symfony-bundle",
   "keywords": [
     "Cron",
@@ -12,7 +12,7 @@
   "authors": [
     {
       "name": "Niklas Funke",
-      "email": "funke@baby-markt.de"
+      "email": "funke@babymarkt.de"
     }
   ],
   "require": {
@@ -29,11 +29,6 @@
   "autoload": {
     "psr-4": {
       "BabymarktExt\\CronBundle\\": ""
-    }
-  },
-  "extra": {
-    "branch-alias": {
-      "dev-master": "master"
     }
   }
 }
