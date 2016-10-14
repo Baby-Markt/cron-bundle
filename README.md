@@ -1,4 +1,4 @@
-# CronBundle
+# CronBundle [![Build Status](https://travis-ci.org/Baby-Markt/cron-bundle.svg?branch=master)](https://travis-ci.org/Baby-Markt/cron-bundle)
 A small bundle to manage cron entries in system crontab.
 
 ## Commands
