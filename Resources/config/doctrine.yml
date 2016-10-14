@@ -8,10 +8,10 @@ doctrine:
   dbal:
     connections:
       babymarkt_ext_cron:
-        driver: %babymarkt_ext_cron.report.database.driver%
-        user: %babymarkt_ext_cron.report.database.user%
-        password: %babymarkt_ext_cron.report.database.password%
-        path: %babymarkt_ext_cron.report.database.path%
+        driver: "%babymarkt_ext_cron.report.database.driver%"
+        user: "%babymarkt_ext_cron.report.database.user%"
+        password: "%babymarkt_ext_cron.report.database.password%"
+        path: "%babymarkt_ext_cron.report.database.path%"
   orm:
     entity_managers:
       babymarkt_ext_cron:

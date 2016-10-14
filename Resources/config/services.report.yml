@@ -2,13 +2,13 @@ services:
   babymarkt_ext_cron.listener.executionreport.factory:
     class: BabymarktExt\CronBundle\Service\Factory\ExecutionReportListenerFactory
     arguments:
-      - %babymarkt_ext_cron.definitions%
-      - @babymarkt_ext_cron.service.cronreport
+      - "%babymarkt_ext_cron.definitions%"
+      - "@babymarkt_ext_cron.service.cronreport"
 
   # This listener should only be registered if DoctrineBundle is installed.
   babymarkt_ext_cron.listener.executionreport:
     class: BabymarktExt\CronBundle\Service\Listener\ExecutionReportListener
-    factory: [@babymarkt_ext_cron.listener.executionreport.factory, create]
+    factory: ["@babymarkt_ext_cron.listener.executionreport.factory", create]
     tags:
       - {name: kernel.event_listener, event: console.command, method: onCronStart}
       - {name: kernel.event_listener, event: console.terminate, method: onCronFinished}
@@ -17,10 +17,10 @@ services:
   babymarkt_ext_cron.service.cronreport.factory:
     class: BabymarktExt\CronBundle\Service\Factory\CronReportFactory
     arguments:
-      - @doctrine.orm.babymarkt_ext_cron_entity_manager
-      - %kernel.environment%
-      - %babymarkt_ext_cron.definitions%
+      - "@doctrine.orm.babymarkt_ext_cron_entity_manager"
+      - "%kernel.environment%"
+      - "%babymarkt_ext_cron.definitions%"
 
   babymarkt_ext_cron.service.cronreport:
     class: BabymarktExt\CronBundle\Service\CronReport
-    factory: [@babymarkt_ext_cron.service.cronreport.factory, create]
+    factory: ["@babymarkt_ext_cron.service.cronreport.factory", create]
