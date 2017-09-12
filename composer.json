@@ -7,7 +7,7 @@
     "Crontab",
     "Symfony2"
   ],
-  "homepage": "https://github.com/Baby-Markt/CronBundle",
+  "homepage": "https://github.com/Baby-Markt/cron-bundle",
   "license": "MIT",
   "authors": [
     {
