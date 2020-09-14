@@ -100,7 +100,7 @@ class CrontabEditor
         $inBlock        = false;
 
         foreach ($crontab as $line) {
-            if (strpos($start, $line) !== false) {
+            if (!empty($line) && strpos($start, $line) !== false) {
                 $inBlock = true;
             }
 
@@ -108,7 +108,7 @@ class CrontabEditor
                 $cleanedCrontab[] = $line;
             }
 
-            if (strpos($end, $line) !== false) {
+            if (!empty($line) && strpos($end, $line) !== false) {
                 $inBlock = false;
             }
         }
