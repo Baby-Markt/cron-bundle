@@ -5,6 +5,7 @@ namespace BabymarktExt\CronBundle\Tests\Service;
 use BabymarktExt\CronBundle\Entity\Cron\Definition;
 use BabymarktExt\CronBundle\Service\CronEntryGenerator;
 use BabymarktExt\CronBundle\Tests\Fixtures\ContainerTrait;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Created by PhpStorm.
@@ -12,7 +13,7 @@ use BabymarktExt\CronBundle\Tests\Fixtures\ContainerTrait;
  * Date: 05.08.15
  * Time: 13:34
  */
-class CronEntryGeneratorTest extends \PHPUnit_Framework_TestCase
+class CronEntryGeneratorTest extends TestCase
 {
 
     use ContainerTrait;
@@ -113,8 +114,8 @@ class CronEntryGeneratorTest extends \PHPUnit_Framework_TestCase
         $entries   = $generator->generateEntries();
 
         $this->assertStringEndsWith('2>&1 1>/var/log/log.log', $entries[$key]);
-        $this->assertContains("2>&1 1>>test", $entries[$key1]);
-        $this->assertContains("2>&1 1>test", $entries[$key2]);
+        $this->assertStringContainsString("2>&1 1>>test", $entries[$key1]);
+        $this->assertStringContainsString("2>&1 1>test", $entries[$key2]);
     }
 
     public function testCronInterval()
@@ -156,14 +157,12 @@ class CronEntryGeneratorTest extends \PHPUnit_Framework_TestCase
         $generator = $this->createGenerator($config);
         $entries   = $generator->generateEntries();
 
-        $this->assertContains('babymarktext:test:command --arg=5 -d', $entries[$key]);
+        $this->assertStringContainsString('babymarktext:test:command --arg=5 -d', $entries[$key]);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testNoCommandSupplied()
     {
+        $this->expectException(\InvalidArgumentException::class);
         $key = 'cron_def';
 
         $config = [
@@ -225,7 +224,7 @@ class CronEntryGeneratorTest extends \PHPUnit_Framework_TestCase
      * Sets up the fixture, for example, open a network connection.
      * This method is called before a test is executed.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

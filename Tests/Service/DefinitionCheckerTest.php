@@ -12,10 +12,11 @@ namespace BabymarktExt\CronBundle\Tests\Service;
 
 use BabymarktExt\CronBundle\Entity\Cron\Definition;
 use BabymarktExt\CronBundle\Service\DefinitionChecker;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 
-class DefinitionCheckerTest extends \PHPUnit_Framework_TestCase
+class DefinitionCheckerTest extends TestCase
 {
 
     /**
@@ -27,7 +28,7 @@ class DefinitionCheckerTest extends \PHPUnit_Framework_TestCase
      * Sets up the fixture, for example, open a network connection.
      * This method is called before a test is executed.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $command = new Command('test:command');
 

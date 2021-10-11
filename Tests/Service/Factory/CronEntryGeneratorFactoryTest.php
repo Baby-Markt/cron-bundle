@@ -14,8 +14,9 @@ use BabymarktExt\CronBundle\Entity\Cron\Definition;
 use BabymarktExt\CronBundle\Service\CronEntryGenerator;
 use BabymarktExt\CronBundle\Service\Factory\CronEntryGeneratorFactory;
 use BabymarktExt\CronBundle\Tests\Fixtures\ContainerTrait;
+use PHPUnit\Framework\TestCase;
 
-class CronEntryGeneratorFactoryTest extends \PHPUnit_Framework_TestCase
+class CronEntryGeneratorFactoryTest extends TestCase
 {
     use ContainerTrait;
 

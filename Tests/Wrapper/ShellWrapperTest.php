@@ -26,10 +26,10 @@ namespace BabymarktExt\CronBundle\Service\Wrapper {
 
 namespace BabymarktExt\CronBundle\Tests\Wrapper {
 
-
     use BabymarktExt\CronBundle\Service\Wrapper\ShellWrapper;
+    use PHPUnit\Framework\TestCase;
 
-    class ShellWrapperTest extends \PHPUnit_Framework_TestCase
+    class ShellWrapperTest extends TestCase
     {
 
         public function testCommandExecution()

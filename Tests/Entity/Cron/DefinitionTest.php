@@ -11,8 +11,9 @@ namespace BabymarktExt\CronBundle\Tests\Entity\Cron;
 
 
 use BabymarktExt\CronBundle\Entity\Cron\Definition;
+use PHPUnit\Framework\TestCase;
 
-class DefinitionTest extends \PHPUnit_Framework_TestCase
+class DefinitionTest extends TestCase
 {
 
     protected $properties = [
@@ -49,12 +50,10 @@ class DefinitionTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Unknown property unknown given.
-     */
     public function testInvalidProperty()
     {
+        $this->expectExceptionMessage("Unknown property unknown given.");
+        $this->expectException(\InvalidArgumentException::class);
         $def = new Definition();
         $def->setProperties(['unknown' => 'value']);
     }

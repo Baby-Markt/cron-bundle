@@ -13,10 +13,11 @@ namespace BabymarktExt\CronBundle\Tests\Command;
 use BabymarktExt\CronBundle\Command\DumpCommand;
 use BabymarktExt\CronBundle\Service\CronEntryGenerator;
 use BabymarktExt\CronBundle\Tests\Fixtures\ContainerTrait;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class DumpCommandTest extends \PHPUnit_Framework_TestCase
+class DumpCommandTest extends TestCase
 {
     use ContainerTrait;
 

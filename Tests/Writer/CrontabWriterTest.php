@@ -17,17 +17,19 @@ use BabymarktExt\CronBundle\Tests\Fixtures\StaticsLoaderTrait;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
 use org\bovigo\vfs\vfsStreamWrapper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * Class CrontabWriterTest
  * @package BabymarktExt\CronBundle\Tests\Writer
  */
-class CrontabWriterTest extends \PHPUnit_Framework_TestCase
+class CrontabWriterTest extends TestCase
 {
     use StaticsLoaderTrait, ContainerTrait;
 
-    const ROOT_DIR    = '/root/dir';
+    const ROOT_DIR = '/root/dir';
     const ENVIRONMENT = 'test';
 
     /**
@@ -53,7 +55,6 @@ class CrontabWriterTest extends \PHPUnit_Framework_TestCase
             // Last parameter is the temp file with lines to write.
             $file = substr($command, 6 + strrpos($command, 'vfs://'));
 
-            /** @noinspection PhpUndefinedMethodInspection */
             $vfsContent = vfsStreamWrapper::getRoot()->getChild($file)->getContent();
 
             $this->assertEquals(implode(PHP_EOL, $lines), trim($vfsContent));
@@ -77,7 +78,10 @@ class CrontabWriterTest extends \PHPUnit_Framework_TestCase
         $writer->write($lines);
     }
 
-    public function commandGenerationData()
+    /**
+     * @return array[]
+     */
+    public function commandGenerationData(): array
     {
         // The container has to be cloned because each getShell() call creates a new instance with different settings.
         return [
@@ -104,12 +108,10 @@ class CrontabWriterTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    /**
-     * @expectedException \BabymarktExt\CronBundle\Exception\AccessDeniedException
-     * @expectedExceptionCode 1
-     */
     public function testAccessDenied()
     {
+        $this->expectExceptionCode(1);
+        $this->expectException(\BabymarktExt\CronBundle\Exception\AccessDeniedException::class);
         $shell = $this->getShell([], true, 1);
 
         $config = $this->container->getParameter('babymarkt_ext_cron.options.crontab');
@@ -118,12 +120,10 @@ class CrontabWriterTest extends \PHPUnit_Framework_TestCase
         $writer->write(['test']);
     }
 
-    /**
-     * @expectedException \BabymarktExt\CronBundle\Exception\WriteException
-     * @expectedExceptionMessageRegExp /is not writable.$/
-     */
     public function testNotWritable()
     {
+        $this->expectException(\BabymarktExt\CronBundle\Exception\WriteException::class);
+        $this->expectExceptionMessageMatches("/is not writable.$/");
         $container = $this->getContainer([
             'options' => ['crontab' => ['tmpPath' => vfsStream::url('testpath')]]
         ]);
@@ -143,7 +143,7 @@ class CrontabWriterTest extends \PHPUnit_Framework_TestCase
      * @param bool $failed
      * @param int $errorCode
      * @param bool $empty
-     * @return ShellWrapperInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return ShellWrapperInterface|MockObject
      */
     protected function getShell(array $crontabConfig = [], $failed = false, $errorCode = 0, $empty = false)
     {
@@ -193,7 +193,7 @@ class CrontabWriterTest extends \PHPUnit_Framework_TestCase
      * Sets up the fixture, for example, open a network connection.
      * This method is called before a test is executed.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         vfsStreamWrapper::register();
         vfsStreamWrapper::setRoot(new vfsStreamDirectory('testpath'));

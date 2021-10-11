@@ -13,20 +13,21 @@ use BabymarktExt\CronBundle\DependencyInjection\BabymarktExtCronExtension;
 use BabymarktExt\CronBundle\Service\Reader\CrontabReader;
 use BabymarktExt\CronBundle\Service\Wrapper\ShellWrapperInterface;
 use BabymarktExt\CronBundle\Tests\Fixtures\StaticsLoaderTrait;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * Class CrontabReaderTest
  * @package BabymarktExt\CronBundle\Tests\Reader
  */
-class CrontabReaderTest extends \PHPUnit_Framework_TestCase
+class CrontabReaderTest extends TestCase
 {
 
     use StaticsLoaderTrait;
 
     const ROOT_DIR    = '/root/dir';
     const ENVIRONMENT = 'test';
-
 
     /**
      * @var ContainerBuilder
@@ -49,12 +50,10 @@ class CrontabReaderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->loadStaticFixture('crontab.txt'), implode(PHP_EOL, $result));
     }
 
-    /**
-     * @expectedException \BabymarktExt\CronBundle\Exception\AccessDeniedException
-     * @expectedExceptionCode 1
-     */
     public function testReadWillFail()
     {
+        $this->expectExceptionCode(1);
+        $this->expectException(\BabymarktExt\CronBundle\Exception\AccessDeniedException::class);
         $shell = $this->getShell([], true, 1);
 
         $config = $this->container->getParameter('babymarkt_ext_cron.options.crontab');
@@ -106,7 +105,7 @@ class CrontabReaderTest extends \PHPUnit_Framework_TestCase
      * @param array $crontabConfig
      * @param bool $failed
      * @param int $errorCode
-     * @return ShellWrapperInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return ShellWrapperInterface|MockObject
      */
     protected function getShell(array $crontabConfig = [], $failed = false, $errorCode = 0)
     {

@@ -11,13 +11,14 @@ namespace BabymarktExt\CronBundle\Tests\DependencyInjection;
 
 use BabymarktExt\CronBundle\DependencyInjection\BabymarktExtCronExtension;
 use Doctrine\Bundle\DoctrineBundle\DependencyInjection\DoctrineExtension;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * Class BabymarktExtCronExtensionTest
  * @package BabymarktExt\CronBundle\Tests\DependencyInjection
  */
-class BabymarktExtCronExtensionTest extends \PHPUnit_Framework_TestCase
+class BabymarktExtCronExtensionTest extends TestCase
 {
 
     /**
@@ -53,9 +54,6 @@ class BabymarktExtCronExtensionTest extends \PHPUnit_Framework_TestCase
                     'user'    => 'test',
                     'sudo'    => true
                 ]
-            ],
-            'report' => [
-                'enabled' => true
             ],
             'crons'   => [
                 'test_cron' => [
@@ -100,7 +98,7 @@ class BabymarktExtCronExtensionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param $definition
-     * @dataProvider cronDefenitionData
+     * @dataProvider cronDefinitionData
      */
     public function testDefaultCronDefinition($definition)
     {
@@ -131,61 +129,10 @@ class BabymarktExtCronExtensionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     *
-     */
-    public function testDoctrineEnabledConfig()
-    {
-        if (class_exists(DoctrineExtension::class)) {
-            $doctrineExtension = new DoctrineExtension();
-            $doctrineExtension->load([], $this->container);
-            $this->container->registerExtension($doctrineExtension);
-            $this->container->setParameter('kernel.bundles', ['DoctrineBundle' => $doctrineExtension]);
-
-            $this->extension->load([['report' => ['enabled' => true]]], $this->container);
-            $this->extension->prepend($this->container);
-
-            $this->assertTrue($this->container->getParameter($this->root . '.report.enabled'));
-            $this->assertTrue($this->container->hasParameter($this->root . '.report.database.driver'));
-            $this->assertTrue($this->container->hasParameter($this->root . '.report.database.user'));
-            $this->assertTrue($this->container->hasParameter($this->root . '.report.database.password'));
-            $this->assertTrue($this->container->hasParameter($this->root . '.report.database.path'));
-
-            $config = $this->container->getExtensionConfig('doctrine')[0];
-
-            $this->assertArrayHasKey($this->root, $config['dbal']['connections']);
-            $this->assertArrayHasKey($this->root, $config['orm']['entity_managers']);
-            $this->assertEquals($this->root, $config['orm']['entity_managers'][$this->root]['connection']);
-
-            $this->assertContains($this->root . '.listener.executionreport', $this->container->getServiceIds());
-        } else {
-            $this->markTestSkipped('DoctrineBundle not found.');
-        }
-    }
-
-    /**
-     *
-     */
-    public function testDoctrineDisabledConfig()
-    {
-        $this->extension->load([], $this->container);
-        $this->extension->prepend($this->container);
-
-        $this->assertFalse($this->container->getParameter($this->root . '.report.enabled'));
-        $this->assertFalse($this->container->hasParameter($this->root . '.report.database.driver'));
-        $this->assertFalse($this->container->hasParameter($this->root . '.report.database.user'));
-        $this->assertFalse($this->container->hasParameter($this->root . '.report.database.password'));
-        $this->assertFalse($this->container->hasParameter($this->root . '.report.database.path'));
-
-        $this->assertCount(0, $this->container->getExtensionConfig('doctrine'));
-
-        $this->assertNotContains($this->root . '.listener.executionreport', $this->container->getServiceIds());
-    }
-
-    /**
      * Sets up the fixture, for example, open a network connection.
      * This method is called before a test is executed.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -202,7 +149,7 @@ class BabymarktExtCronExtensionTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function cronDefenitionData()
+    public function cronDefinitionData(): array
     {
         return [
             [

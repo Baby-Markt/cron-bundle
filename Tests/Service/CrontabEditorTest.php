@@ -7,14 +7,16 @@ namespace BabymarktExt\CronBundle\Tests\Service;
 use BabymarktExt\CronBundle\Service\CrontabEditor;
 use BabymarktExt\CronBundle\Service\Reader\CrontabReaderInterface;
 use BabymarktExt\CronBundle\Tests\Fixtures\BufferedWriter;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CrontabEditorTest extends \PHPUnit_Framework_TestCase
+class CrontabEditorTest extends TestCase
 {
 
     public function testRemovingCrons()
     {
         /**
-         * @var CrontabReaderInterface|\PHPUnit_Framework_MockObject_MockObject $reader
+         * @var CrontabReaderInterface|MockObject $reader
          */
         $reader = $this->getMockBuilder(CrontabReaderInterface::class)->getMock();
         $writer = new BufferedWriter();
@@ -46,7 +48,7 @@ class CrontabEditorTest extends \PHPUnit_Framework_TestCase
     public function testRemovingCronsWithMultipleBlocks()
     {
         /**
-         * @var CrontabReaderInterface|\PHPUnit_Framework_MockObject_MockObject $reader
+         * @var CrontabReaderInterface|MockObject $reader
          */
         $reader = $this->getMockBuilder(CrontabReaderInterface::class)->getMock();
         $writer = new BufferedWriter();
@@ -81,7 +83,7 @@ class CrontabEditorTest extends \PHPUnit_Framework_TestCase
     public function testUpdateExistingCronsBlock()
     {
         /**
-         * @var CrontabReaderInterface|\PHPUnit_Framework_MockObject_MockObject $reader
+         * @var CrontabReaderInterface|MockObject $reader
          */
         $reader = $this->getMockBuilder(CrontabReaderInterface::class)->getMock();
         $writer = new BufferedWriter();
@@ -118,7 +120,7 @@ class CrontabEditorTest extends \PHPUnit_Framework_TestCase
     public function testInjectingCrons()
     {
         /**
-         * @var CrontabReaderInterface|\PHPUnit_Framework_MockObject_MockObject $reader
+         * @var CrontabReaderInterface|MockObject $reader
          */
         $reader = $this->getMockBuilder(CrontabReaderInterface::class)->getMock();
         $writer = new BufferedWriter();
@@ -149,7 +151,7 @@ class CrontabEditorTest extends \PHPUnit_Framework_TestCase
     public function testStrposEmptyNeedle()
     {
         /**
-         * @var CrontabReaderInterface|\PHPUnit_Framework_MockObject_MockObject $reader
+         * @var CrontabReaderInterface|MockObject $reader
          */
         $reader = $this->getMockBuilder(CrontabReaderInterface::class)->getMock();
         $writer = new BufferedWriter();

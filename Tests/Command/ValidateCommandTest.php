@@ -14,11 +14,12 @@ use BabymarktExt\CronBundle\Command\ValidateCommand;
 use BabymarktExt\CronBundle\Entity\Cron\Definition;
 use BabymarktExt\CronBundle\Service\DefinitionChecker;
 use BabymarktExt\CronBundle\Tests\Fixtures\ContainerTrait;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class ValidateCommandTest extends \PHPUnit_Framework_TestCase
+class ValidateCommandTest extends TestCase
 {
     use ContainerTrait;
 
@@ -67,9 +68,9 @@ class ValidateCommandTest extends \PHPUnit_Framework_TestCase
         $tester->execute([]);
 
         $this->assertEmpty($tester->getStatusCode());
-        $this->assertContains('test', $tester->getDisplay());
-        $this->assertContains('some:command', $tester->getDisplay());
-        $this->assertContains('OK', $tester->getDisplay());
+        $this->assertStringContainsString('test', $tester->getDisplay());
+        $this->assertStringContainsString('some:command', $tester->getDisplay());
+        $this->assertStringContainsString('OK', $tester->getDisplay());
     }
 
     public function testInvalidDefinition()
@@ -100,9 +101,9 @@ class ValidateCommandTest extends \PHPUnit_Framework_TestCase
         $tester->execute([]);
 
         $this->assertEquals(1, $tester->getStatusCode());
-        $this->assertContains('test', $tester->getDisplay());
-        $this->assertContains('some:command', $tester->getDisplay());
-        $this->assertContains(DefinitionChecker::RESULT_INCORRECT_COMMAND, $tester->getDisplay());
+        $this->assertStringContainsString('test', $tester->getDisplay());
+        $this->assertStringContainsString('some:command', $tester->getDisplay());
+        $this->assertStringContainsString(DefinitionChecker::RESULT_INCORRECT_COMMAND, $tester->getDisplay());
     }
 
     public function testDisabledDefinition()
@@ -130,9 +131,9 @@ class ValidateCommandTest extends \PHPUnit_Framework_TestCase
         $tester->execute([]);
 
         $this->assertEmpty($tester->getStatusCode());
-        $this->assertContains('test', $tester->getDisplay());
-        $this->assertContains('some:command', $tester->getDisplay());
-        $this->assertContains('Disabled', $tester->getDisplay());
+        $this->assertStringContainsString('test', $tester->getDisplay());
+        $this->assertStringContainsString('some:command', $tester->getDisplay());
+        $this->assertStringContainsString('Disabled', $tester->getDisplay());
     }
 
     public function testNoDefinitionsFound()
@@ -151,7 +152,7 @@ class ValidateCommandTest extends \PHPUnit_Framework_TestCase
         $tester->execute([]);
 
         $this->assertEmpty($tester->getStatusCode());
-        $this->assertContains('No cron job definitions found', $tester->getDisplay());
+        $this->assertStringContainsString('No cron job definitions found', $tester->getDisplay());
 
     }
 }

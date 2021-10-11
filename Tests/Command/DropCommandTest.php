@@ -14,6 +14,8 @@ use BabymarktExt\CronBundle\Exception\AccessDeniedException;
 use BabymarktExt\CronBundle\Exception\WriteException;
 use BabymarktExt\CronBundle\Service\CrontabEditor;
 use BabymarktExt\CronBundle\Tests\Fixtures\ContainerTrait;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -22,7 +24,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  * Class DropCommandTest
  * @package BabymarktExt\CronBundle\Tests\Command
  */
-class DropCommandTest extends \PHPUnit_Framework_TestCase
+class DropCommandTest extends TestCase
 {
     use ContainerTrait {
         getContainer as parentGetContainer;
@@ -40,7 +42,7 @@ class DropCommandTest extends \PHPUnit_Framework_TestCase
         $app = new Application();
         $app->add($cmd);
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject $editor */
+        /** @var MockObject $editor */
         $editor = $container->get(self::SERVICE_CRONTAB_EDITOR);
         $editor->expects($this->once())
             ->method('removeCrons')
@@ -49,8 +51,8 @@ class DropCommandTest extends \PHPUnit_Framework_TestCase
         $tester = new CommandTester($app->find('babymarktext:cron:drop'));
         $tester->execute([]);
 
-        $this->assertContains('Can\'t write to crontab.', $tester->getDisplay());
-        $this->assertContains('test fail', $tester->getDisplay());
+        $this->assertStringContainsString('Can\'t write to crontab.', $tester->getDisplay());
+        $this->assertStringContainsString('test fail', $tester->getDisplay());
         $this->assertEquals(DropCommand::STATUS_NOT_WRITABLE, $tester->getStatusCode());
     }
 
@@ -64,7 +66,7 @@ class DropCommandTest extends \PHPUnit_Framework_TestCase
         $app = new Application();
         $app->add($cmd);
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject $editor */
+        /** @var MockObject $editor */
         $editor = $container->get(self::SERVICE_CRONTAB_EDITOR);
         $editor->expects($this->once())
             ->method('removeCrons')
@@ -73,8 +75,8 @@ class DropCommandTest extends \PHPUnit_Framework_TestCase
         $tester = new CommandTester($app->find('babymarktext:cron:drop'));
         $tester->execute([]);
 
-        $this->assertContains('Can\'t access crontab.', $tester->getDisplay());
-        $this->assertContains('test fail', $tester->getDisplay());
+        $this->assertStringContainsString('Can\'t access crontab.', $tester->getDisplay());
+        $this->assertStringContainsString('test fail', $tester->getDisplay());
         $this->assertEquals(DropCommand::STATUS_ACCESS_DENIED, $tester->getStatusCode());
     }
 
@@ -88,7 +90,7 @@ class DropCommandTest extends \PHPUnit_Framework_TestCase
         $app = new Application();
         $app->add($cmd);
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject $editor */
+        /** @var MockObject $editor */
         $editor = $container->get(self::SERVICE_CRONTAB_EDITOR);
         $editor->expects($this->once())
             ->method('removeCrons')
@@ -97,7 +99,7 @@ class DropCommandTest extends \PHPUnit_Framework_TestCase
         $tester = new CommandTester($app->find('babymarktext:cron:drop'));
         $tester->execute([]);
 
-        $this->assertContains('All crons successfully dropped.', $tester->getDisplay());
+        $this->assertStringContainsString('All crons successfully dropped.', $tester->getDisplay());
         $this->assertEquals(0, $tester->getStatusCode());
     }
 

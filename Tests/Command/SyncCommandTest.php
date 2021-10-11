@@ -15,6 +15,7 @@ use BabymarktExt\CronBundle\Exception\WriteException;
 use BabymarktExt\CronBundle\Service\CronEntryGenerator;
 use BabymarktExt\CronBundle\Service\CrontabEditor;
 use BabymarktExt\CronBundle\Tests\Fixtures\ContainerTrait;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -23,7 +24,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  * Class SyncCommandTest
  * @package BabymarktExt\CronBundle\Tests\Command
  */
-class SyncCommandTest extends \PHPUnit_Framework_TestCase
+class SyncCommandTest extends TestCase
 {
     use ContainerTrait {
         getContainer as parentGetContainer;
@@ -53,8 +54,8 @@ class SyncCommandTest extends \PHPUnit_Framework_TestCase
         $tester = new CommandTester($app->find('babymarktext:cron:sync'));
         $tester->execute([]);
 
-        $this->assertContains('Can\'t write to crontab.', $tester->getDisplay());
-        $this->assertContains('test fail', $tester->getDisplay());
+        $this->assertStringContainsString('Can\'t write to crontab.', $tester->getDisplay());
+        $this->assertStringContainsString('test fail', $tester->getDisplay());
         $this->assertEquals(SyncCommand::STATUS_NOT_WRITABLE, $tester->getStatusCode());
     }
 
@@ -77,8 +78,8 @@ class SyncCommandTest extends \PHPUnit_Framework_TestCase
         $tester = new CommandTester($app->find('babymarktext:cron:sync'));
         $tester->execute(['command' => 'babymarkt:cron:sync']);
 
-        $this->assertContains('Can\'t access crontab.', $tester->getDisplay());
-        $this->assertContains('test fail', $tester->getDisplay());
+        $this->assertStringContainsString('Can\'t access crontab.', $tester->getDisplay());
+        $this->assertStringContainsString('test fail', $tester->getDisplay());
         $this->assertEquals(SyncCommand::STATUS_ACCESS_DENIED, $tester->getStatusCode());
     }
 
@@ -101,7 +102,7 @@ class SyncCommandTest extends \PHPUnit_Framework_TestCase
         $tester = new CommandTester($app->find('babymarktext:cron:sync'));
         $tester->execute(['command' => 'babymarkt:cron:sync']);
 
-        $this->assertContains('3 crons successfully synced.', $tester->getDisplay());
+        $this->assertStringContainsString('3 crons successfully synced.', $tester->getDisplay());
         $this->assertEquals(0, $tester->getStatusCode());
     }
 
