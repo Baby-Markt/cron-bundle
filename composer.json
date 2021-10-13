@@ -5,7 +5,8 @@
   "keywords": [
     "Cron",
     "Crontab",
-    "Symfony2"
+    "Symfony",
+    "PHP"
   ],
   "homepage": "https://github.com/Baby-Markt/cron-bundle",
   "license": "MIT",
@@ -28,11 +29,6 @@
   "autoload": {
     "psr-4": {
       "BabymarktExt\\CronBundle\\": ""
-    }
-  },
-  "config": {
-    "platform": {
-      "php": "7.3"
     }
   }
 }
