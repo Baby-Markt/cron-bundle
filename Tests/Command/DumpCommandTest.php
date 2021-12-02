@@ -21,12 +21,8 @@ class DumpCommandTest extends TestCase
 {
     use ContainerTrait;
 
-    const SERVICE_ENTRY_GENERATOR = 'babymarkt_ext_cron.service.cronentrygenerator';
-
     public function testDumpEntries()
     {
-        $container = $this->getContainer();
-
         $generator = $this->getMockBuilder(CronEntryGenerator::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -35,10 +31,8 @@ class DumpCommandTest extends TestCase
             ->method('generateEntries')
             ->willReturn(['Line1', 'Line2']);
 
-        $container->set(self::SERVICE_ENTRY_GENERATOR, $generator);
-
         $cmd = new DumpCommand();
-        $cmd->setContainer($container);
+        $cmd->setCronEntryGenerator($generator);
 
         $app = new Application();
         $app->add($cmd);

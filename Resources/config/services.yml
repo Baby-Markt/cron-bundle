@@ -7,41 +7,28 @@ services:
     resource: '../../Command/'
     tags: [ { name: console.command } ]
 
-  babymarkt_ext_cron.service.cronentrygenerator.factory:
-    class: BabymarktExt\CronBundle\Service\Factory\CronEntryGeneratorFactory
+  BabymarktExt\CronBundle\Service\Factory\CronEntryGeneratorFactory:
     arguments:
-      - "%babymarkt_ext_cron.definitions%"
-      - "%babymarkt_ext_cron.options.output%"
-      - "%kernel.root_dir%/.."
-      - "%kernel.environment%"
+      - '%babymarkt_ext_cron.definitions%'
+      - '%babymarkt_ext_cron.options.output%'
+      - '%kernel.root_dir%/..'
+      - '%kernel.environment%'
 
-  babymarkt_ext_cron.service.cronentrygenerator:
-    class: BabymarktExt\CronBundle\Service\CronEntryGenerator
-    factory: ["@babymarkt_ext_cron.service.cronentrygenerator.factory", create]
+  BabymarktExt\CronBundle\Service\CronEntryGenerator:
+    factory: ['@BabymarktExt\CronBundle\Service\Factory\CronEntryGeneratorFactory', create]
 
-  babymarkt_ext_cron.service.wrapper.shell:
-    class: BabymarktExt\CronBundle\Service\Wrapper\ShellWrapper
-
-  babymarkt_ext_cron.service.writer.crontab:
-    class: BabymarktExt\CronBundle\Service\Writer\CrontabWriter
+  BabymarktExt\CronBundle\Service\Writer\CrontabWriterInterface:
+    class: BabymarktExt\CronBundle\Service\Reader\CrontabWriter
     arguments:
-      - "@babymarkt_ext_cron.service.wrapper.shell"
-      - "%babymarkt_ext_cron.options.crontab%"
+      - '%babymarkt_ext_cron.options.crontab%'
 
-  babymarkt_ext_cron.service.reader.crontab:
+  BabymarktExt\CronBundle\Service\Reader\CrontabReaderInterface:
     class: BabymarktExt\CronBundle\Service\Reader\CrontabReader
     arguments:
-      - "@babymarkt_ext_cron.service.wrapper.shell"
-      - "%babymarkt_ext_cron.options.crontab%"
+      - '%babymarkt_ext_cron.options.crontab%'
 
-  babymarkt_ext_cron.service.crontabeditor:
-    class: BabymarktExt\CronBundle\Service\CrontabEditor
+  BabymarktExt\CronBundle\Service\CrontabEditor:
     arguments:
-      - "%babymarkt_ext_cron.options.id%"
-      - "@babymarkt_ext_cron.service.reader.crontab"
-      - "@babymarkt_ext_cron.service.writer.crontab"
-
-  babymarkt_ext_cron.service.definitionchecker:
-    class: BabymarktExt\CronBundle\Service\DefinitionChecker
+      - '%babymarkt_ext_cron.options.id%'
 
 

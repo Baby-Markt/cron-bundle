@@ -24,6 +24,6 @@ interface CrontabWriterInterface
      * @throws AccessDeniedException if access to crontab is denied.
      * @throws WriteException if the temp path is not writable.
      */
-    public function write(array $lines);
+    public function write(array $lines): void;
 
 }

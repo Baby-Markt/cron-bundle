@@ -19,7 +19,7 @@ interface CrontabReaderInterface
     /**
      * Reads content from system crontab of the current user.
      * @throws AccessDeniedException if access to crontab is denied.
-     * @return string
+     * @return string[]
      */
-    public function read();
+    public function read(): array;
 }

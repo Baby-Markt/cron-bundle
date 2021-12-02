@@ -38,17 +38,11 @@ class CrontabEditor
     protected $writer;
 
     /**
-     * CrontabEditor constructor.
-     *
      * @param string $identifier Crontab block identifier.
-     * @param CrontabReaderInterface $reader
-     * @param CrontabWriterInterface $writer
      */
-    public function __construct($identifier, CrontabReaderInterface $reader, CrontabWriterInterface $writer)
+    public function __construct(string $identifier)
     {
         $this->identifier = $identifier;
-        $this->reader     = $reader;
-        $this->writer     = $writer;
     }
 
     /**
@@ -134,5 +128,21 @@ class CrontabEditor
         return sprintf('### CRONTAB-EDITOR-END %s ###', $this->identifier);
     }
 
+    /**
+     * @required
+     * @param CrontabReaderInterface $reader
+     */
+    public function setReader(CrontabReaderInterface $reader): void
+    {
+        $this->reader = $reader;
+    }
 
+    /**
+     * @required
+     * @param CrontabWriterInterface $writer
+     */
+    public function setWriter(CrontabWriterInterface $writer): void
+    {
+        $this->writer = $writer;
+    }
 }

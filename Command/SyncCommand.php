@@ -13,8 +13,7 @@ use BabymarktExt\CronBundle\Exception\AccessDeniedException;
 use BabymarktExt\CronBundle\Exception\WriteException;
 use BabymarktExt\CronBundle\Service\CronEntryGenerator;
 use BabymarktExt\CronBundle\Service\CrontabEditor;
-use BabymarktExt\CronBundle\Service\Writer;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -24,17 +23,26 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Date: 04.08.15
  * Time: 13:53
  */
-class SyncCommand extends ContainerAwareCommand
+class SyncCommand extends Command
 {
     const
         STATUS_NOT_WRITABLE = 1,
         STATUS_ACCESS_DENIED = 2;
 
+    /**
+     * @var CronEntryGenerator
+     */
+    protected $cronEntryGenerator;
+
+    /**
+     * @var CrontabEditor
+     */
+    protected $crontabEditor;
 
     /**
      * Configures the current command.
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('babymarktext:cron:sync')
@@ -58,19 +66,13 @@ class SyncCommand extends ContainerAwareCommand
      *
      * @see setCode()
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        /** @var CronEntryGenerator $generator */
-        $generator = $this->getContainer()->get('babymarkt_ext_cron.service.cronentrygenerator');
-
-        /** @var CrontabEditor $editor */
-        $editor = $this->getContainer()->get('babymarkt_ext_cron.service.crontabeditor');
-
         // Generate the cron entries from definitions
-        $entries = $generator->generateEntries();
+        $entries = $this->cronEntryGenerator->generateEntries();
 
         try {
-            $editor->injectCrons($entries);
+            $this->crontabEditor->injectCrons($entries);
             $output->writeln('<info>' . count($entries) . ' crons successfully synced.</info>');
 
         } catch (WriteException $e) {
@@ -83,5 +85,25 @@ class SyncCommand extends ContainerAwareCommand
             $output->writeln($e->getMessage());
             return self::STATUS_ACCESS_DENIED;
         }
+
+        return 0;
+    }
+
+    /**
+     * @required
+     * @param CronEntryGenerator $cronEntryGenerator
+     */
+    public function setCronEntryGenerator(CronEntryGenerator $cronEntryGenerator): void
+    {
+        $this->cronEntryGenerator = $cronEntryGenerator;
+    }
+
+    /**
+     * @required
+     * @param CrontabEditor $crontabEditor
+     */
+    public function setCrontabEditor(CrontabEditor $crontabEditor): void
+    {
+        $this->crontabEditor = $crontabEditor;
     }
 }

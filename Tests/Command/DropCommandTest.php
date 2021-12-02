@@ -18,7 +18,6 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * Class DropCommandTest
@@ -30,23 +29,29 @@ class DropCommandTest extends TestCase
         getContainer as parentGetContainer;
     }
 
-    const SERVICE_CRONTAB_EDITOR = 'babymarkt_ext_cron.service.crontabeditor';
+    /**
+     * @var CrontabEditor|MockObject
+     */
+    private $crontabEditor;
+
+    protected function setUp(): void
+    {
+        $this->crontabEditor = $this->getMockBuilder(CrontabEditor::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
 
     public function testTargetNotWritable()
     {
-        $container = $this->getContainer();
+        $this->crontabEditor->expects($this->once())
+            ->method('removeCrons')
+            ->willThrowException(new WriteException('test fail'));
 
         $cmd = new DropCommand();
-        $cmd->setContainer($container);
+        $cmd->setCrontabEditor($this->crontabEditor);
 
         $app = new Application();
         $app->add($cmd);
-
-        /** @var MockObject $editor */
-        $editor = $container->get(self::SERVICE_CRONTAB_EDITOR);
-        $editor->expects($this->once())
-            ->method('removeCrons')
-            ->willThrowException(new WriteException('test fail'));
 
         $tester = new CommandTester($app->find('babymarktext:cron:drop'));
         $tester->execute([]);
@@ -58,19 +63,15 @@ class DropCommandTest extends TestCase
 
     public function testAccessDenied()
     {
-        $container = $this->getContainer();
+        $this->crontabEditor->expects($this->once())
+            ->method('removeCrons')
+            ->willThrowException(new AccessDeniedException('test fail'));
 
         $cmd = new DropCommand();
-        $cmd->setContainer($container);
+        $cmd->setCrontabEditor($this->crontabEditor);
 
         $app = new Application();
         $app->add($cmd);
-
-        /** @var MockObject $editor */
-        $editor = $container->get(self::SERVICE_CRONTAB_EDITOR);
-        $editor->expects($this->once())
-            ->method('removeCrons')
-            ->willThrowException(new AccessDeniedException('test fail'));
 
         $tester = new CommandTester($app->find('babymarktext:cron:drop'));
         $tester->execute([]);
@@ -82,41 +83,21 @@ class DropCommandTest extends TestCase
 
     public function testSuccessfulDrop()
     {
-        $container = $this->getContainer();
+        /** @var MockObject $editor */
+        $this->crontabEditor->expects($this->once())
+            ->method('removeCrons')
+            ->willReturn(null);
 
         $cmd = new DropCommand();
-        $cmd->setContainer($container);
+        $cmd->setCrontabEditor($this->crontabEditor);
 
         $app = new Application();
         $app->add($cmd);
-
-        /** @var MockObject $editor */
-        $editor = $container->get(self::SERVICE_CRONTAB_EDITOR);
-        $editor->expects($this->once())
-            ->method('removeCrons')
-            ->willReturn(null);
 
         $tester = new CommandTester($app->find('babymarktext:cron:drop'));
         $tester->execute([]);
 
         $this->assertStringContainsString('All crons successfully dropped.', $tester->getDisplay());
         $this->assertEquals(0, $tester->getStatusCode());
-    }
-
-    /**
-     * @param array $config
-     * @return ContainerBuilder
-     */
-    protected function getContainer($config = [])
-    {
-        $container = $this->parentGetContainer($config);
-
-        $editor = $this->getMockBuilder(CrontabEditor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $container->set(self::SERVICE_CRONTAB_EDITOR, $editor);
-
-        return $container;
     }
 }

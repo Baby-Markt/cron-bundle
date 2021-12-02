@@ -40,16 +40,14 @@ class CrontabWriter implements CrontabWriterInterface
     /**
      * @var ShellWrapperInterface
      */
-    protected $shell;
+    protected $shellWrapper;
 
     /**
      * CrontabWriter constructor.
-     * @param ShellWrapperInterface $shell
      * @param array $config
      */
-    public function __construct(ShellWrapperInterface $shell, array $config = [])
+    public function __construct(array $config = [])
     {
-        $this->shell = $shell;
         $this->setConfig($config);
     }
 
@@ -60,7 +58,7 @@ class CrontabWriter implements CrontabWriterInterface
      * @throws AccessDeniedException if access to crontab is denied.
      * @throws WriteException if the temp path is not writable.
      */
-    public function write(array $lines)
+    public function write(array $lines): void
     {
         // Reindex content array to ensure numeric indexes.
         $lines = array_values($lines);
@@ -80,24 +78,24 @@ class CrontabWriter implements CrontabWriterInterface
             // Write lines to file.
             file_put_contents($tmpFile, implode(PHP_EOL, (array)$lines));
 
-            $result = $this->shell->execute($this->getCronCommand() . ' ' . $tmpFile);
+            $result = $this->shellWrapper->execute($this->getCronCommand() . ' ' . $tmpFile);
 
             unlink($tmpFile);
 
         } else {
             // If no lines should be added to crontab, clear crontab for current user.
-            $result = $this->shell->execute($this->getCronCommand() . ' -r');
+            $result = $this->shellWrapper->execute($this->getCronCommand() . ' -r');
         }
 
-        if ($this->shell->isFailed()) {
-            throw new AccessDeniedException($result, $this->shell->getErrorCode());
+        if ($this->shellWrapper->isFailed()) {
+            throw new AccessDeniedException($result, $this->shellWrapper->getErrorCode());
         }
     }
 
     /**
      * Returns the cron command.
      */
-    protected function getCronCommand()
+    protected function getCronCommand(): string
     {
         if ($this->config['sudo']) {
             $command = 'sudo ' . $this->config['bin'];
@@ -113,10 +111,10 @@ class CrontabWriter implements CrontabWriterInterface
     }
 
     /**
-     * @return array
+     * @return array|null
      * @codeCoverageIgnore
      */
-    public function getConfig()
+    public function getConfig(): ?array
     {
         return $this->config;
     }
@@ -125,8 +123,18 @@ class CrontabWriter implements CrontabWriterInterface
      * @param array $config
      * return $this
      */
-    public function setConfig($config)
+    public function setConfig(array $config): void
     {
         $this->config = array_replace($this->defaultConfig, $config);
     }
+
+    /**
+     * @required
+     * @param ShellWrapperInterface $shellWrapper
+     */
+    public function setShellWrapper(ShellWrapperInterface $shellWrapper): void
+    {
+        $this->shellWrapper = $shellWrapper;
+    }
+
 }

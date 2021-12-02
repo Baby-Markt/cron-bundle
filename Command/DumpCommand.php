@@ -9,7 +9,8 @@
 
 namespace BabymarktExt\CronBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use BabymarktExt\CronBundle\Service\CronEntryGenerator;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -19,8 +20,13 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Date: 04.08.15
  * Time: 13:53
  */
-class DumpCommand extends ContainerAwareCommand
+class DumpCommand extends Command
 {
+    /**
+     * @var CronEntryGenerator
+     */
+    protected $cronEntryGenerator;
+
     /**
      * Configures the current command.
      */
@@ -48,15 +54,24 @@ class DumpCommand extends ContainerAwareCommand
      *
      * @see setCode()
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $generator   = $this->getContainer()->get('babymarkt_ext_cron.service.cronentrygenerator');
-        $listEntries = $generator->generateEntries();
+        $listEntries = $this->cronEntryGenerator->generateEntries();
 
         foreach ($listEntries as $entry) {
             $output->writeln($entry);
         }
+
+        return 0;
     }
 
+    /**
+     * @required
+     * @param CronEntryGenerator $cronEntryGenerator
+     */
+    public function setCronEntryGenerator(CronEntryGenerator $cronEntryGenerator): void
+    {
+        $this->cronEntryGenerator = $cronEntryGenerator;
+    }
 
 }

@@ -38,39 +38,37 @@ class CrontabReader implements CrontabReaderInterface
     /**
      * @var ShellWrapperInterface
      */
-    protected $shell;
+    protected $shellWrapper;
 
     /**
      * CrontabReader constructor.
-     * @param ShellWrapperInterface $shell
      * @param array $config
      */
-    public function __construct(ShellWrapperInterface $shell, array $config = [])
+    public function __construct(array $config = [])
     {
-        $this->shell = $shell;
         $this->setConfig($config);
     }
 
     /**
      * Reads content from system crontab of the current user.
      * @throws AccessDeniedException if access to crontab is denied.
-     * @return string
+     * @return string[]
      */
-    public function read()
+    public function read(): array
     {
-        $result = $this->shell->execute($this->getCronCommand() . ' -l');
+        $result = $this->shellWrapper->execute($this->getCronCommand() . ' -l');
 
-        if ($this->shell->isFailed()) {
-            throw new AccessDeniedException($result, $this->shell->getErrorCode());
+        if ($this->shellWrapper->isFailed()) {
+            throw new AccessDeniedException($result, $this->shellWrapper->getErrorCode());
         }
 
-        return $this->shell->getOutput();
+        return $this->shellWrapper->getOutput();
     }
 
     /**
      * Returns the cron command.
      */
-    protected function getCronCommand()
+    protected function getCronCommand(): string
     {
         if ($this->config['sudo']) {
             $command = 'sudo ' . $this->config['bin'];
@@ -102,4 +100,14 @@ class CrontabReader implements CrontabReaderInterface
     {
         $this->config = array_replace($this->defaultConfig, (array)$config);
     }
+
+    /**
+     * @required
+     * @param ShellWrapperInterface $shellWrapper
+     */
+    public function setShellWrapper(ShellWrapperInterface $shellWrapper): void
+    {
+        $this->shellWrapper = $shellWrapper;
+    }
+
 }

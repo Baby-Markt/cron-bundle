@@ -17,30 +17,10 @@ use BabymarktExt\CronBundle\Tests\Fixtures\ContainerTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class ValidateCommandTest extends TestCase
 {
     use ContainerTrait;
-
-    const SERVICE_DEF_CHECKER = 'babymarkt_ext_cron.service.definitionchecker';
-
-    /**
-     * @param ContainerBuilder $container
-     * @return CommandTester
-     */
-    protected function getTester(ContainerBuilder $container)
-    {
-        $cmd = new ValidateCommand();
-        $cmd->setContainer($container);
-
-        $app = new Application();
-        $app->add($cmd);
-
-        $tester = new CommandTester($app->find('babymarktext:cron:validate'));
-
-        return $tester;
-    }
 
     public function testValidDefinition()
     {
@@ -60,11 +40,16 @@ class ValidateCommandTest extends TestCase
                 'test' => ['command' => 'some:command']
             ]
         ];
-
         $container = $this->getContainer($config);
-        $container->set(self::SERVICE_DEF_CHECKER, $checkerStub);
 
-        $tester = $this->getTester($container);
+        $cmd = new ValidateCommand();
+        $cmd->setContainer($container);
+        $cmd->setDefinitionChecker($checkerStub);
+
+        $app = new Application();
+        $app->add($cmd);
+
+        $tester = new CommandTester($app->find('babymarktext:cron:validate'));
         $tester->execute([]);
 
         $this->assertEmpty($tester->getStatusCode());
@@ -95,9 +80,15 @@ class ValidateCommandTest extends TestCase
         ];
 
         $container = $this->getContainer($config);
-        $container->set(self::SERVICE_DEF_CHECKER, $checkerStub);
 
-        $tester = $this->getTester($container);
+        $cmd = new ValidateCommand();
+        $cmd->setContainer($container);
+        $cmd->setDefinitionChecker($checkerStub);
+
+        $app = new Application();
+        $app->add($cmd);
+
+        $tester = new CommandTester($app->find('babymarktext:cron:validate'));
         $tester->execute([]);
 
         $this->assertEquals(1, $tester->getStatusCode());
@@ -125,9 +116,15 @@ class ValidateCommandTest extends TestCase
         ];
 
         $container = $this->getContainer($config);
-        $container->set(self::SERVICE_DEF_CHECKER, $checkerStub);
 
-        $tester = $this->getTester($container);
+        $cmd = new ValidateCommand();
+        $cmd->setContainer($container);
+        $cmd->setDefinitionChecker($checkerStub);
+
+        $app = new Application();
+        $app->add($cmd);
+
+        $tester = new CommandTester($app->find('babymarktext:cron:validate'));
         $tester->execute([]);
 
         $this->assertEmpty($tester->getStatusCode());
@@ -145,10 +142,14 @@ class ValidateCommandTest extends TestCase
         $checkerStub->expects($this->never())->method('check');
         $checkerStub->expects($this->never())->method('getResult');
 
-        $container = $this->getContainer();
-        $container->set(self::SERVICE_DEF_CHECKER, $checkerStub);
+        $cmd = new ValidateCommand();
+        $cmd->setContainer($this->getContainer());
+        $cmd->setDefinitionChecker($checkerStub);
 
-        $tester = $this->getTester($container);
+        $app = new Application();
+        $app->add($cmd);
+
+        $tester = new CommandTester($app->find('babymarktext:cron:validate'));
         $tester->execute([]);
 
         $this->assertEmpty($tester->getStatusCode());

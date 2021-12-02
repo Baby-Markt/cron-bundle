@@ -12,8 +12,7 @@ namespace BabymarktExt\CronBundle\Command;
 use BabymarktExt\CronBundle\Exception\AccessDeniedException;
 use BabymarktExt\CronBundle\Exception\WriteException;
 use BabymarktExt\CronBundle\Service\CrontabEditor;
-use BabymarktExt\CronBundle\Service\Writer;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -23,16 +22,21 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Date: 04.08.15
  * Time: 13:53
  */
-class DropCommand extends ContainerAwareCommand
+class DropCommand extends Command
 {
     const
         STATUS_NOT_WRITABLE = 1,
         STATUS_ACCESS_DENIED = 2;
 
     /**
+     * @var CrontabEditor
+     */
+    protected $crontabEditor;
+
+    /**
      * Configures the current command.
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('babymarktext:cron:drop')
@@ -56,13 +60,10 @@ class DropCommand extends ContainerAwareCommand
      *
      * @see setCode()
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        /** @var CrontabEditor $editor */
-        $editor = $this->getContainer()->get('babymarkt_ext_cron.service.crontabeditor');
-
         try {
-            $editor->removeCrons();
+            $this->crontabEditor->removeCrons();
             $output->writeln('<info>All crons successfully dropped.</info>');
 
         } catch (WriteException $e) {
@@ -75,6 +76,17 @@ class DropCommand extends ContainerAwareCommand
             $output->writeln($e->getMessage());
             return self::STATUS_ACCESS_DENIED;
         }
+
+        return 0;
+    }
+
+    /**
+     * @required
+     * @param CrontabEditor $crontabEditor
+     */
+    public function setCrontabEditor(CrontabEditor $crontabEditor): void
+    {
+        $this->crontabEditor = $crontabEditor;
     }
 
 }

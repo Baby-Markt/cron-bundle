@@ -26,7 +26,7 @@ class CrontabReaderTest extends TestCase
 
     use StaticsLoaderTrait;
 
-    const ROOT_DIR    = '/root/dir';
+    const ROOT_DIR = '/root/dir';
     const ENVIRONMENT = 'test';
 
     /**
@@ -40,11 +40,12 @@ class CrontabReaderTest extends TestCase
      */
     public function testReadFromCrontabWithDefaultConfig()
     {
-        $shell = $this->getShell();
+        $shell = $this->getShell([]);
 
         $config = $this->container->getParameter('babymarkt_ext_cron.options.crontab');
 
-        $reader = new CrontabReader($shell, $config);
+        $reader = new CrontabReader($config);
+        $reader->setShellWrapper($shell);
         $result = $reader->read();
 
         $this->assertEquals($this->loadStaticFixture('crontab.txt'), implode(PHP_EOL, $result));
@@ -58,7 +59,8 @@ class CrontabReaderTest extends TestCase
 
         $config = $this->container->getParameter('babymarkt_ext_cron.options.crontab');
 
-        $reader = new CrontabReader($shell, $config);
+        $reader = new CrontabReader($config);
+        $reader->setShellWrapper($shell);
         $reader->read();
     }
 
@@ -71,7 +73,8 @@ class CrontabReaderTest extends TestCase
 
         $config = $this->container->getParameter('babymarkt_ext_cron.options.crontab');
 
-        $reader = new CrontabReader($shell, $config);
+        $reader = new CrontabReader($config);
+        $reader->setShellWrapper($shell);
         $reader->read();
     }
 
@@ -84,7 +87,8 @@ class CrontabReaderTest extends TestCase
 
         $config = $this->container->getParameter('babymarkt_ext_cron.options.crontab');
 
-        $reader = new CrontabReader($shell, $config);
+        $reader = new CrontabReader($config);
+        $reader->setShellWrapper($shell);
         $reader->read();
     }
 
@@ -97,7 +101,8 @@ class CrontabReaderTest extends TestCase
 
         $config = $this->container->getParameter('babymarkt_ext_cron.options.crontab');
 
-        $reader = new CrontabReader($shell, $config);
+        $reader = new CrontabReader($config);
+        $reader->setShellWrapper($shell);
         $reader->read();
     }
 
@@ -107,7 +112,7 @@ class CrontabReaderTest extends TestCase
      * @param int $errorCode
      * @return ShellWrapperInterface|MockObject
      */
-    protected function getShell(array $crontabConfig = [], $failed = false, $errorCode = 0)
+    protected function getShell(array $crontabConfig, bool $failed = false, int $errorCode = 0)
     {
         $containerConfig = [
             'options' => ['crontab' => $crontabConfig]
@@ -156,7 +161,7 @@ class CrontabReaderTest extends TestCase
      * @param array $config
      * @return ContainerBuilder
      */
-    protected function getContainer($config = [])
+    protected function getContainer(array $config = []): ContainerBuilder
     {
         $ext  = new BabymarktExtCronExtension();
         $cont = new ContainerBuilder();
@@ -168,8 +173,6 @@ class CrontabReaderTest extends TestCase
 
         return $cont;
     }
-
-
 
 
 }

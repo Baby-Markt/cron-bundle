@@ -14,11 +14,10 @@ use BabymarktExt\CronBundle\Exception\AccessDeniedException;
 use BabymarktExt\CronBundle\Exception\WriteException;
 use BabymarktExt\CronBundle\Service\CronEntryGenerator;
 use BabymarktExt\CronBundle\Service\CrontabEditor;
-use BabymarktExt\CronBundle\Tests\Fixtures\ContainerTrait;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * Class SyncCommandTest
@@ -26,30 +25,44 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  */
 class SyncCommandTest extends TestCase
 {
-    use ContainerTrait {
-        getContainer as parentGetContainer;
+    /**
+     * @var CronEntryGenerator|MockObject
+     */
+    private $entryGenerator;
+
+    /**
+     * @var CrontabEditor|MockObject
+     */
+    private $editor;
+
+    protected function setUp(): void
+    {
+        /** @var CronEntryGenerator|MockObject $entryGenerator */
+        $this->entryGenerator = $this->getMockBuilder(CronEntryGenerator::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->entryGenerator->expects($this->once())
+            ->method('generateEntries')
+            ->willReturn([1, 2, 3]);
+
+        $this->editor = $this->getMockBuilder(CrontabEditor::class)
+            ->disableOriginalConstructor()
+            ->getMock();
     }
-
-    const
-        SERVICE_ENTRY_GENERATOR = 'babymarkt_ext_cron.service.cronentrygenerator',
-        SERVICE_CRONTAB_EDITOR = 'babymarkt_ext_cron.service.crontabeditor';
-
 
     public function testTargetNotWritable()
     {
-        $container = $this->getContainer();
+        $this->editor->expects($this->once())
+            ->method('injectCrons')
+            ->willThrowException(new WriteException('test fail'));
 
         $cmd = new SyncCommand();
-        $cmd->setContainer($container);
+        $cmd->setCrontabEditor($this->editor);
+        $cmd->setCronEntryGenerator($this->entryGenerator);
 
         $app = new Application();
         $app->add($cmd);
-
-        /** @var \PHPUnit_Framework_MockObject_MockObject $editor */
-        $editor = $container->get(self::SERVICE_CRONTAB_EDITOR);
-        $editor->expects($this->once())
-            ->method('injectCrons')
-            ->willThrowException(new WriteException('test fail'));
 
         $tester = new CommandTester($app->find('babymarktext:cron:sync'));
         $tester->execute([]);
@@ -61,19 +74,16 @@ class SyncCommandTest extends TestCase
 
     public function testAccessDenied()
     {
-        $container = $this->getContainer();
+        $this->editor->expects($this->once())
+            ->method('injectCrons')
+            ->willThrowException(new AccessDeniedException('test fail'));
 
         $cmd = new SyncCommand();
-        $cmd->setContainer($container);
+        $cmd->setCrontabEditor($this->editor);
+        $cmd->setCronEntryGenerator($this->entryGenerator);
 
         $app = new Application();
         $app->add($cmd);
-
-        /** @var \PHPUnit_Framework_MockObject_MockObject $editor */
-        $editor = $container->get(self::SERVICE_CRONTAB_EDITOR);
-        $editor->expects($this->once())
-            ->method('injectCrons')
-            ->willThrowException(new AccessDeniedException('test fail'));
 
         $tester = new CommandTester($app->find('babymarktext:cron:sync'));
         $tester->execute(['command' => 'babymarkt:cron:sync']);
@@ -85,52 +95,23 @@ class SyncCommandTest extends TestCase
 
     public function testSuccessfulSync()
     {
-        $container = $this->getContainer();
+        $this->editor->expects($this->once())
+            ->method('injectCrons')
+            ->willReturn(null);
 
         $cmd = new SyncCommand();
-        $cmd->setContainer($container);
+        $cmd->setCrontabEditor($this->editor);
+        $cmd->setCronEntryGenerator($this->entryGenerator);
 
         $app = new Application();
         $app->add($cmd);
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject $editor */
-        $editor = $container->get(self::SERVICE_CRONTAB_EDITOR);
-        $editor->expects($this->once())
-            ->method('injectCrons')
-            ->willReturn(null);
-
+        /** @var MockObject $editor */
         $tester = new CommandTester($app->find('babymarktext:cron:sync'));
         $tester->execute(['command' => 'babymarkt:cron:sync']);
 
         $this->assertStringContainsString('3 crons successfully synced.', $tester->getDisplay());
         $this->assertEquals(0, $tester->getStatusCode());
-    }
-
-    /**
-     * @param array $config
-     * @return ContainerBuilder
-     */
-    protected function getContainer($config = [])
-    {
-        $container = $this->parentGetContainer($config);
-
-        /** @var CronEntryGenerator|\PHPUnit_Framework_MockObject_MockObject $entryGenerator */
-        $entryGenerator = $this->getMockBuilder(CronEntryGenerator::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $entryGenerator->expects($this->once())
-            ->method('generateEntries')
-            ->willReturn([1, 2, 3]);
-
-        $editor = $this->getMockBuilder(CrontabEditor::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $container->set(self::SERVICE_ENTRY_GENERATOR, $entryGenerator);
-        $container->set(self::SERVICE_CRONTAB_EDITOR, $editor);
-
-        return $container;
     }
 
 

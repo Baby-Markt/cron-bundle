@@ -24,8 +24,8 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('babymarkt_ext_cron');
+        $treeBuilder = new TreeBuilder('babymarkt_ext_cron');
+        $rootNode = $treeBuilder->getRootNode();
 
         $rootNode
             ->children()

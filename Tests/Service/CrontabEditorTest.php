@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
 class CrontabEditorTest extends TestCase
 {
 
-    public function testRemovingCrons()
+    public function testRemovingCronDefinitions()
     {
         /**
          * @var CrontabReaderInterface|MockObject $reader
@@ -32,7 +32,9 @@ class CrontabEditorTest extends TestCase
             'row 100',
         ]);
 
-        $editor = new CrontabEditor('test', $reader, $writer);
+        $editor = new CrontabEditor('test');
+        $editor->setReader($reader);
+        $editor->setWriter($writer);
 
         $editor->removeCrons();
 
@@ -65,7 +67,9 @@ class CrontabEditorTest extends TestCase
             'row 3',
         ]);
 
-        $editor = new CrontabEditor('test', $reader, $writer);
+        $editor = new CrontabEditor('test');
+        $editor->setReader($reader);
+        $editor->setWriter($writer);
 
         $editor->removeCrons();
 
@@ -99,7 +103,9 @@ class CrontabEditorTest extends TestCase
             'row 100',
         ]);
 
-        $editor = new CrontabEditor('test', $reader, $writer);
+        $editor = new CrontabEditor('test');
+        $editor->setReader($reader);
+        $editor->setWriter($writer);
 
         $editor->injectCrons([
             'cron-1' => 'the new cron definition 1',
@@ -130,7 +136,9 @@ class CrontabEditorTest extends TestCase
             'row 2',
         ]);
 
-        $editor = new CrontabEditor('test', $reader, $writer);
+        $editor = new CrontabEditor('test');
+        $editor->setReader($reader);
+        $editor->setWriter($writer);
 
         $editor->injectCrons([
             'cron-1' => 'cron definition 1',
@@ -170,7 +178,9 @@ class CrontabEditorTest extends TestCase
             'row 100',
         ]);
 
-        $editor = new CrontabEditor('test', $reader, $writer);
+        $editor = new CrontabEditor('test');
+        $editor->setReader($reader);
+        $editor->setWriter($writer);
 
         $editor->removeCrons();
 

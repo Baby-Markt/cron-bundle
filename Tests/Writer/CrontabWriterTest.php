@@ -9,6 +9,8 @@
 
 namespace BabymarktExt\CronBundle\Tests\Writer;
 
+use BabymarktExt\CronBundle\Exception\AccessDeniedException;
+use BabymarktExt\CronBundle\Exception\WriteException;
 use BabymarktExt\CronBundle\Service\Wrapper\ShellWrapper;
 use BabymarktExt\CronBundle\Service\Wrapper\ShellWrapperInterface;
 use BabymarktExt\CronBundle\Service\Writer\CrontabWriter;
@@ -60,7 +62,8 @@ class CrontabWriterTest extends TestCase
             $this->assertEquals(implode(PHP_EOL, $lines), trim($vfsContent));
         });
 
-        $writer = new CrontabWriter($shell, $config);
+        $writer = new CrontabWriter($config);
+        $writer->setShellWrapper($shell);
         $writer->write($lines);
     }
 
@@ -74,7 +77,8 @@ class CrontabWriterTest extends TestCase
     {
         $config = $container->getParameter('babymarkt_ext_cron.options.crontab');
 
-        $writer = new CrontabWriter($shell, $config);
+        $writer = new CrontabWriter($config);
+        $writer->setShellWrapper($shell);
         $writer->write($lines);
     }
 
@@ -111,18 +115,19 @@ class CrontabWriterTest extends TestCase
     public function testAccessDenied()
     {
         $this->expectExceptionCode(1);
-        $this->expectException(\BabymarktExt\CronBundle\Exception\AccessDeniedException::class);
+        $this->expectException(AccessDeniedException::class);
         $shell = $this->getShell([], true, 1);
 
         $config = $this->container->getParameter('babymarkt_ext_cron.options.crontab');
 
-        $writer = new CrontabWriter($shell, $config);
+        $writer = new CrontabWriter($config);
+        $writer->setShellWrapper($shell);
         $writer->write(['test']);
     }
 
     public function testNotWritable()
     {
-        $this->expectException(\BabymarktExt\CronBundle\Exception\WriteException::class);
+        $this->expectException(WriteException::class);
         $this->expectExceptionMessageMatches("/is not writable.$/");
         $container = $this->getContainer([
             'options' => ['crontab' => ['tmpPath' => vfsStream::url('testpath')]]
@@ -134,7 +139,8 @@ class CrontabWriterTest extends TestCase
 
         $config = $container->getParameter('babymarkt_ext_cron.options.crontab');
 
-        $writer = new CrontabWriter(new ShellWrapper(), $config);
+        $writer = new CrontabWriter($config);
+        $writer->setShellWrapper(new ShellWrapper());
         $writer->write(['test']);
     }
 

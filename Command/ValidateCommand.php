@@ -11,18 +11,28 @@ namespace BabymarktExt\CronBundle\Command;
 
 use BabymarktExt\CronBundle\Entity\Cron\Definition;
 use BabymarktExt\CronBundle\Service\DefinitionChecker;
-use BabymarktExt\CronBundle\Service\Writer;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\DependencyInjection\Container;
 
 /**
  * This silly test command is only for checking the cron report listener.
  * @package BabymarktExt\CronBundle\Command
  */
-class ValidateCommand extends ContainerAwareCommand
+class ValidateCommand extends Command
 {
+    /**
+     * @var DefinitionChecker
+     */
+    protected $definitionChecker;
+
+    /**
+     * @var Container
+     */
+    protected $container;
+
     /**
      * Configures the current command.
      */
@@ -50,22 +60,20 @@ class ValidateCommand extends ContainerAwareCommand
      *
      * @see setCode()
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        /** @var DefinitionChecker $checker */
-        $checker = $this->getContainer()->get('babymarkt_ext_cron.service.definitionchecker');
-        $checker->setApplication($this->getApplication());
+        $this->definitionChecker->setApplication($this->getApplication());
 
-        /** @var Definition[] $definitions */
-        $definitions = $this->getContainer()->getParameter('babymarkt_ext_cron.definitions');
+        /** @var array $definitions */
+        $definitions = $this->container->getParameter('babymarkt_ext_cron.definitions');
 
         $errorFound = false;
 
         if (count($definitions)) {
             $resultList = [];
 
-            foreach ($definitions as $alias => $definition) {
-                $definition = new Definition($definition);
+            foreach ($definitions as $alias => $definitionData) {
+                $definition = new Definition($definitionData);
 
                 if ($definition->isDisabled()) {
                     $resultList[] = [
@@ -74,11 +82,11 @@ class ValidateCommand extends ContainerAwareCommand
                         'result'  => '<comment>Disabled</comment>'
                     ];
                 } else {
-                    if (!$checker->check($definition)) {
+                    if (!$this->definitionChecker->check($definition)) {
                         $resultList[] = [
                             'alias'   => $alias,
                             'command' => $definition->getCommand(),
-                            'result'  => '<error>' . $checker->getResult() . '</error>'
+                            'result'  => '<error>' . $this->definitionChecker->getResult() . '</error>'
                         ];
                         $errorFound   = true;
                     } else {
@@ -103,7 +111,25 @@ class ValidateCommand extends ContainerAwareCommand
         }
 
         return (int)$errorFound;
-
     }
+
+    /**
+     * @required
+     * @param DefinitionChecker $definitionChecker
+     */
+    public function setDefinitionChecker(DefinitionChecker $definitionChecker): void
+    {
+        $this->definitionChecker = $definitionChecker;
+    }
+
+    /**
+     * @required
+     * @param Container $container
+     */
+    public function setContainer(Container $container): void
+    {
+        $this->container = $container;
+    }
+
 
 }
