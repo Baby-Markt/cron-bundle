@@ -15,7 +15,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * This silly test command is only for checking the cron report listener.
@@ -29,7 +29,7 @@ class ValidateCommand extends Command
     protected $definitionChecker;
 
     /**
-     * @var Container
+     * @var ContainerInterface
      */
     protected $container;
 
@@ -124,9 +124,9 @@ class ValidateCommand extends Command
 
     /**
      * @required
-     * @param Container $container
+     * @param ContainerInterface $container
      */
-    public function setContainer(Container $container): void
+    public function setContainer(ContainerInterface $container): void
     {
         $this->container = $container;
     }
