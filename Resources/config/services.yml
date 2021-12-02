@@ -31,4 +31,7 @@ services:
     arguments:
       - '%babymarkt_ext_cron.options.id%'
 
+  BabymarktExt\CronBundle\Service\Wrapper\ShellWrapperInterface:
+    class: BabymarktExt\CronBundle\Service\Wrapper\ShellWrapper
+
 

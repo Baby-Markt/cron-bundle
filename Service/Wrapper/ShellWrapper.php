@@ -33,7 +33,7 @@ class ShellWrapper implements ShellWrapperInterface
      * @param string $command
      * @return string The last output line.
      */
-    public function execute($command)
+    public function execute($command): string
     {
         return exec($command, $this->output, $this->errorCode);
     }
@@ -42,7 +42,7 @@ class ShellWrapper implements ShellWrapperInterface
      * Returns all output lines as an array.
      * @return array
      */
-    public function getOutput()
+    public function getOutput(): array
     {
         return $this->output;
     }
@@ -51,7 +51,7 @@ class ShellWrapper implements ShellWrapperInterface
      * Returns output as a single string.
      * @return string
      */
-    public function getOutputString()
+    public function getOutputString(): string
     {
         return trim(implode(PHP_EOL, $this->output));
     }
@@ -59,7 +59,7 @@ class ShellWrapper implements ShellWrapperInterface
     /**
      * @return int
      */
-    public function getErrorCode()
+    public function getErrorCode(): int
     {
         return $this->errorCode;
     }
@@ -67,7 +67,7 @@ class ShellWrapper implements ShellWrapperInterface
     /**
      * @return boolean TRUE if the error code is not 0, otherwise FALSE.
      */
-    public function isFailed()
+    public function isFailed(): bool
     {
         return $this->errorCode != 0;
     }
