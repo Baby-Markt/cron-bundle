@@ -1,4 +1,12 @@
 services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+  BabymarktExt\CronBundle\Command\:
+    resource: '../../Command/'
+    tags: [ { name: console.command } ]
+
   babymarkt_ext_cron.service.cronentrygenerator.factory:
     class: BabymarktExt\CronBundle\Service\Factory\CronEntryGeneratorFactory
     arguments:
