@@ -34,4 +34,6 @@ services:
   BabymarktExt\CronBundle\Service\Wrapper\ShellWrapperInterface:
     class: BabymarktExt\CronBundle\Service\Wrapper\ShellWrapper
 
+  BabymarktExt\CronBundle\Service\DefinitionChecker: ~
+
 
