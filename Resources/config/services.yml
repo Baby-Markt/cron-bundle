@@ -15,7 +15,9 @@ services:
       - '%kernel.environment%'
 
   BabymarktExt\CronBundle\Service\CronEntryGenerator:
-    factory: ['@BabymarktExt\CronBundle\Service\Factory\CronEntryGeneratorFactory', create]
+    factory: [ '@BabymarktExt\CronBundle\Service\Factory\CronEntryGeneratorFactory', create ]
+    calls:
+      - [ setScript, [ '%babymarkt_ext_cron.options.script%' ] ]
 
   BabymarktExt\CronBundle\Service\Writer\CrontabWriterInterface:
     class: BabymarktExt\CronBundle\Service\Writer\CrontabWriter

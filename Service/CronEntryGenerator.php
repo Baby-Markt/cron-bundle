@@ -40,6 +40,11 @@ class CronEntryGenerator
     protected $environment;
 
     /**
+     * @var string
+     */
+    protected $script = 'bin/console';
+
+    /**
      * ListGenerator constructor.
      * @param array $definitions
      * @param array $outputOptions
@@ -137,8 +142,9 @@ class CronEntryGenerator
             throw new \InvalidArgumentException('Cron command is required.');
         }
 
-        return vsprintf('cd %s; php console --env=%s %s', [
+        return vsprintf('cd %s; php %s --env=%s %s', [
             $this->basedir,
+            $this->script,
             $this->environment,
             $def->getCommand()
         ]);
@@ -222,5 +228,21 @@ class CronEntryGenerator
     {
         $this->environment = $environment;
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getScript(): string
+    {
+        return $this->script;
+    }
+
+    /**
+     * @param string $script
+     */
+    public function setScript(string $script): void
+    {
+        $this->script = $script;
     }
 }

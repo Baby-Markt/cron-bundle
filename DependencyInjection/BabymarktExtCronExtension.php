@@ -60,6 +60,7 @@ class BabymarktExtCronExtension extends Extension implements PrependExtensionInt
 
         $container->setParameter('babymarkt_ext_cron.options.output', $config['options']['output']);
         $container->setParameter('babymarkt_ext_cron.options.crontab', $config['options']['crontab']);
+        $container->setParameter('babymarkt_ext_cron.options.script', $config['options']['script']);
         $container->setParameter('babymarkt_ext_cron.options.id', $id);
     }
 

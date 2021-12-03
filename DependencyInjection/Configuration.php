@@ -33,6 +33,7 @@ class Configuration implements ConfigurationInterface
                     ->addDefaultsIfNotSet()
                     ->children()
                         ->scalarNode('id')->defaultNull()->end()
+                        ->scalarNode('script')->defaultValue('bin/console')->end()
                         ->arrayNode('output')
                             ->addDefaultsIfNotSet()
                             ->children()
