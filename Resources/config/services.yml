@@ -11,7 +11,7 @@ services:
     arguments:
       - '%babymarkt_ext_cron.definitions%'
       - '%babymarkt_ext_cron.options.output%'
-      - '%kernel.project_dir%'
+      - '%babymarkt_ext_cron.options.working_dir%'
       - '%kernel.environment%'
 
   BabymarktExt\CronBundle\Service\CronEntryGenerator:

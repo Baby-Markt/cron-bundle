@@ -34,6 +34,7 @@ class Configuration implements ConfigurationInterface
                     ->children()
                         ->scalarNode('id')->defaultNull()->end()
                         ->scalarNode('script')->defaultValue('bin/console')->end()
+                        ->scalarNode('working_dir')->defaultValue('%kernel.project_dir%')->end()
                         ->arrayNode('output')
                             ->addDefaultsIfNotSet()
                             ->children()
