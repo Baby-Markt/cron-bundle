@@ -11,12 +11,12 @@ namespace BabymarktExt\CronBundle\Tests\Service\Factory;
 
 
 use BabymarktExt\CronBundle\Entity\Cron\Definition;
-use BabymarktExt\CronBundle\Service\CronEntryGenerator;
-use BabymarktExt\CronBundle\Service\Factory\CronEntryGeneratorFactory;
+use BabymarktExt\CronBundle\Service\CrontabEntryGenerator;
+use BabymarktExt\CronBundle\Service\Factory\CrontabEntryGeneratorFactory;
 use BabymarktExt\CronBundle\Tests\Fixtures\ContainerTrait;
 use PHPUnit\Framework\TestCase;
 
-class CronEntryGeneratorFactoryTest extends TestCase
+class CrontabEntryGeneratorFactoryTest extends TestCase
 {
     use ContainerTrait;
 
@@ -24,7 +24,7 @@ class CronEntryGeneratorFactoryTest extends TestCase
     public function testFactory()
     {
         $config = [
-            'crons' => [
+            'cronjobs' => [
                 'test-job' => [
                     'command'  => 'babymarktext:test:command'
                 ]
@@ -33,16 +33,16 @@ class CronEntryGeneratorFactoryTest extends TestCase
 
         $container = $this->getContainer($config);
 
-        $factory = new CronEntryGeneratorFactory(
+        $factory = new CrontabEntryGeneratorFactory(
             $container->getParameter('babymarkt_ext_cron.definitions'),
             $container->getParameter('babymarkt_ext_cron.options.output'),
-            $container->getParameter('kernel.root_dir') . '/..',
+            $container->getParameter('kernel.project_dir') . '/..',
             $container->getParameter('kernel.environment')
         );
 
         $generator = $factory->create();
 
-        $this->assertInstanceOf(CronEntryGenerator::class, $generator);
+        $this->assertInstanceOf(CrontabEntryGenerator::class, $generator);
         $this->assertContainsOnlyInstancesOf(Definition::class, $generator->getDefinitions());
     }
 }

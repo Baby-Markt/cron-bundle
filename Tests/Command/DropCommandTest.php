@@ -44,7 +44,7 @@ class DropCommandTest extends TestCase
     public function testTargetNotWritable()
     {
         $this->crontabEditor->expects($this->once())
-            ->method('removeCrons')
+            ->method('removeCronjobs')
             ->willThrowException(new WriteException('test fail'));
 
         $cmd = new DropCommand();
@@ -64,7 +64,7 @@ class DropCommandTest extends TestCase
     public function testAccessDenied()
     {
         $this->crontabEditor->expects($this->once())
-            ->method('removeCrons')
+            ->method('removeCronjobs')
             ->willThrowException(new AccessDeniedException('test fail'));
 
         $cmd = new DropCommand();
@@ -85,7 +85,7 @@ class DropCommandTest extends TestCase
     {
         /** @var MockObject $editor */
         $this->crontabEditor->expects($this->once())
-            ->method('removeCrons')
+            ->method('removeCronjobs')
             ->willReturn(null);
 
         $cmd = new DropCommand();
@@ -97,7 +97,7 @@ class DropCommandTest extends TestCase
         $tester = new CommandTester($app->find('babymarktext:cron:drop'));
         $tester->execute([]);
 
-        $this->assertStringContainsString('All crons successfully dropped.', $tester->getDisplay());
+        $this->assertStringContainsString('All cronjobs successfully dropped.', $tester->getDisplay());
         $this->assertEquals(0, $tester->getStatusCode());
     }
 }

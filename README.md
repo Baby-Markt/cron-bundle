@@ -11,18 +11,53 @@ Available commands are:
 * babymarktext:cron:sync
 
 ### Drop
-Drops all the whole crons block from crontab not considering the configured crons.
+Drops all the whole cronjobs block from crontab not considering the configured cronjobs.
 
 ### Dump
 Generates the cron entries which may be installed to crontab and shows it on console.
 
 ### Report
-Show some reports about the execution of the configured crons. This features required the DoctrineBundle. 
+Show some reports about the execution of the configured cronjobs. This features required the DoctrineBundle. 
 
 ### Sync
-Syncs the configured crons with the crontab. Only the related cron block will be affected.
+Syncs the configured cronjobs with the crontab. Only the related cron block will be affected.
 
 ## Configuration
+
+Following all available configuration options:
+```
+    babymarkt_ext_cron:
+        options:
+            id: '<<your-custom-id>>'
+            script: 'bin/console'
+            working_dir: '%kernel.project_dir%'
+            output:
+                file: '/dev/null'
+                append: false
+            crontab:
+                bin: 'crontab'
+                tmpPath: '<<system temp dir>>'
+                user: null
+                sudo: false
+        cronjobs:
+            your-first-job-name:
+                minutes: *
+                hours: *
+                days: *
+                months: *
+                weekdays: *
+                command: '<<the-symfony-command>>'
+                disabled: false
+                output:
+                    file: null
+                    append: null
+                arguments:
+                    - '<<your-first-argument>>'
+                    - '<<your-second-argument>>'
+                    - '...'
+            your-second-job-name:
+                ...
+```
 
 ### defaults
 Default configuration that affects the cron definitions.
@@ -44,7 +79,7 @@ The user which will use to execute the command. Defaults to current user which e
 #### sudo
 If true, sudo will be used to execute the command. Defaults to "false".
 
-### crons
+### cronjobs
 The cron definitions.
 
 #### minutes

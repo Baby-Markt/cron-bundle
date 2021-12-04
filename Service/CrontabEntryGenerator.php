@@ -14,7 +14,7 @@ use BabymarktExt\CronBundle\Entity\Cron\Definition;
  * Class ListGenerator
  * @package BabymarktExt\CronBundle\DependencyInjection
  */
-class CronEntryGenerator
+class CrontabEntryGenerator
 {
 
     /**

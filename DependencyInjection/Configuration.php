@@ -22,7 +22,7 @@ class Configuration implements ConfigurationInterface
     /**
      * {@inheritdoc}
      */
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('babymarkt_ext_cron');
         $rootNode = $treeBuilder->getRootNode();
@@ -34,7 +34,10 @@ class Configuration implements ConfigurationInterface
                     ->children()
                         ->scalarNode('id')->defaultNull()->end()
                         ->scalarNode('script')->defaultValue('bin/console')->end()
-                        ->scalarNode('working_dir')->defaultValue('%kernel.project_dir%')->end()
+                        ->scalarNode('working_dir')
+                            ->defaultNull()
+                            ->info('If not set, the project dir is used as working dir.')
+                        ->end()
                         ->arrayNode('output')
                             ->addDefaultsIfNotSet()
                             ->children()
@@ -54,23 +57,7 @@ class Configuration implements ConfigurationInterface
                     ->end()
                 ->end()
 
-                ->arrayNode('report')
-                    ->addDefaultsIfNotSet()
-                    ->children()
-                        ->booleanNode('enabled')->defaultFalse()->end()
-                        ->arrayNode('database')
-                            ->addDefaultsIfNotSet()
-                            ->children()
-                                ->scalarNode('user')->defaultValue('crons')->end()
-                                ->scalarNode('password')->defaultValue('password')->end()
-                                ->scalarNode('path')->defaultNull()->end()
-                            ->end()
-                        ->end()
-                    ->end()
-                ->end()
-
-                ->arrayNode('crons')
-                    ->requiresAtLeastOneElement()
+                ->arrayNode('cronjobs')
                     ->useAttributeAsKey('name')
                     ->prototype('array')
                         ->children()

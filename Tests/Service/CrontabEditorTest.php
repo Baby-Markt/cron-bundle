@@ -36,7 +36,7 @@ class CrontabEditorTest extends TestCase
         $editor->setReader($reader);
         $editor->setWriter($writer);
 
-        $editor->removeCrons();
+        $editor->removeCronjobs();
 
         $buffer = $writer->getClean();
 
@@ -47,7 +47,7 @@ class CrontabEditorTest extends TestCase
         $this->assertNotContains('some cron definition 2', $buffer);
     }
 
-    public function testRemovingCronsWithMultipleBlocks()
+    public function testRemovingCronjobsWithMultipleBlocks()
     {
         /**
          * @var CrontabReaderInterface|MockObject $reader
@@ -71,7 +71,7 @@ class CrontabEditorTest extends TestCase
         $editor->setReader($reader);
         $editor->setWriter($writer);
 
-        $editor->removeCrons();
+        $editor->removeCronjobs();
 
         $buffer = $writer->getClean();
 
@@ -84,7 +84,7 @@ class CrontabEditorTest extends TestCase
         $this->assertContains('some cron definition other', $buffer);
     }
 
-    public function testUpdateExistingCronsBlock()
+    public function testUpdateExistingCronjobsBlock()
     {
         /**
          * @var CrontabReaderInterface|MockObject $reader
@@ -107,7 +107,7 @@ class CrontabEditorTest extends TestCase
         $editor->setReader($reader);
         $editor->setWriter($writer);
 
-        $editor->injectCrons([
+        $editor->injectCronjobs([
             'cron-1' => 'the new cron definition 1',
             'cron-2' => 'the new cron definition 2'
         ]);
@@ -123,7 +123,7 @@ class CrontabEditorTest extends TestCase
         $this->assertContains('the new cron definition 2', $buffer);
     }
 
-    public function testInjectingCrons()
+    public function testInjectingCronjobs()
     {
         /**
          * @var CrontabReaderInterface|MockObject $reader
@@ -140,7 +140,7 @@ class CrontabEditorTest extends TestCase
         $editor->setReader($reader);
         $editor->setWriter($writer);
 
-        $editor->injectCrons([
+        $editor->injectCronjobs([
             'cron-1' => 'cron definition 1',
             'cron-2' => 'cron definition 2'
         ]);
@@ -182,7 +182,7 @@ class CrontabEditorTest extends TestCase
         $editor->setReader($reader);
         $editor->setWriter($writer);
 
-        $editor->removeCrons();
+        $editor->removeCronjobs();
 
         $buffer = $writer->getClean();
 

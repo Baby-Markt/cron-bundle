@@ -12,8 +12,8 @@ namespace BabymarktExt\CronBundle\Tests\Command;
 use BabymarktExt\CronBundle\Command\SyncCommand;
 use BabymarktExt\CronBundle\Exception\AccessDeniedException;
 use BabymarktExt\CronBundle\Exception\WriteException;
-use BabymarktExt\CronBundle\Service\CronEntryGenerator;
 use BabymarktExt\CronBundle\Service\CrontabEditor;
+use BabymarktExt\CronBundle\Service\CrontabEntryGenerator;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
@@ -26,7 +26,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 class SyncCommandTest extends TestCase
 {
     /**
-     * @var CronEntryGenerator|MockObject
+     * @var CrontabEntryGenerator|MockObject
      */
     private $entryGenerator;
 
@@ -37,8 +37,8 @@ class SyncCommandTest extends TestCase
 
     protected function setUp(): void
     {
-        /** @var CronEntryGenerator|MockObject $entryGenerator */
-        $this->entryGenerator = $this->getMockBuilder(CronEntryGenerator::class)
+        /** @var CrontabEntryGenerator|MockObject $entryGenerator */
+        $this->entryGenerator = $this->getMockBuilder(CrontabEntryGenerator::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -54,12 +54,12 @@ class SyncCommandTest extends TestCase
     public function testTargetNotWritable()
     {
         $this->editor->expects($this->once())
-            ->method('injectCrons')
+            ->method('injectCronjobs')
             ->willThrowException(new WriteException('test fail'));
 
         $cmd = new SyncCommand();
         $cmd->setCrontabEditor($this->editor);
-        $cmd->setCronEntryGenerator($this->entryGenerator);
+        $cmd->setCrontabEntryGenerator($this->entryGenerator);
 
         $app = new Application();
         $app->add($cmd);
@@ -75,12 +75,12 @@ class SyncCommandTest extends TestCase
     public function testAccessDenied()
     {
         $this->editor->expects($this->once())
-            ->method('injectCrons')
+            ->method('injectCronjobs')
             ->willThrowException(new AccessDeniedException('test fail'));
 
         $cmd = new SyncCommand();
         $cmd->setCrontabEditor($this->editor);
-        $cmd->setCronEntryGenerator($this->entryGenerator);
+        $cmd->setCrontabEntryGenerator($this->entryGenerator);
 
         $app = new Application();
         $app->add($cmd);
@@ -96,12 +96,12 @@ class SyncCommandTest extends TestCase
     public function testSuccessfulSync()
     {
         $this->editor->expects($this->once())
-            ->method('injectCrons')
+            ->method('injectCronjobs')
             ->willReturn(null);
 
         $cmd = new SyncCommand();
         $cmd->setCrontabEditor($this->editor);
-        $cmd->setCronEntryGenerator($this->entryGenerator);
+        $cmd->setCrontabEntryGenerator($this->entryGenerator);
 
         $app = new Application();
         $app->add($cmd);
@@ -110,7 +110,7 @@ class SyncCommandTest extends TestCase
         $tester = new CommandTester($app->find('babymarktext:cron:sync'));
         $tester->execute(['command' => 'babymarkt:cron:sync']);
 
-        $this->assertStringContainsString('3 crons successfully synced.', $tester->getDisplay());
+        $this->assertStringContainsString('3 cronjobs successfully synced.', $tester->getDisplay());
         $this->assertEquals(0, $tester->getStatusCode());
     }
 

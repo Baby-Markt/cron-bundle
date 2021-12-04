@@ -11,7 +11,7 @@ namespace BabymarktExt\CronBundle\Tests\Command;
 
 
 use BabymarktExt\CronBundle\Command\DumpCommand;
-use BabymarktExt\CronBundle\Service\CronEntryGenerator;
+use BabymarktExt\CronBundle\Service\CrontabEntryGenerator;
 use BabymarktExt\CronBundle\Tests\Fixtures\ContainerTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
@@ -23,7 +23,7 @@ class DumpCommandTest extends TestCase
 
     public function testDumpEntries()
     {
-        $generator = $this->getMockBuilder(CronEntryGenerator::class)
+        $generator = $this->getMockBuilder(CrontabEntryGenerator::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -32,7 +32,7 @@ class DumpCommandTest extends TestCase
             ->willReturn(['Line1', 'Line2']);
 
         $cmd = new DumpCommand();
-        $cmd->setCronEntryGenerator($generator);
+        $cmd->setCrontabEntryGenerator($generator);
 
         $app = new Application();
         $app->add($cmd);

@@ -40,7 +40,7 @@ class DropCommand extends Command
     {
         $this
             ->setName('babymarktext:cron:drop')
-            ->setDescription('Drops all configured crons from crontab.');
+            ->setDescription('Drops all configured cronjobs from crontab.');
     }
 
     /**
@@ -63,8 +63,8 @@ class DropCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         try {
-            $this->crontabEditor->removeCrons();
-            $output->writeln('<info>All crons successfully dropped.</info>');
+            $this->crontabEditor->removeCronjobs();
+            $output->writeln('<info>All cronjobs successfully dropped.</info>');
 
         } catch (WriteException $e) {
             $output->writeln('<error>Can\'t write to crontab.</error>');

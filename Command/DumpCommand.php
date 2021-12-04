@@ -9,7 +9,7 @@
 
 namespace BabymarktExt\CronBundle\Command;
 
-use BabymarktExt\CronBundle\Service\CronEntryGenerator;
+use BabymarktExt\CronBundle\Service\CrontabEntryGenerator;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -23,7 +23,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class DumpCommand extends Command
 {
     /**
-     * @var CronEntryGenerator
+     * @var CrontabEntryGenerator
      */
     protected $cronEntryGenerator;
 
@@ -34,7 +34,7 @@ class DumpCommand extends Command
     {
         $this
             ->setName('babymarktext:cron:dump')
-            ->setDescription('Shows a list of all configured crons.');
+            ->setDescription('Shows a list of all configured cronjobs.');
     }
 
     /**
@@ -67,9 +67,9 @@ class DumpCommand extends Command
 
     /**
      * @required
-     * @param CronEntryGenerator $cronEntryGenerator
+     * @param CrontabEntryGenerator $cronEntryGenerator
      */
-    public function setCronEntryGenerator(CronEntryGenerator $cronEntryGenerator): void
+    public function setCrontabEntryGenerator(CrontabEntryGenerator $cronEntryGenerator): void
     {
         $this->cronEntryGenerator = $cronEntryGenerator;
     }

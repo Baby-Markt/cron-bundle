@@ -47,22 +47,22 @@ class CrontabEditor
 
     /**
      * Injects the cron entries into crontab.
-     * @param array $crons
+     * @param array $cronjobs
      * @todo Add a simple locking mechanism.
      * @throws AccessDeniedException if access to crontab is prohibited.
      * @throws WriteException if the temp path is not writable.
      */
-    public function injectCrons(array $crons)
+    public function injectCronjobs(array $cronjobs)
     {
         // Read current crontab contents
         $crontab = $this->reader->read();
 
         // Remove old cron entries.
-        $crontab = $this->purgeOldCrons($crontab);
+        $crontab = $this->purgeOldCronjobs($crontab);
 
         // Add the new cron's block to crontab lines.
         $crontab[] = $this->generateStartLine();
-        $crontab += $crons;
+        $crontab += $cronjobs;
         $crontab[] = $this->generateEndLine();
 
         // Write content back into crontab.
@@ -70,22 +70,22 @@ class CrontabEditor
     }
 
     /**
-     * Removes the existing crons from crontab.
+     * Removes the existing cronjobs from crontab.
      * @todo Add a simple locking mechanism.
      * @throws AccessDeniedException if access to crontab is prohibited.
      */
-    public function removeCrons()
+    public function removeCronjobs()
     {
         $crontab = $this->reader->read();
-        $crontab = $this->purgeOldCrons($crontab);
+        $crontab = $this->purgeOldCronjobs($crontab);
 
         $this->writer->write($crontab);
     }
 
     /**
-     * Removes the old crons with same cron's block identifier.
+     * Removes the old cronjobs with same cron's block identifier.
      */
-    protected function purgeOldCrons($crontab)
+    protected function purgeOldCronjobs($crontab)
     {
         $start = $this->generateStartLine();
         $end   = $this->generateEndLine();

@@ -36,7 +36,7 @@ class ValidateCommandTest extends TestCase
         $checkerStub->expects($this->never())->method('getResult');
 
         $config = [
-            'crons' => [
+            'cronjobs' => [
                 'test' => ['command' => 'some:command']
             ]
         ];
@@ -74,7 +74,7 @@ class ValidateCommandTest extends TestCase
             ->willReturn(DefinitionChecker::RESULT_INCORRECT_COMMAND);
 
         $config = [
-            'crons' => [
+            'cronjobs' => [
                 'test' => ['command' => 'some:command']
             ]
         ];
@@ -110,7 +110,7 @@ class ValidateCommandTest extends TestCase
             ->method('getResult');
 
         $config = [
-            'crons' => [
+            'cronjobs' => [
                 'test' => ['command' => 'some:command', 'disabled' => true]
             ]
         ];

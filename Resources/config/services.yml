@@ -7,15 +7,15 @@ services:
     resource: '../../Command/'
     tags: [ { name: console.command } ]
 
-  BabymarktExt\CronBundle\Service\Factory\CronEntryGeneratorFactory:
+  BabymarktExt\CronBundle\Service\Factory\CrontabEntryGeneratorFactory:
     arguments:
       - '%babymarkt_ext_cron.definitions%'
       - '%babymarkt_ext_cron.options.output%'
       - '%babymarkt_ext_cron.options.working_dir%'
       - '%kernel.environment%'
 
-  BabymarktExt\CronBundle\Service\CronEntryGenerator:
-    factory: [ '@BabymarktExt\CronBundle\Service\Factory\CronEntryGeneratorFactory', create ]
+  BabymarktExt\CronBundle\Service\CrontabEntryGenerator:
+    factory: [ '@BabymarktExt\CronBundle\Service\Factory\CrontabEntryGeneratorFactory', create ]
     calls:
       - [ setScript, [ '%babymarkt_ext_cron.options.script%' ] ]
 

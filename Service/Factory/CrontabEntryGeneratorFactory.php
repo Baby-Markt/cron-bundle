@@ -10,13 +10,13 @@
 namespace BabymarktExt\CronBundle\Service\Factory;
 
 use BabymarktExt\CronBundle\Entity\Cron\Definition;
-use BabymarktExt\CronBundle\Service\CronEntryGenerator;
+use BabymarktExt\CronBundle\Service\CrontabEntryGenerator;
 
 /**
- * Class CronEntryGeneratorFactory
+ * Class CrontabEntryGeneratorFactory
  * @package BabymarktExt\CronBundle\Service\Factory
  */
-class CronEntryGeneratorFactory
+class CrontabEntryGeneratorFactory
 {
 
     /**
@@ -57,7 +57,7 @@ class CronEntryGeneratorFactory
     }
 
     /**
-     * @return CronEntryGenerator
+     * @return CrontabEntryGenerator
      */
     public function create()
     {
@@ -67,7 +67,7 @@ class CronEntryGeneratorFactory
             $definitions[$alias] = new Definition($properties);
         }
 
-        return new CronEntryGenerator($definitions, $this->outputOptions, $this->basedir, $this->environment);
+        return new CrontabEntryGenerator($definitions, $this->outputOptions, $this->basedir, $this->environment);
     }
 
 }

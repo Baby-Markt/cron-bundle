@@ -11,8 +11,8 @@ namespace BabymarktExt\CronBundle\Command;
 
 use BabymarktExt\CronBundle\Exception\AccessDeniedException;
 use BabymarktExt\CronBundle\Exception\WriteException;
-use BabymarktExt\CronBundle\Service\CronEntryGenerator;
 use BabymarktExt\CronBundle\Service\CrontabEditor;
+use BabymarktExt\CronBundle\Service\CrontabEntryGenerator;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -30,7 +30,7 @@ class SyncCommand extends Command
         STATUS_ACCESS_DENIED = 2;
 
     /**
-     * @var CronEntryGenerator
+     * @var CrontabEntryGenerator
      */
     protected $cronEntryGenerator;
 
@@ -46,7 +46,7 @@ class SyncCommand extends Command
     {
         $this
             ->setName('babymarktext:cron:sync')
-            ->setDescription('Syncs all configured crons with crontab.');
+            ->setDescription('Syncs all configured cronjobs with crontab.');
     }
 
     /**
@@ -72,8 +72,8 @@ class SyncCommand extends Command
         $entries = $this->cronEntryGenerator->generateEntries();
 
         try {
-            $this->crontabEditor->injectCrons($entries);
-            $output->writeln('<info>' . count($entries) . ' crons successfully synced.</info>');
+            $this->crontabEditor->injectCronjobs($entries);
+            $output->writeln('<info>' . count($entries) . ' cronjobs successfully synced.</info>');
 
         } catch (WriteException $e) {
             $output->writeln('<error>Can\'t write to crontab.</error>');
@@ -91,9 +91,9 @@ class SyncCommand extends Command
 
     /**
      * @required
-     * @param CronEntryGenerator $cronEntryGenerator
+     * @param CrontabEntryGenerator $cronEntryGenerator
      */
-    public function setCronEntryGenerator(CronEntryGenerator $cronEntryGenerator): void
+    public function setCrontabEntryGenerator(CrontabEntryGenerator $cronEntryGenerator): void
     {
         $this->cronEntryGenerator = $cronEntryGenerator;
     }

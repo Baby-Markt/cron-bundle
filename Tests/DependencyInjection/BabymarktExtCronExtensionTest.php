@@ -55,7 +55,7 @@ class BabymarktExtCronExtensionTest extends TestCase
                     'sudo'    => true
                 ]
             ],
-            'crons'   => [
+            'cronjobs'   => [
                 'test_cron' => [
                     'minutes'   => '1',
                     'hours'     => '2',
@@ -77,8 +77,8 @@ class BabymarktExtCronExtensionTest extends TestCase
         $this->assertEquals($config['options']['id'], $this->container->getParameter($this->root . '.options.id'));
 
         foreach ($this->container->getParameter($this->root . '.definitions') as $alias => $def) {
-            $this->assertArrayHasKey($alias, $config['crons']);
-            $this->assertEquals($config['crons'][$alias], $def);
+            $this->assertArrayHasKey($alias, $config['cronjobs']);
+            $this->assertEquals($config['cronjobs'][$alias], $def);
         }
     }
 
@@ -115,7 +115,7 @@ class BabymarktExtCronExtensionTest extends TestCase
         ];
 
         $configs = [
-            'crons' => [
+            'cronjobs' => [
                 'test-cron' => array_replace_recursive(['command' => 'babymarktext:cron:validate'], $definition)
             ]
         ];
@@ -141,7 +141,7 @@ class BabymarktExtCronExtensionTest extends TestCase
         $this->root      = "babymarkt_ext_cron";
 
         $this->container->setParameter('kernel.bundles', []);
-        $this->container->setParameter('kernel.root_dir', '/test/dir');
+        $this->container->setParameter('kernel.project_dir', '/test/dir');
         $this->container->setParameter('kernel.environment', 'test');
         $this->container->setParameter('kernel.debug', 'false');
     }

@@ -3,7 +3,7 @@
 namespace BabymarktExt\CronBundle\Tests\Service;
 
 use BabymarktExt\CronBundle\Entity\Cron\Definition;
-use BabymarktExt\CronBundle\Service\CronEntryGenerator;
+use BabymarktExt\CronBundle\Service\CrontabEntryGenerator;
 use BabymarktExt\CronBundle\Tests\Fixtures\ContainerTrait;
 use PHPUnit\Framework\TestCase;
 
@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
  * Date: 05.08.15
  * Time: 13:34
  */
-class CronEntryGeneratorTest extends TestCase
+class CrontabEntryGeneratorTest extends TestCase
 {
 
     use ContainerTrait;
@@ -28,7 +28,7 @@ class CronEntryGeneratorTest extends TestCase
         $key = 'cron_def';
 
         $config = [
-            'crons' => [
+            'cronjobs' => [
                 $key => [
                     'command' => 'babymarktext:test:command'
                 ]
@@ -38,26 +38,29 @@ class CronEntryGeneratorTest extends TestCase
         $container   = $this->getContainer($config);
         $definitions = $container->getParameter($this->root . '.definitions');
         $outputConf  = $container->getParameter($this->root . '.options.output');
+        $workingDir  = $container->getParameter($this->root . '.options.working_dir');
 
-        $rootDir     = $container->getParameter('kernel.root_dir');
+        $projectDir  = $container->getParameter('kernel.project_dir');
         $environment = $container->getParameter('kernel.environment');
 
-        $generator = new CronEntryGenerator(
+        $this->assertEquals($projectDir, $workingDir, 'Working dir and project dir are not equal');
+
+        $generator = new CrontabEntryGenerator(
             array_map(
                 function ($def) {
                     return new Definition($def);
                 },
                 $definitions
             ),
-            $outputConf, $rootDir, $environment
+            $outputConf, $projectDir, $environment
         );
         $entries   = $generator->generateEntries();
 
         $this->assertCount(1, $entries);
         $this->assertArrayHasKey($key, $entries);
         $this->assertEquals(
-            sprintf('* * * * * cd %s; php console --env=%s babymarktext:test:command 2>&1 1>%s',
-                $rootDir, $environment, $outputConf['file']),
+            sprintf('* * * * * cd %s; php bin/console --env=%s babymarktext:test:command 2>&1 1>%s',
+                $projectDir, $environment, $outputConf['file']),
             $entries[$key]
         );
     }
@@ -67,7 +70,7 @@ class CronEntryGeneratorTest extends TestCase
         $key = 'cron_def';
 
         $config = [
-            'crons' => [
+            'cronjobs' => [
                 $key => [
                     'command'  => 'babymarktext:test:command',
                     'disabled' => true
@@ -88,7 +91,7 @@ class CronEntryGeneratorTest extends TestCase
         $key2 = 'cron_replace';
 
         $config = [
-            'crons' => [
+            'cronjobs' => [
                 $key  => [
                     'command' => 'babymarktext:test:command',
                     'output'  => ['file' => '/var/log/log.log']
@@ -123,7 +126,7 @@ class CronEntryGeneratorTest extends TestCase
         $key = 'cron_def';
 
         $config = [
-            'crons' => [
+            'cronjobs' => [
                 $key => [
                     'minutes'  => '1',
                     'hours'    => '2',
@@ -146,7 +149,7 @@ class CronEntryGeneratorTest extends TestCase
         $key = 'cron_def';
 
         $config = [
-            'crons' => [
+            'cronjobs' => [
                 $key => [
                     'command'   => 'babymarktext:test:command',
                     'arguments' => ['--arg=5', '-d']
@@ -166,7 +169,7 @@ class CronEntryGeneratorTest extends TestCase
         $key = 'cron_def';
 
         $config = [
-            'crons' => [
+            'cronjobs' => [
                 $key => [
                     'command' => 'babymarktext:test:command'
                 ]
@@ -174,7 +177,7 @@ class CronEntryGeneratorTest extends TestCase
         ];
 
         $container = $this->getContainer($config);
-        /** @var Definition[] $definitions */
+        /** @var array[] $definitions */
         $definitions = $container->getParameter($this->root . '.definitions');
         $outputConf  = $container->getParameter($this->root . '.options.output');
 
@@ -188,24 +191,24 @@ class CronEntryGeneratorTest extends TestCase
         // Remove command to test exception
         $definitions[$key]->setCommand(null);
 
-        $rootDir     = $container->getParameter('kernel.root_dir');
+        $rootDir     = $container->getParameter('kernel.project_dir');
         $environment = $container->getParameter('kernel.environment');
 
-        $generator = new CronEntryGenerator($definitions, $outputConf, $rootDir, $environment);
+        $generator = new CrontabEntryGenerator($definitions, $outputConf, $rootDir, $environment);
         $generator->generateEntries();
     }
 
     /**
      * @param $config
-     * @return CronEntryGenerator
+     * @return CrontabEntryGenerator
      */
-    protected function createGenerator($config)
+    protected function createGenerator($config): CrontabEntryGenerator
     {
         $container   = $this->getContainer($config);
         $definitions = $container->getParameter($this->root . '.definitions');
         $outputConf  = $container->getParameter($this->root . '.options.output');
 
-        $rootDir     = $container->getParameter('kernel.root_dir');
+        $rootDir     = $container->getParameter('kernel.project_dir');
         $environment = $container->getParameter('kernel.environment');
 
         $definitions = array_map(
@@ -215,9 +218,7 @@ class CronEntryGeneratorTest extends TestCase
             $definitions
         );
 
-        $generator = new CronEntryGenerator($definitions, $outputConf, $rootDir, $environment);
-
-        return $generator;
+        return new CrontabEntryGenerator($definitions, $outputConf, $rootDir, $environment);
     }
 
     /**

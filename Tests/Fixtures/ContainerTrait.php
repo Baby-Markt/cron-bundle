@@ -18,7 +18,7 @@ trait ContainerTrait
     /**
      * @var string
      */
-    protected $rootDir = '/test/path';
+    protected $projectDir = '/test/path';
 
     /**
      * @var string
@@ -29,12 +29,12 @@ trait ContainerTrait
      * @param array $config
      * @return ContainerBuilder
      */
-    protected function getContainer($config = [])
+    protected function getContainer(array $config = []): ContainerBuilder
     {
         $ext  = new BabymarktExtCronExtension();
         $cont = new ContainerBuilder();
         $cont->setParameter('kernel.bundles', []);
-        $cont->setParameter('kernel.root_dir', $this->rootDir);
+        $cont->setParameter('kernel.project_dir', $this->projectDir);
         $cont->setParameter('kernel.environment', $this->environment);
 
         $ext->load([$config], $cont);

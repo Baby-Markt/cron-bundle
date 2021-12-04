@@ -166,7 +166,7 @@ class CrontabReaderTest extends TestCase
         $ext  = new BabymarktExtCronExtension();
         $cont = new ContainerBuilder();
         $cont->setParameter('kernel.bundles', []);
-        $cont->setParameter('kernel.root_dir', self::ROOT_DIR);
+        $cont->setParameter('kernel.project_dir', self::ROOT_DIR);
         $cont->setParameter('kernel.environment', self::ENVIRONMENT);
 
         $ext->load([$config], $cont);
