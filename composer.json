@@ -30,5 +30,10 @@
     "psr-4": {
       "BabymarktExt\\CronBundle\\": ""
     }
+  },
+  "config": {
+    "platform": {
+      "php": "7.3"
+    }
   }
 }
