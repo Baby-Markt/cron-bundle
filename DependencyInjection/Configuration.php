@@ -67,6 +67,7 @@ class Configuration implements ConfigurationInterface
                             ->scalarNode('months')->defaultValue('*')->end()
                             ->scalarNode('weekdays')->defaultValue('*')->end()
                             ->scalarNode('command')->isRequired()->end()
+                            ->scalarNode('description')->defaultNull()->end()
                             ->booleanNode('disabled')->defaultFalse()->end()
                             ->arrayNode('output')
                                 ->addDefaultsIfNotSet()

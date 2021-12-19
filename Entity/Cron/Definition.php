@@ -58,6 +58,12 @@ class Definition
     protected $command;
 
     /**
+     * Command description
+     * @var string
+     */
+    protected $description;
+
+    /**
      * If job is disalbed, it will not be synced to crontab.
      * @var bool
      */
@@ -300,7 +306,7 @@ class Definition
      * @codeCoverageIgnore
      * @return array
      */
-    public function getArguments()
+    public function getArguments(): array
     {
         return $this->arguments;
     }
@@ -310,9 +316,26 @@ class Definition
      * @param array $arguments
      * @return $this
      */
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): Definition
     {
         $this->arguments = $arguments;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string|null $description
+     */
+    public function setDescription(?string $description): Definition
+    {
+        $this->description = $description;
         return $this;
     }
 

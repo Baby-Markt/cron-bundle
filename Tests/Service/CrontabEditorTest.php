@@ -24,10 +24,10 @@ class CrontabEditorTest extends TestCase
         $reader->method('read')->willReturn([
             'row 1',
             'row 2',
-            '### CRONTAB-EDITOR-START test ###',
+            '###> test ###',
             'some cron definition 1',
             'some cron definition 2',
-            '### CRONTAB-EDITOR-END test ###',
+            '###< test ###',
             'row 99',
             'row 100',
         ]);
@@ -41,8 +41,8 @@ class CrontabEditorTest extends TestCase
         $buffer = $writer->getClean();
 
         $this->assertCount(4, $buffer);
-        $this->assertNotContains('### CRONTAB-EDITOR-START test ###', $buffer);
-        $this->assertNotContains('### CRONTAB-EDITOR-END test ###', $buffer);
+        $this->assertNotContains('###> test ###', $buffer);
+        $this->assertNotContains('###< test ###', $buffer);
         $this->assertNotContains('some cron definition 1', $buffer);
         $this->assertNotContains('some cron definition 2', $buffer);
     }
@@ -57,13 +57,13 @@ class CrontabEditorTest extends TestCase
 
         $reader->method('read')->willReturn([
             'row 1',
-            '### CRONTAB-EDITOR-START test ###',
+            '###> test ###',
             'some cron definition test',
-            '### CRONTAB-EDITOR-END test ###',
+            '###< test ###',
             'row 2',
-            '### CRONTAB-EDITOR-START some_other ###',
+            '###> some_other ###',
             'some cron definition other',
-            '### CRONTAB-EDITOR-END some_other ###',
+            '###< some_other ###',
             'row 3',
         ]);
 
@@ -76,10 +76,10 @@ class CrontabEditorTest extends TestCase
         $buffer = $writer->getClean();
 
         $this->assertCount(6, $buffer);
-        $this->assertNotContains('### CRONTAB-EDITOR-START test ###', $buffer);
-        $this->assertNotContains('### CRONTAB-EDITOR-END test ###', $buffer);
-        $this->assertContains('### CRONTAB-EDITOR-START some_other ###', $buffer);
-        $this->assertContains('### CRONTAB-EDITOR-END some_other ###', $buffer);
+        $this->assertNotContains('###> test ###', $buffer);
+        $this->assertNotContains('###< test ###', $buffer);
+        $this->assertContains('###> some_other ###', $buffer);
+        $this->assertContains('###< some_other ###', $buffer);
         $this->assertNotContains('some cron definition test', $buffer);
         $this->assertContains('some cron definition other', $buffer);
     }
@@ -95,10 +95,10 @@ class CrontabEditorTest extends TestCase
         $reader->method('read')->willReturn([
             'row 1',
             'row 2',
-            '### CRONTAB-EDITOR-START test ###',
+            '###> test ###',
             'some old cron definition 1',
             'some old cron definition 2',
-            '### CRONTAB-EDITOR-END test ###',
+            '###< test ###',
             'row 99',
             'row 100',
         ]);
@@ -115,8 +115,8 @@ class CrontabEditorTest extends TestCase
         $buffer = $writer->getClean();
 
         $this->assertCount(8, $buffer);
-        $this->assertContains('### CRONTAB-EDITOR-START test ###', $buffer);
-        $this->assertContains('### CRONTAB-EDITOR-END test ###', $buffer);
+        $this->assertContains('###> test ###', $buffer);
+        $this->assertContains('###< test ###', $buffer);
         $this->assertNotContains('some old cron definition 1', $buffer);
         $this->assertNotContains('some old cron definition 2', $buffer);
         $this->assertContains('the new cron definition 1', $buffer);
@@ -147,8 +147,8 @@ class CrontabEditorTest extends TestCase
 
         $buffer = $writer->getClean();
 
-        $this->assertContains('### CRONTAB-EDITOR-START test ###', $buffer);
-        $this->assertContains('### CRONTAB-EDITOR-END test ###', $buffer);
+        $this->assertContains('###> test ###', $buffer);
+        $this->assertContains('###< test ###', $buffer);
         $this->assertContains('cron definition 1', $buffer);
         $this->assertContains('cron definition 2', $buffer);
     }
@@ -168,11 +168,11 @@ class CrontabEditorTest extends TestCase
             '',
             'row 1',
             'row 2',
-            '### CRONTAB-EDITOR-START test ###',
+            '###> test ###',
             '',
             'some old cron definition 1',
             'some old cron definition 2',
-            '### CRONTAB-EDITOR-END test ###',
+            '###< test ###',
             'row 99',
             '',
             'row 100',
@@ -187,8 +187,8 @@ class CrontabEditorTest extends TestCase
         $buffer = $writer->getClean();
 
         $this->assertCount(6, $buffer);
-        $this->assertNotContains('### CRONTAB-EDITOR-START test ###', $buffer);
-        $this->assertNotContains('### CRONTAB-EDITOR-END test ###', $buffer);
+        $this->assertNotContains('###> test ###', $buffer);
+        $this->assertNotContains('###< test ###', $buffer);
         $this->assertNotContains('some cron definition 1', $buffer);
         $this->assertNotContains('some cron definition 2', $buffer);
         $this->assertContains('', $buffer);

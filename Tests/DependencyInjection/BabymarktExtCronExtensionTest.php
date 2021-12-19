@@ -42,7 +42,7 @@ class BabymarktExtCronExtensionTest extends TestCase
     public function testFullConfigInjection()
     {
         $config = [
-            'options' => [
+            'options'  => [
                 'id'      => 'test-id',
                 'output'  => [
                     'file'   => 'test',
@@ -55,17 +55,18 @@ class BabymarktExtCronExtensionTest extends TestCase
                     'sudo'    => true
                 ]
             ],
-            'cronjobs'   => [
+            'cronjobs' => [
                 'test_cron' => [
-                    'minutes'   => '1',
-                    'hours'     => '2',
-                    'days'      => '3',
-                    'months'    => '4',
-                    'weekdays'  => '5',
-                    'command'   => 'babymarktext:cron:validate',
-                    'disabled'  => true,
-                    'output'    => ['file' => 'test', 'append' => true],
-                    'arguments' => ['test1', 'test2', 'test3']
+                    'minutes'     => '1',
+                    'hours'       => '2',
+                    'days'        => '3',
+                    'months'      => '4',
+                    'weekdays'    => '5',
+                    'command'     => 'babymarktext:cron:validate',
+                    'description' => null,
+                    'disabled'    => true,
+                    'output'      => ['file' => 'test', 'append' => true],
+                    'arguments'   => ['test1', 'test2', 'test3']
                 ]
             ]
         ];
@@ -103,15 +104,16 @@ class BabymarktExtCronExtensionTest extends TestCase
     public function testDefaultCronDefinition($definition)
     {
         $defaults = [
-            'minutes'   => '*',
-            'hours'     => '*',
-            'days'      => '*',
-            'months'    => '*',
-            'weekdays'  => '*',
-            'command'   => 'babymarktext:cron:validate',
-            'disabled'  => false,
-            'output'    => ['file' => null, 'append' => null],
-            'arguments' => []
+            'minutes'     => '*',
+            'hours'       => '*',
+            'days'        => '*',
+            'months'      => '*',
+            'weekdays'    => '*',
+            'command'     => 'babymarktext:cron:validate',
+            'description' => null,
+            'disabled'    => false,
+            'output'      => ['file' => null, 'append' => null],
+            'arguments'   => []
         ];
 
         $configs = [

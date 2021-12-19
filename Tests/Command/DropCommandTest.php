@@ -85,8 +85,7 @@ class DropCommandTest extends TestCase
     {
         /** @var MockObject $editor */
         $this->crontabEditor->expects($this->once())
-            ->method('removeCronjobs')
-            ->willReturn(null);
+            ->method('removeCronjobs');
 
         $cmd = new DropCommand();
         $cmd->setCrontabEditor($this->crontabEditor);

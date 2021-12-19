@@ -96,8 +96,7 @@ class SyncCommandTest extends TestCase
     public function testSuccessfulSync()
     {
         $this->editor->expects($this->once())
-            ->method('injectCronjobs')
-            ->willReturn(null);
+            ->method('injectCronjobs');
 
         $cmd = new SyncCommand();
         $cmd->setCrontabEditor($this->editor);

@@ -15,7 +15,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * This silly test command is only for checking the cron report listener.
@@ -29,12 +28,12 @@ class ValidateCommand extends Command
     protected $definitionChecker;
 
     /**
-     * @var ContainerInterface
+     * @var array
      */
-    protected $container;
+    protected $definitions;
 
     /**
-     * Configures the current command.
+     * @inheritDoc
      */
     protected function configure()
     {
@@ -44,35 +43,18 @@ class ValidateCommand extends Command
     }
 
     /**
-     * Executes the current command.
-     *
-     * This method is not abstract because you can use this class
-     * as a concrete class. In this case, instead of defining the
-     * execute() method, you set the code to execute by passing
-     * a Closure to the setCode() method.
-     *
-     * @param InputInterface $input An InputInterface instance
-     * @param OutputInterface $output An OutputInterface instance
-     *
-     * @return null|int null or 0 if everything went fine, or an error code
-     *
-     * @throws \LogicException When this abstract method is not implemented
-     *
-     * @see setCode()
+     * @inheritDoc
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->definitionChecker->setApplication($this->getApplication());
 
-        /** @var array $definitions */
-        $definitions = $this->container->getParameter('babymarkt_ext_cron.definitions');
-
         $errorFound = false;
 
-        if (count($definitions)) {
+        if (count($this->definitions)) {
             $resultList = [];
 
-            foreach ($definitions as $alias => $definitionData) {
+            foreach ($this->definitions as $alias => $definitionData) {
                 $definition = new Definition($definitionData);
 
                 if ($definition->isDisabled()) {
@@ -123,13 +105,11 @@ class ValidateCommand extends Command
     }
 
     /**
+     * @param array $definitions
      * @required
-     * @param ContainerInterface $container
      */
-    public function setContainer(ContainerInterface $container): void
+    public function setDefinitions(array $definitions): void
     {
-        $this->container = $container;
+        $this->definitions = $definitions;
     }
-
-
 }

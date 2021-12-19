@@ -52,7 +52,7 @@ class CrontabEditor
      * @throws AccessDeniedException if access to crontab is prohibited.
      * @throws WriteException if the temp path is not writable.
      */
-    public function injectCronjobs(array $cronjobs)
+    public function injectCronjobs(array $cronjobs): void
     {
         // Read current crontab contents
         $crontab = $this->reader->read();
@@ -74,7 +74,7 @@ class CrontabEditor
      * @todo Add a simple locking mechanism.
      * @throws AccessDeniedException if access to crontab is prohibited.
      */
-    public function removeCronjobs()
+    public function removeCronjobs(): void
     {
         $crontab = $this->reader->read();
         $crontab = $this->purgeOldCronjobs($crontab);
@@ -85,7 +85,7 @@ class CrontabEditor
     /**
      * Removes the old cronjobs with same cron's block identifier.
      */
-    protected function purgeOldCronjobs($crontab)
+    protected function purgeOldCronjobs($crontab): array
     {
         $start = $this->generateStartLine();
         $end   = $this->generateEndLine();
@@ -114,18 +114,18 @@ class CrontabEditor
      * Generates the block start line.
      * @return string
      */
-    protected function generateStartLine()
+    protected function generateStartLine(): string
     {
-        return sprintf('### CRONTAB-EDITOR-START %s ###', $this->identifier);
+        return sprintf('###> %s ###', $this->identifier);
     }
 
     /**
      * Generates the block end line.
      * @return string
      */
-    protected function generateEndLine()
+    protected function generateEndLine(): string
     {
-        return sprintf('### CRONTAB-EDITOR-END %s ###', $this->identifier);
+        return sprintf('###< %s ###', $this->identifier);
     }
 
     /**
