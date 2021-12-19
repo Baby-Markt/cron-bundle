@@ -104,10 +104,8 @@ class Definition
 
     /**
      * Set the entity properties by given array.
-     * @param array $properties
-     * @return $this
      */
-    public function setProperties(array $properties)
+    public function setProperties(array $properties): Definition
     {
         foreach ($properties as $key => $value) {
             if (property_exists($this, $key)) {
@@ -124,19 +122,16 @@ class Definition
 
     /**
      * @codeCoverageIgnore
-     * @return string
      */
-    public function getAlias()
+    public function getAlias(): string
     {
         return $this->alias;
     }
 
     /**
      * @codeCoverageIgnore
-     * @param string $alias
-     * @return $this
      */
-    public function setAlias($alias)
+    public function setAlias(string $alias): Definition
     {
         $this->alias = $alias;
         return $this;
@@ -144,19 +139,16 @@ class Definition
 
     /**
      * @codeCoverageIgnore
-     * @return string
      */
-    public function getMinutes()
+    public function getMinutes(): string
     {
         return $this->minutes;
     }
 
     /**
      * @codeCoverageIgnore
-     * @param string $minutes
-     * @return $this
      */
-    public function setMinutes($minutes)
+    public function setMinutes(string $minutes): Definition
     {
         $this->minutes = $minutes;
         return $this;
@@ -164,19 +156,16 @@ class Definition
 
     /**
      * @codeCoverageIgnore
-     * @return string
      */
-    public function getHours()
+    public function getHours(): string
     {
         return $this->hours;
     }
 
     /**
      * @codeCoverageIgnore
-     * @param string $hours
-     * @return $this
      */
-    public function setHours($hours)
+    public function setHours(string $hours): Definition
     {
         $this->hours = $hours;
         return $this;
@@ -184,19 +173,16 @@ class Definition
 
     /**
      * @codeCoverageIgnore
-     * @return string
      */
-    public function getDays()
+    public function getDays(): string
     {
         return $this->days;
     }
 
     /**
      * @codeCoverageIgnore
-     * @param string $days
-     * @return $this
      */
-    public function setDays($days)
+    public function setDays(string $days): Definition
     {
         $this->days = $days;
         return $this;
@@ -204,19 +190,16 @@ class Definition
 
     /**
      * @codeCoverageIgnore
-     * @return string
      */
-    public function getMonths()
+    public function getMonths(): string
     {
         return $this->months;
     }
 
     /**
      * @codeCoverageIgnore
-     * @param string $months
-     * @return $this
      */
-    public function setMonths($months)
+    public function setMonths(string $months): Definition
     {
         $this->months = $months;
         return $this;
@@ -224,19 +207,16 @@ class Definition
 
     /**
      * @codeCoverageIgnore
-     * @return string
      */
-    public function getWeekdays()
+    public function getWeekdays(): string
     {
         return $this->weekdays;
     }
 
     /**
      * @codeCoverageIgnore
-     * @param string $weekdays
-     * @return $this
      */
-    public function setWeekdays($weekdays)
+    public function setWeekdays(string $weekdays): Definition
     {
         $this->weekdays = $weekdays;
         return $this;
@@ -244,19 +224,16 @@ class Definition
 
     /**
      * @codeCoverageIgnore
-     * @return string
      */
-    public function getCommand()
+    public function getCommand(): ?string
     {
         return $this->command;
     }
 
     /**
      * @codeCoverageIgnore
-     * @param string $command
-     * @return $this
      */
-    public function setCommand($command)
+    public function setCommand(string $command): Definition
     {
         $this->command = $command;
         return $this;
@@ -264,39 +241,33 @@ class Definition
 
     /**
      * @codeCoverageIgnore
-     * @return boolean
      */
-    public function isDisabled()
+    public function isDisabled(): bool
     {
         return $this->disabled;
     }
 
     /**
      * @codeCoverageIgnore
-     * @param boolean $disabled
-     * @return $this
      */
-    public function setDisabled($disabled)
+    public function setDisabled(bool $disabled): Definition
     {
-        $this->disabled = (bool)$disabled;
+        $this->disabled = $disabled;
         return $this;
     }
 
     /**
      * @codeCoverageIgnore
-     * @return array
      */
-    public function getOutput()
+    public function getOutput(): array
     {
         return $this->output;
     }
 
     /**
      * @codeCoverageIgnore
-     * @param array $output
-     * @return $this
      */
-    public function setOutput(array $output)
+    public function setOutput(array $output): Definition
     {
         $this->output = $output;
         return $this;
@@ -304,7 +275,6 @@ class Definition
 
     /**
      * @codeCoverageIgnore
-     * @return array
      */
     public function getArguments(): array
     {
@@ -313,8 +283,6 @@ class Definition
 
     /**
      * @codeCoverageIgnore
-     * @param array $arguments
-     * @return $this
      */
     public function setArguments(array $arguments): Definition
     {
@@ -323,7 +291,7 @@ class Definition
     }
 
     /**
-     * @return string|null
+     * @codeCoverageIgnore
      */
     public function getDescription(): ?string
     {
@@ -331,14 +299,12 @@ class Definition
     }
 
     /**
-     * @param string|null $description
+     * @codeCoverageIgnore
      */
     public function setDescription(?string $description): Definition
     {
         $this->description = $description;
         return $this;
     }
-
-
 
 }

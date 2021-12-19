@@ -30,7 +30,8 @@ class CrontabEntryGeneratorTest extends TestCase
         $config = [
             'cronjobs' => [
                 $key => [
-                    'command' => 'babymarktext:test:command'
+                    'command'     => 'babymarktext:test:command',
+                    'description' => 'test-description'
                 ]
             ]
         ];
@@ -58,9 +59,13 @@ class CrontabEntryGeneratorTest extends TestCase
 
         $this->assertCount(1, $entries);
         $this->assertArrayHasKey($key, $entries);
+
+        $expectedCronJob = sprintf("# job '%s' (test-description)" . PHP_EOL, $key);
+        $expectedCronJob .= sprintf('* * * * * cd %s; php bin/console --env=%s babymarktext:test:command 2>&1 1>%s',
+            $projectDir, $environment, $outputConf['file']);
+
         $this->assertEquals(
-            sprintf('* * * * * cd %s; php bin/console --env=%s babymarktext:test:command 2>&1 1>%s',
-                $projectDir, $environment, $outputConf['file']),
+            $expectedCronJob,
             $entries[$key]
         );
     }
@@ -141,7 +146,7 @@ class CrontabEntryGeneratorTest extends TestCase
         $generator = $this->createGenerator($config);
         $entries   = $generator->generateEntries();
 
-        $this->assertStringStartsWith('1 2 3 4 5', $entries[$key]);
+        $this->assertStringContainsString('1 2 3 4 5', $entries[$key]);
     }
 
     public function testCommandArguments()
@@ -189,7 +194,7 @@ class CrontabEntryGeneratorTest extends TestCase
         );
 
         // Remove command to test exception
-        $definitions[$key]->setCommand(null);
+        $definitions[$key]->setCommand('');
 
         $rootDir     = $container->getParameter('kernel.project_dir');
         $environment = $container->getParameter('kernel.environment');

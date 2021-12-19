@@ -35,15 +35,12 @@ class ValidateCommandTest extends TestCase
 
         $checkerStub->expects($this->never())->method('getResult');
 
-        $config = [
-            'cronjobs' => [
-                'test' => ['command' => 'some:command']
-            ]
+        $definitions = [
+            'test' => ['command' => 'some:command']
         ];
-        $container = $this->getContainer($config);
 
         $cmd = new ValidateCommand();
-        $cmd->setContainer($container);
+        $cmd->setDefinitions($definitions);
         $cmd->setDefinitionChecker($checkerStub);
 
         $app = new Application();
@@ -73,16 +70,12 @@ class ValidateCommandTest extends TestCase
             ->method('getResult')
             ->willReturn(DefinitionChecker::RESULT_INCORRECT_COMMAND);
 
-        $config = [
-            'cronjobs' => [
-                'test' => ['command' => 'some:command']
-            ]
+        $definitions = [
+            'test' => ['command' => 'some:command']
         ];
 
-        $container = $this->getContainer($config);
-
         $cmd = new ValidateCommand();
-        $cmd->setContainer($container);
+        $cmd->setDefinitions($definitions);
         $cmd->setDefinitionChecker($checkerStub);
 
         $app = new Application();
@@ -109,16 +102,12 @@ class ValidateCommandTest extends TestCase
         $checkerStub->expects($this->never())
             ->method('getResult');
 
-        $config = [
-            'cronjobs' => [
-                'test' => ['command' => 'some:command', 'disabled' => true]
-            ]
+        $definitions = [
+            'test' => ['command' => 'some:command', 'disabled' => true]
         ];
 
-        $container = $this->getContainer($config);
-
         $cmd = new ValidateCommand();
-        $cmd->setContainer($container);
+        $cmd->setDefinitions($definitions);
         $cmd->setDefinitionChecker($checkerStub);
 
         $app = new Application();
@@ -143,7 +132,6 @@ class ValidateCommandTest extends TestCase
         $checkerStub->expects($this->never())->method('getResult');
 
         $cmd = new ValidateCommand();
-        $cmd->setContainer($this->getContainer());
         $cmd->setDefinitionChecker($checkerStub);
 
         $app = new Application();

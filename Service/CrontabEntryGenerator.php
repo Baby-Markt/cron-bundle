@@ -8,6 +8,7 @@
  */
 
 namespace BabymarktExt\CronBundle\Service;
+
 use BabymarktExt\CronBundle\Entity\Cron\Definition;
 
 /**
@@ -30,7 +31,7 @@ class CrontabEntryGenerator
     protected $basedir;
 
     /**
-     * @var string
+     * @var array
      */
     protected $outputOptions;
 
@@ -51,7 +52,7 @@ class CrontabEntryGenerator
      * @param string $basedir
      * @param string $environment
      */
-    public function __construct(array $definitions, array $outputOptions, $basedir, $environment)
+    public function __construct(array $definitions, array $outputOptions, string $basedir, string $environment)
     {
         $this->definitions   = $definitions;
         $this->outputOptions = $outputOptions;
@@ -60,13 +61,14 @@ class CrontabEntryGenerator
     }
 
     /**
-     * @return array
+     * Generates the cron entries.
      */
-    public function generateEntries()
+    public function generateEntries(): array
     {
         $entries = [];
 
         foreach ($this->definitions as $alias => $def) {
+            $def->setAlias($alias);
             if (!$def->isDisabled()) {
                 $entry   = [];
                 $entry[] = $this->getIntervalString(
@@ -80,11 +82,18 @@ class CrontabEntryGenerator
                 $entry[] = $this->getArgumentsString($def->getArguments());
                 $entry[] = $this->getOutputString($def->getOutput());
 
-                $entries[$alias] = implode(' ', array_filter($entry));
+                $entries[$alias] = $this->getCommentString($def) . PHP_EOL . implode(' ', array_filter($entry));
             }
         }
 
         return $entries;
+    }
+
+    protected function getCommentString(Definition $definition): string
+    {
+        return sprintf("# job '%s' (%s)",
+            $definition->getAlias(),
+            $definition->getDescription() ?? 'no description');
     }
 
     /**
@@ -116,13 +125,11 @@ class CrontabEntryGenerator
 
     /**
      * Returns the output redirection string.
-     * @param string $output
-     * @return string
      */
-    protected function getOutputString($output = null)
+    protected function getOutputString(array $output = null): string
     {
         $file   = $output['file'] ?: $this->outputOptions['file'];
-        $append = $output['append'] ?: $this->outputOptions['append'];
+        $append = $output['append'] || $this->outputOptions['append'];
 
         if ($append) {
             return sprintf('2>&1 1>>%s', $file);
@@ -136,7 +143,7 @@ class CrontabEntryGenerator
      * @param Definition $def
      * @return string
      */
-    protected function getCommandString(Definition $def)
+    protected function getCommandString(Definition $def): string
     {
         if (empty($def->getCommand())) {
             throw new \InvalidArgumentException('Cron command is required.');
@@ -154,7 +161,7 @@ class CrontabEntryGenerator
      * @codeCoverageIgnore
      * @return Definition[]
      */
-    public function getDefinitions()
+    public function getDefinitions(): array
     {
         return $this->definitions;
     }
@@ -164,7 +171,7 @@ class CrontabEntryGenerator
      * @param Definition[] $definitions
      * @return $this
      */
-    public function setDefinitions(array $definitions)
+    public function setDefinitions(array $definitions): CrontabEntryGenerator
     {
         $this->definitions = $definitions;
         return $this;
@@ -174,17 +181,15 @@ class CrontabEntryGenerator
      * @codeCoverageIgnore
      * @return string
      */
-    public function getBasedir()
+    public function getBasedir(): string
     {
         return $this->basedir;
     }
 
     /**
      * @codeCoverageIgnore
-     * @param string $basedir
-     * @return $this
      */
-    public function setBasedir($basedir)
+    public function setBasedir(string $basedir): CrontabEntryGenerator
     {
         $this->basedir = realpath($basedir) ?: $basedir;
         return $this;
@@ -192,19 +197,16 @@ class CrontabEntryGenerator
 
     /**
      * @codeCoverageIgnore
-     * @return string
      */
-    public function getOutputOptions()
+    public function getOutputOptions(): array
     {
         return $this->outputOptions;
     }
 
     /**
      * @codeCoverageIgnore
-     * @param string $outputOptions
-     * @return $this
      */
-    public function setOutputOptions($outputOptions)
+    public function setOutputOptions(array $outputOptions): CrontabEntryGenerator
     {
         $this->outputOptions = $outputOptions;
         return $this;
@@ -212,26 +214,23 @@ class CrontabEntryGenerator
 
     /**
      * @codeCoverageIgnore
-     * @return string
      */
-    public function getEnvironment()
+    public function getEnvironment(): string
     {
         return $this->environment;
     }
 
     /**
      * @codeCoverageIgnore
-     * @param string $environment
-     * @return $this
      */
-    public function setEnvironment($environment)
+    public function setEnvironment(string $environment): CrontabEntryGenerator
     {
         $this->environment = $environment;
         return $this;
     }
 
     /**
-     * @return string
+     * @codeCoverageIgnore
      */
     public function getScript(): string
     {
@@ -239,7 +238,7 @@ class CrontabEntryGenerator
     }
 
     /**
-     * @param string $script
+     * @codeCoverageIgnore
      */
     public function setScript(string $script): void
     {

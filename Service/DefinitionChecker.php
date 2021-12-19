@@ -19,8 +19,7 @@ use Symfony\Component\Console\Application;
  */
 class DefinitionChecker
 {
-    const
-        RESULT_INCORRECT_COMMAND = 'incorrectCommand';
+    const RESULT_INCORRECT_COMMAND = 'incorrectCommand';
 
     /**
      * @var Application
@@ -34,13 +33,9 @@ class DefinitionChecker
 
     /**
      * Checks a single definition.
-     *
-     * @param Definition $definition
-     * @return bool
      */
-    public function check(Definition $definition)
+    public function check(Definition $definition): bool
     {
-
         try {
             $this->application->find($definition->getCommand());
         } catch (\InvalidArgumentException $e) {
@@ -53,19 +48,16 @@ class DefinitionChecker
 
     /**
      * @codeCoverageIgnore
-     * @return Application
      */
-    public function getApplication()
+    public function getApplication(): Application
     {
         return $this->application;
     }
 
     /**
      * @codeCoverageIgnore
-     * @param Application $application
-     * @return $this
      */
-    public function setApplication($application)
+    public function setApplication(Application $application): DefinitionChecker
     {
         $this->application = $application;
         return $this;
@@ -73,19 +65,16 @@ class DefinitionChecker
 
     /**
      * @codeCoverageIgnore
-     * @return string
      */
-    public function getResult()
+    public function getResult(): ?string
     {
         return $this->result;
     }
 
     /**
      * @codeCoverageIgnore
-     * @param string $result
-     * @return $this
      */
-    public function setResult($result)
+    public function setResult(string $result): DefinitionChecker
     {
         $this->result = $result;
         return $this;

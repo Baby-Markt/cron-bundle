@@ -45,7 +45,7 @@ class DefinitionTest extends TestCase
                 $this->assertTrue($def->$getter());
             } else {
                 $getter = 'get' . ucfirst($key);
-                $this->assertSame($expected, $def->$getter());
+                $this->assertEquals($expected, $def->$getter());
             }
         }
     }
@@ -69,7 +69,7 @@ class DefinitionTest extends TestCase
                 $this->assertTrue($def->$getter());
             } else {
                 $getter = 'get' . ucfirst($key);
-                $this->assertSame($expected, $def->$getter());
+                $this->assertEquals($expected, $def->$getter());
             }
         }
     }

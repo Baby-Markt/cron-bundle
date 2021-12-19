@@ -51,8 +51,10 @@ class ValidateCommand extends Command
 
         $errorFound = false;
 
-        if (count($this->definitions)) {
+        if (count((array)$this->definitions)) {
             $resultList = [];
+
+            ksort($this->definitions);
 
             foreach ($this->definitions as $alias => $definitionData) {
                 $definition = new Definition($definitionData);
@@ -80,6 +82,7 @@ class ValidateCommand extends Command
                     }
                 }
             }
+
 
             $table = new Table($output);
             $table->setHeaders([
