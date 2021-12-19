@@ -58,6 +58,8 @@ class CrontabEntryGenerator
         $this->outputOptions = $outputOptions;
         $this->basedir       = realpath($basedir) ?: $basedir;
         $this->environment   = $environment;
+
+        ksort($this->definitions);
     }
 
     /**
