@@ -17,11 +17,11 @@ class DefinitionTest extends TestCase
 {
 
     protected $properties = [
-        'minutes'   => 1,
-        'hours'     => 1,
-        'days'      => 1,
-        'months'    => 1,
-        'weekdays'  => 1,
+        'minutes'   => "1",
+        'hours'     => "1",
+        'days'      => "1",
+        'months'    => "1",
+        'weekdays'  => "1",
         'command'   => 'dummy:command',
         'disabled'  => true,
         'output'    => [

@@ -1,79 +1,39 @@
 <?php
-/*
- * Copyright (c) 2015 Babymarkt.de GmbH - All Rights Reserved
- *
- * All information contained herein is, and remains the property of Baby-Markt.de
- * and is protected by copyright law. Unauthorized copying of this file or any parts,
- * via any medium is strictly prohibited.
- */
+declare(strict_types=1);
 
 namespace Babymarkt\Symfony\CronBundle\Entity\Cron;
 
 /**
  * A cron definition.
- * @package Babymarkt\Symfony\CronBundle\Entity
  */
 class Definition
 {
-    /**
-     * The job alias.
-     * @var string
-     */
-    protected $alias;
-
-    /**
-     * Minutes.
-     * @var string
-     */
-    protected $minutes = '*';
-
-    /**
-     * Hours.
-     * @var string
-     */
-    protected $hours = '*';
-
-    /**
-     * Days.
-     * @var string
-     */
-    protected $days = '*';
-
-    /**
-     * Months.
-     * @var string
-     */
-    protected $months = '*';
-
-    /**
-     * Weekdays.
-     * @var string
-     */
-    protected $weekdays = '*';
+    protected string $alias;
+    protected string $minutes = '*';
+    protected string $hours = '*';
+    protected string $days = '*';
+    protected string $months = '*';
+    protected string $weekdays = '*';
 
     /**
      * Symfony console application command e.g. "doctrine:schema:update".
-     * @var string
      */
-    protected $command;
+    protected string $command;
 
     /**
      * Command description
-     * @var string
      */
-    protected $description;
+    protected ?string $description;
 
     /**
-     * If job is disalbed, it will not be synced to crontab.
-     * @var bool
+     * If the job is disabled, it will not be synced to crontab.
      */
-    protected $disabled = false;
+    protected bool $disabled = false;
 
     /**
      * Output configuration. Usable keys are "file" and "append".
-     * @var array
      */
-    protected $output = [
+    protected array $output = [
         /**
          * The File which the output will be redirected into.
          * @var string
@@ -82,24 +42,22 @@ class Definition
 
         /**
          * If true, the output will be appended to the configured output file.
+         * @var bool
          */
         'append' => null
     ];
 
     /**
      * Command arguments.
-     * @var array
      */
-    protected $arguments = [];
+    protected array $arguments = [];
 
     /**
      * @param array|null $properties
      */
-    public function __construct(array $properties = null)
+    public function __construct(?array $properties = null)
     {
-        if ($properties !== null) {
-            $this->setProperties($properties);
-        }
+        $this->setProperties((array)$properties);
     }
 
     /**
