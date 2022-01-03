@@ -5,10 +5,10 @@ A small bundle to manage cron entries in system crontab.
 
 Available commands are:
 
-* babymarktext:cron:drop
-* babymarktext:cron:dump
-* babymarktext:cron:report
-* babymarktext:cron:sync
+* babymarkt_cron:drop
+* babymarkt_cron:dump
+* babymarkt_cron:report
+* babymarkt_cron:sync
 
 ### Drop
 Drops all the whole cronjobs block from crontab not considering the configured cronjobs.
@@ -24,89 +24,67 @@ Syncs the configured cronjobs with the crontab. Only the related cron block will
 
 ## Configuration
 
-Following all available configuration options:
+Let's start with a minimal setup to run a job every minute:
+```yaml
+babymarkt_cron:
+  cronjobs:
+    my_job: 'my:symfony:command'
 ```
-    babymarkt_ext_cron:
-        options:
-            id: '<<your-custom-id>>'
-            script: 'bin/console'
-            working_dir: '%kernel.project_dir%'
+
+Full configuration reference with default values:
+```yaml
+babymarkt_cron:
+    options:
+        # This ID is used to identify the job block in the crontab. If not defined, 
+        # it is automatically generated from the project directory and the environment.
+        id: ~
+        
+        # The script to run the commands.
+        script: 'bin/console'
+        
+        # The working directory. Defaults to %kernel.project_dir%.
+        working_dir: ~
+        
+        # Specifies globally where the output should be written to.
+        output:
+            file: '/dev/null'
+            append: true
+        
+        # Crontab options
+        crontab:
+            # Crontab executable.
+            bin: 'crontab'
+            # Path to store the temporary crontab content. Defaults to the system temp dir. 
+            tmpPath: ~
+            # The user to execute the crontab.
+            user: ~
+            # Defines whether sudo is used or not.
+            sudo: false
+    cronjobs:
+        # The name of the job definition
+        your-first-job-name:
+            
+            # Definition of the execution time.
+            minutes: *
+            hours: *
+            days: *
+            months: *
+            weekdays: *
+            
+            # The Symfony command to execute.
+            command: '<<the-symfony-command>>' # required
+            
+            # If TRUE, the command isn't executed.
+            disabled: false
+
+            # Overwrites the global output settings.
             output:
-                file: '/dev/null'
-                append: false
-            crontab:
-                bin: 'crontab'
-                tmpPath: '<<system temp dir>>'
-                user: null
-                sudo: false
-        cronjobs:
-            your-first-job-name:
-                minutes: *
-                hours: *
-                days: *
-                months: *
-                weekdays: *
-                command: '<<the-symfony-command>>'
-                disabled: false
-                output:
-                    file: null
-                    append: null
-                arguments:
-                    - '<<your-first-argument>>'
-                    - '<<your-second-argument>>'
-                    - '...'
-            your-second-job-name:
-                ...
+                file: ~
+                append: ~
+            
+            # Command arguments and options.    
+            arguments:
+                - '<<your-first-argument>>'
+                - '<<your-second-argument>>'
+                #...
 ```
-
-### defaults
-Default configuration that affects the cron definitions.
-
-#### output
-
-### crontab
-Configurations related to the crontab command.
-
-#### bin
-The path to the crontab binary. Defaults to "crontab".
-
-#### tmpPath
-The path for writing temporary files into. Defaults to system temp dir.
-
-#### user
-The user which will use to execute the command. Defaults to current user which executes the sync command.
-
-#### sudo
-If true, sudo will be used to execute the command. Defaults to "false".
-
-### cronjobs
-The cron definitions.
-
-#### minutes
-Cron definition for minutes. Defaults to "*".
-
-#### hours
-Cron definition for hours. Defaults to "*".
-
-#### days
-Cron definition for days. Defaults to "*".
-
-#### months
-Cron definition for months. Defaults to "*".
-
-#### weekdays
-Cron definition for weekdays. Defaults to "*".
-
-#### command
-The symfony command which will be executed.
-
-#### disabled
-If true, the cron will not be synced to crontab. Defaults to "false".
-
-#### arguments
-A list of command arguments.
-
-#### output
-This configuration provides the same sub keys like defaults output. Here defined settings will overwrite the defaults.
-
-

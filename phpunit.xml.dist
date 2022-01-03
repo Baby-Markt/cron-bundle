@@ -13,7 +13,7 @@
   </coverage>
   <testsuites>
     <testsuite name="CronBundle for the Symfony Framework">
-      <directory>./Tests</directory>
+      <directory>./tests</directory>
     </testsuite>
   </testsuites>
 </phpunit>

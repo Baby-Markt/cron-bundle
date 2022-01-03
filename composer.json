@@ -4,12 +4,14 @@
   "type": "symfony-bundle",
   "keywords": [
     "Cron",
+    "Crond",
     "Crontab",
     "Symfony",
     "PHP"
   ],
   "homepage": "https://github.com/Baby-Markt/cron-bundle",
   "license": "MIT",
+  "minimum-stability": "stable",
   "authors": [
     {
       "name": "Niklas Funke",
@@ -17,10 +19,10 @@
     }
   ],
   "require": {
-    "php": "^7.3 || ^8.0",
-    "symfony/framework-bundle": "^4.4 || ^5.0 || ^6.0" ,
-    "symfony/console": "^4.4 || ^5.0 || ^6.0",
-    "symfony/yaml": "^4.4 || ^5.0 || ^6.0"
+    "php": ">=7.4",
+    "symfony/framework-bundle": "^4.4 || ^5.4 || ^6.0" ,
+    "symfony/console": "^4.4 || ^5.4 || ^6.0",
+    "symfony/yaml": "^4.4 || ^5.4 || ^6.0"
   },
   "require-dev": {
     "phpunit/phpunit": "^9.5.10",
@@ -28,12 +30,18 @@
   },
   "autoload": {
     "psr-4": {
-      "BabymarktExt\\CronBundle\\": ""
+      "Babymarkt\\Symfony\\CronBundle\\": "src"
     }
+  },
+  "autoload-dev": {
+    "psr-4": { "Babymarkt\\Symfony\\CronBundle\\Tests\\": "tests" }
+  },
+  "scripts": {
+    "test": "vendor/bin/phpunit"
   },
   "config": {
     "platform": {
-      "php": "7.3"
+      "php": "7.4.0"
     }
   }
 }
