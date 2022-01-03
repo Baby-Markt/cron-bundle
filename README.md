@@ -1,26 +1,32 @@
-# CronBundle [![Build Status](https://travis-ci.org/Baby-Markt/cron-bundle.svg?branch=master)](https://travis-ci.org/Baby-Markt/cron-bundle)
+# CronBundle
 A small bundle to manage cron entries in system crontab.
 
-## Commands
+![Build 2.x](https://github.com/Baby-Markt/cron-bundle/actions/workflows/php.yml/badge.svg?branch=2.x)
+[![codecov](https://codecov.io/gh/Baby-Markt/cron-bundle/branch/1.0.x-dev/graph/badge.svg?token=N8MOLOBNW9)](https://codecov.io/gh/Baby-Markt/cron-bundle)
+[![Packagist Version](https://img.shields.io/packagist/v/babymarkt/cron-bundle)](https://packagist.org/packages/babymarkt/cron-bundle)
+[![License](https://img.shields.io/github/license/Baby-Markt/cron-bundle.svg)](https://github.com/Baby-Markt/cron-bundle/blob/master/LICENSE)
+![PHP from Packagist](https://img.shields.io/packagist/php-v/babymarkt/cron-bundle)
 
-Available commands are:
+## Installation
 
-* babymarkt_cron:drop
-* babymarkt_cron:dump
-* babymarkt_cron:report
-* babymarkt_cron:sync
+You need to require this library through composer:
 
-### Drop
-Drops all the whole cronjobs block from crontab not considering the configured cronjobs.
+```bash
+composer require babymarkt/cron-bundle
+```
 
-### Dump
-Generates the cron entries which may be installed to crontab and shows it on console.
+If you are using [Symfony Flex](https://github.com/symfony/flex), the following will happen automatically. Otherwise,
+you have to enable the bundle on the `bundles.php` manually:
 
-### Report
-Show some reports about the execution of the configured cronjobs. This features required the DoctrineBundle. 
+```php
+// config/bundles.php
+return [
+    // ...
+    Babymarkt\Symfony\CronBundle\BabymarktCronBundle::class => ['all' => true],
+];
 
-### Sync
-Syncs the configured cronjobs with the crontab. Only the related cron block will be affected.
+```
+
 
 ## Configuration
 
@@ -88,3 +94,26 @@ babymarkt_cron:
                 - '<<your-second-argument>>'
                 #...
 ```
+
+## Commands
+
+### `babymarkt_cron:drop`
+Drops all the whole cronjobs block from crontab not considering the configured cronjobs.
+
+### `babymarkt_cron:dump`
+Generates the cron entries which may be installed to crontab and shows it on console.
+
+### `babymarkt_cron:report`
+Show some reports about the execution of the configured cronjobs. This features required the DoctrineBundle.
+
+### `babymarkt_cron:sync`
+Syncs the configured cronjobs with the crontab. Only the related cron block will be affected.
+
+
+## Contributing
+
+Bug reports and pull requests are welcome on GitHub at https://github.com/Baby-Markt/cron-bundle.
+
+## License
+
+The bundle is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
