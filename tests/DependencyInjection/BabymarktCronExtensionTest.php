@@ -74,7 +74,7 @@ class BabymarktCronExtensionTest extends TestCase
                     'days'        => '3',
                     'months'      => '4',
                     'weekdays'    => '5',
-                    'command'     => 'babymarkt_cron:validate',
+                    'command'     => 'babymarkt-cron:validate',
                     'description' => null,
                     'disabled'    => true,
                     'output'      => ['file' => 'test', 'append' => true],
@@ -138,7 +138,7 @@ class BabymarktCronExtensionTest extends TestCase
             'days'        => '*',
             'months'      => '*',
             'weekdays'    => '*',
-            'command'     => 'babymarkt_cron:validate',
+            'command'     => 'babymarkt-cron:validate',
             'description' => null,
             'disabled'    => false,
             'output'      => ['file' => null, 'append' => null],
@@ -147,7 +147,7 @@ class BabymarktCronExtensionTest extends TestCase
 
         $configs = [
             'cronjobs' => [
-                'test-cron' => array_replace_recursive(['command' => 'babymarkt_cron:validate'], $definition)
+                'test-cron' => array_replace_recursive(['command' => 'babymarkt-cron:validate'], $definition)
             ]
         ];
 

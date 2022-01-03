@@ -53,7 +53,7 @@ class DropCommandTest extends TestCase
         $app = new Application();
         $app->add($cmd);
 
-        $tester = new CommandTester($app->find('babymarkt_cron:drop'));
+        $tester = new CommandTester($app->find('babymarkt-cron:drop'));
         $tester->execute([]);
 
         $this->assertStringContainsString('Can\'t write to crontab.', $tester->getDisplay());
@@ -73,7 +73,7 @@ class DropCommandTest extends TestCase
         $app = new Application();
         $app->add($cmd);
 
-        $tester = new CommandTester($app->find('babymarkt_cron:drop'));
+        $tester = new CommandTester($app->find('babymarkt-cron:drop'));
         $tester->execute([]);
 
         $this->assertStringContainsString('Can\'t access crontab.', $tester->getDisplay());
@@ -93,7 +93,7 @@ class DropCommandTest extends TestCase
         $app = new Application();
         $app->add($cmd);
 
-        $tester = new CommandTester($app->find('babymarkt_cron:drop'));
+        $tester = new CommandTester($app->find('babymarkt-cron:drop'));
         $tester->execute([]);
 
         $this->assertStringContainsString('All cronjobs successfully dropped.', $tester->getDisplay());

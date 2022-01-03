@@ -20,7 +20,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class SyncJobsCommand extends Command
 {
-    protected static $defaultName = 'babymarkt_cron:sync';
+    protected static $defaultName = 'babymarkt-cron:sync';
     protected static $defaultDescription = 'Syncs all configured cronjobs with crontab.';
 
     const

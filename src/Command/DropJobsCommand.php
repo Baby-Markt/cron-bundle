@@ -14,7 +14,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class DropJobsCommand extends Command
 {
-    protected static $defaultName = 'babymarkt_cron:drop';
+    protected static $defaultName = 'babymarkt-cron:drop';
     protected static $defaultDescription = 'Drops all configured cronjobs from crontab.';
 
     const

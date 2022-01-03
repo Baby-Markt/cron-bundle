@@ -37,7 +37,7 @@ class DumpCommandTest extends TestCase
         $app = new Application();
         $app->add($cmd);
 
-        $tester = new CommandTester($app->find('babymarkt_cron:dump'));
+        $tester = new CommandTester($app->find('babymarkt-cron:dump'));
         $tester->execute([]);
 
         $this->assertEquals('Line1' . PHP_EOL . 'Line2' . PHP_EOL, $tester->getDisplay());

@@ -64,7 +64,7 @@ class SyncCommandTest extends TestCase
         $app = new Application();
         $app->add($cmd);
 
-        $tester = new CommandTester($app->find('babymarkt_cron:sync'));
+        $tester = new CommandTester($app->find('babymarkt-cron:sync'));
         $tester->execute([]);
 
         $this->assertStringContainsString('Can\'t write to crontab.', $tester->getDisplay());
@@ -85,7 +85,7 @@ class SyncCommandTest extends TestCase
         $app = new Application();
         $app->add($cmd);
 
-        $tester = new CommandTester($app->find('babymarkt_cron:sync'));
+        $tester = new CommandTester($app->find('babymarkt-cron:sync'));
         $tester->execute(['command' => 'babymarkt:cron:sync']);
 
         $this->assertStringContainsString('Can\'t access crontab.', $tester->getDisplay());
@@ -106,7 +106,7 @@ class SyncCommandTest extends TestCase
         $app->add($cmd);
 
         /** @var MockObject $editor */
-        $tester = new CommandTester($app->find('babymarkt_cron:sync'));
+        $tester = new CommandTester($app->find('babymarkt-cron:sync'));
         $tester->execute(['command' => 'babymarkt:cron:sync']);
 
         $this->assertStringContainsString('3 cronjobs successfully synced.', $tester->getDisplay());

@@ -46,7 +46,7 @@ class ValidateCommandTest extends TestCase
         $app = new Application();
         $app->add($cmd);
 
-        $tester = new CommandTester($app->find('babymarkt_cron:validate'));
+        $tester = new CommandTester($app->find('babymarkt-cron:validate'));
         $tester->execute([]);
 
         $this->assertEmpty($tester->getStatusCode());
@@ -81,7 +81,7 @@ class ValidateCommandTest extends TestCase
         $app = new Application();
         $app->add($cmd);
 
-        $tester = new CommandTester($app->find('babymarkt_cron:validate'));
+        $tester = new CommandTester($app->find('babymarkt-cron:validate'));
         $tester->execute([]);
 
         $this->assertEquals(1, $tester->getStatusCode());
@@ -113,7 +113,7 @@ class ValidateCommandTest extends TestCase
         $app = new Application();
         $app->add($cmd);
 
-        $tester = new CommandTester($app->find('babymarkt_cron:validate'));
+        $tester = new CommandTester($app->find('babymarkt-cron:validate'));
         $tester->execute([]);
 
         $this->assertEmpty($tester->getStatusCode());
@@ -137,7 +137,7 @@ class ValidateCommandTest extends TestCase
         $app = new Application();
         $app->add($cmd);
 
-        $tester = new CommandTester($app->find('babymarkt_cron:validate'));
+        $tester = new CommandTester($app->find('babymarkt-cron:validate'));
         $tester->execute([]);
 
         $this->assertEmpty($tester->getStatusCode());

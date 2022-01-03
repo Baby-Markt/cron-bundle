@@ -11,7 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class DumpJobsCommand extends Command
 {
-    protected static $defaultName = 'babymarkt_cron:dump';
+    protected static $defaultName = 'babymarkt-cron:dump';
     protected static $defaultDescription = 'Shows a list of all configured cronjobs.';
 
     protected ?CrontabEntryGenerator $cronEntryGenerator;

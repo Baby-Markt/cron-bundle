@@ -97,16 +97,16 @@ babymarkt_cron:
 
 ## Commands
 
-### `babymarkt_cron:drop`
+### `babymarkt-cron:drop`
 Drops all the whole cronjobs block from crontab not considering the configured cronjobs.
 
-### `babymarkt_cron:dump`
+### `babymarkt-cron:dump`
 Generates the cron entries which may be installed to crontab and shows it on console.
 
-### `babymarkt_cron:report`
+### `babymarkt-cron:report`
 Show some reports about the execution of the configured cronjobs. This features required the DoctrineBundle.
 
-### `babymarkt_cron:sync`
+### `babymarkt-cron:sync`
 Syncs the configured cronjobs with the crontab. Only the related cron block will be affected.
 
 

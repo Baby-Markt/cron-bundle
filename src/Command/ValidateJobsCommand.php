@@ -18,7 +18,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class ValidateJobsCommand extends Command
 {
-    protected static $defaultName = 'babymarkt_cron:validate';
+    protected static $defaultName = 'babymarkt-cron:validate';
     protected static $defaultDescription = 'Validates the configured cron jobs against some simple rules.';
 
     protected ?DefinitionChecker $definitionChecker = null;
