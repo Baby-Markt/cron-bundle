@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Babymarkt\Symfony\CronBundle\Tests\Service;
+namespace Babymarkt\Symfony\CronBundle\Tests\Crontab;
 
-use Babymarkt\Symfony\CronBundle\Service\CrontabEditor;
-use Babymarkt\Symfony\CronBundle\Service\Reader\CrontabReaderInterface;
+use Babymarkt\Symfony\CronBundle\Crontab\CrontabEditor;
+use Babymarkt\Symfony\CronBundle\Crontab\Reader\CrontabReaderInterface;
 use Babymarkt\Symfony\CronBundle\Tests\Fixtures\BufferedWriter;
 use PHPUnit\Framework\TestCase;
 

@@ -5,8 +5,8 @@ namespace Babymarkt\Symfony\CronBundle\Tests\Command;
 
 
 use Babymarkt\Symfony\CronBundle\Command\ValidateJobsCommand;
+use Babymarkt\Symfony\CronBundle\Crontab\DefinitionChecker;
 use Babymarkt\Symfony\CronBundle\Entity\Cron\Definition;
-use Babymarkt\Symfony\CronBundle\Service\DefinitionChecker;
 use Babymarkt\Symfony\CronBundle\Tests\Fixtures\ContainerTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;

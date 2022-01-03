@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Babymarkt\Symfony\CronBundle\Service\Wrapper {
+namespace Babymarkt\Symfony\CronBundle\Shell {
     /**
      * Overwrite global exec method in class namespace.
      *
@@ -20,7 +20,7 @@ namespace Babymarkt\Symfony\CronBundle\Service\Wrapper {
 
 namespace Babymarkt\Symfony\CronBundle\Tests\Wrapper {
 
-    use Babymarkt\Symfony\CronBundle\Service\Wrapper\ShellWrapper;
+    use Babymarkt\Symfony\CronBundle\Shell\ShellWrapper;
     use PHPUnit\Framework\TestCase;
 
     class ShellWrapperTest extends TestCase

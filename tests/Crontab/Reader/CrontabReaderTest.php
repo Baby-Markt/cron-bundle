@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Babymarkt\Symfony\CronBundle\Tests\Reader;
+namespace Babymarkt\Symfony\CronBundle\Tests\Crontab\Reader;
 
+use Babymarkt\Symfony\CronBundle\Crontab\Reader\CrontabReader;
 use Babymarkt\Symfony\CronBundle\DependencyInjection\BabymarktCronExtension;
-use Babymarkt\Symfony\CronBundle\Service\Reader\CrontabReader;
-use Babymarkt\Symfony\CronBundle\Service\Wrapper\ShellWrapperInterface;
+use Babymarkt\Symfony\CronBundle\Shell\ShellWrapperInterface;
 use Babymarkt\Symfony\CronBundle\Tests\Fixtures\StaticsLoaderTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;

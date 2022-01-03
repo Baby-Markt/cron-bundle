@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace Babymarkt\Symfony\CronBundle\Service;
+namespace Babymarkt\Symfony\CronBundle\Crontab;
 
+use Babymarkt\Symfony\CronBundle\Crontab\Reader\CrontabReaderInterface;
+use Babymarkt\Symfony\CronBundle\Crontab\Writer\CrontabWriterInterface;
 use Babymarkt\Symfony\CronBundle\Exception\AccessDeniedException;
 use Babymarkt\Symfony\CronBundle\Exception\WriteException;
-use Babymarkt\Symfony\CronBundle\Service\Reader\CrontabReaderInterface;
-use Babymarkt\Symfony\CronBundle\Service\Writer\CrontabWriterInterface;
 
 /**
  * The crontab editor provides capabilities to manage cronjobs in the system crontab.

@@ -35,8 +35,8 @@ services:
     arguments:
       - '%babymarkt_cron.options.id%'
 
-  Babymarkt\Symfony\CronBundle\Service\Wrapper\ShellWrapperInterface:
-    class: Babymarkt\Symfony\CronBundle\Service\Wrapper\ShellWrapper
+  Babymarkt\Symfony\CronBundle\Shell\ShellWrapperInterface:
+    class: Babymarkt\Symfony\CronBundle\Shell\ShellWrapper
 
   Babymarkt\Symfony\CronBundle\Service\DefinitionChecker: ~
 

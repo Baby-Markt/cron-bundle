@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace Babymarkt\Symfony\CronBundle\Tests\Writer;
+namespace Babymarkt\Symfony\CronBundle\Tests\Crontab\Writer;
 
+use Babymarkt\Symfony\CronBundle\Crontab\Writer\CrontabWriter;
 use Babymarkt\Symfony\CronBundle\Exception\AccessDeniedException;
 use Babymarkt\Symfony\CronBundle\Exception\WriteException;
-use Babymarkt\Symfony\CronBundle\Service\Wrapper\ShellWrapper;
-use Babymarkt\Symfony\CronBundle\Service\Wrapper\ShellWrapperInterface;
-use Babymarkt\Symfony\CronBundle\Service\Writer\CrontabWriter;
+use Babymarkt\Symfony\CronBundle\Shell\ShellWrapper;
+use Babymarkt\Symfony\CronBundle\Shell\ShellWrapperInterface;
 use Babymarkt\Symfony\CronBundle\Tests\Fixtures\ContainerTrait;
 use Babymarkt\Symfony\CronBundle\Tests\Fixtures\StaticsLoaderTrait;
 use org\bovigo\vfs\vfsStream;

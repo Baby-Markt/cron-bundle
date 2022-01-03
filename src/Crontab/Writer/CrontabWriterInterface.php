@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Babymarkt\Symfony\CronBundle\Service\Writer;
+namespace Babymarkt\Symfony\CronBundle\Crontab\Writer;
 
 use Babymarkt\Symfony\CronBundle\Exception\AccessDeniedException;
 use Babymarkt\Symfony\CronBundle\Exception\WriteException;

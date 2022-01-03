@@ -5,7 +5,7 @@ namespace Babymarkt\Symfony\CronBundle\Tests\Command;
 
 
 use Babymarkt\Symfony\CronBundle\Command\DumpJobsCommand;
-use Babymarkt\Symfony\CronBundle\Service\CrontabEntryGenerator;
+use Babymarkt\Symfony\CronBundle\Crontab\CrontabEntryGenerator;
 use Babymarkt\Symfony\CronBundle\Tests\Fixtures\ContainerTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;

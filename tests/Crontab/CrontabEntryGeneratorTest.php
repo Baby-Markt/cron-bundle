@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Babymarkt\Symfony\CronBundle\Tests\Service;
+namespace Babymarkt\Symfony\CronBundle\Tests\Crontab;
 
+use Babymarkt\Symfony\CronBundle\Crontab\CrontabEntryGenerator;
 use Babymarkt\Symfony\CronBundle\Entity\Cron\Definition;
-use Babymarkt\Symfony\CronBundle\Service\CrontabEntryGenerator;
 use Babymarkt\Symfony\CronBundle\Tests\Fixtures\ContainerTrait;
 use PHPUnit\Framework\TestCase;
 

@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Babymarkt\Symfony\CronBundle\Service\Writer;
+namespace Babymarkt\Symfony\CronBundle\Crontab\Writer;
 
 use Babymarkt\Symfony\CronBundle\Exception\AccessDeniedException;
 use Babymarkt\Symfony\CronBundle\Exception\WriteException;
-use Babymarkt\Symfony\CronBundle\Service\Wrapper\ShellWrapperInterface;
+use Babymarkt\Symfony\CronBundle\Shell\ShellWrapperInterface;
 
 /**
  * Updates the system crontab entries.

@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Babymarkt\Symfony\CronBundle\Command;
 
+use Babymarkt\Symfony\CronBundle\Crontab\DefinitionChecker;
 use Babymarkt\Symfony\CronBundle\Entity\Cron\Definition;
-use Babymarkt\Symfony\CronBundle\Service\DefinitionChecker;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

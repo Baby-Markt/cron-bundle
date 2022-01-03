@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Babymarkt\Symfony\CronBundle\Service\Wrapper;
+namespace Babymarkt\Symfony\CronBundle\Shell;
 
 /**
  * A simple wrapper to encapsulate command execution and make it easier to test classes that depend on it.

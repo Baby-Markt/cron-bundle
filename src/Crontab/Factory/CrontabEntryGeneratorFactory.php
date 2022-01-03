@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Babymarkt\Symfony\CronBundle\Service\Factory;
+namespace Babymarkt\Symfony\CronBundle\Crontab\Factory;
 
+use Babymarkt\Symfony\CronBundle\Crontab\CrontabEntryGenerator;
 use Babymarkt\Symfony\CronBundle\Entity\Cron\Definition;
-use Babymarkt\Symfony\CronBundle\Service\CrontabEntryGenerator;
 
 /**
  * A factory class to create an instance of the crontab entry generator.

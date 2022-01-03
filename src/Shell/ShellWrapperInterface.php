@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Babymarkt\Symfony\CronBundle\Service\Wrapper;
+namespace Babymarkt\Symfony\CronBundle\Shell;
 
 interface ShellWrapperInterface
 {

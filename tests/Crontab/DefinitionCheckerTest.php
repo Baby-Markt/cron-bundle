@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Babymarkt\Symfony\CronBundle\Tests\Service;
+namespace Babymarkt\Symfony\CronBundle\Tests\Crontab;
 
+use Babymarkt\Symfony\CronBundle\Crontab\DefinitionChecker;
 use Babymarkt\Symfony\CronBundle\Entity\Cron\Definition;
-use Babymarkt\Symfony\CronBundle\Service\DefinitionChecker;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;

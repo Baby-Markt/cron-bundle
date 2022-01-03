@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Babymarkt\Symfony\CronBundle\Service;
+namespace Babymarkt\Symfony\CronBundle\Crontab;
 
 use Babymarkt\Symfony\CronBundle\Entity\Cron\Definition;
 use Symfony\Component\Console\Application;

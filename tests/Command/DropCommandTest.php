@@ -4,9 +4,9 @@ declare(strict_types=1);
 namespace Babymarkt\Symfony\CronBundle\Tests\Command;
 
 use Babymarkt\Symfony\CronBundle\Command\DropJobsCommand;
+use Babymarkt\Symfony\CronBundle\Crontab\CrontabEditor;
 use Babymarkt\Symfony\CronBundle\Exception\AccessDeniedException;
 use Babymarkt\Symfony\CronBundle\Exception\WriteException;
-use Babymarkt\Symfony\CronBundle\Service\CrontabEditor;
 use Babymarkt\Symfony\CronBundle\Tests\Fixtures\ContainerTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;

@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Babymarkt\Symfony\CronBundle\Tests\Fixtures;
 
+use Babymarkt\Symfony\CronBundle\Crontab\Writer\CrontabWriterInterface;
 use Babymarkt\Symfony\CronBundle\Exception\AccessDeniedException;
-use Babymarkt\Symfony\CronBundle\Service\Writer\CrontabWriterInterface;
 
 class BufferedWriter implements CrontabWriterInterface
 {

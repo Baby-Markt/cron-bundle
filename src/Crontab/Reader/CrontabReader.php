@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Babymarkt\Symfony\CronBundle\Service\Reader;
+namespace Babymarkt\Symfony\CronBundle\Crontab\Reader;
 
 use Babymarkt\Symfony\CronBundle\Exception\AccessDeniedException;
-use Babymarkt\Symfony\CronBundle\Service\Wrapper\ShellWrapperInterface;
+use Babymarkt\Symfony\CronBundle\Shell\ShellWrapperInterface;
 
 /**
  * Read entries from system crontab.
