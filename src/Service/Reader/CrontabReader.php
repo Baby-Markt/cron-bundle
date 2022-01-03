@@ -35,10 +35,12 @@ class CrontabReader implements CrontabReaderInterface
 
     /**
      * CrontabReader constructor.
+     * @param ShellWrapperInterface $shellWrapper
      * @param array $config
      */
-    public function __construct(array $config = [])
+    public function __construct(ShellWrapperInterface $shellWrapper, array $config = [])
     {
+        $this->shellWrapper = $shellWrapper;
         $this->setConfig($config);
     }
 
@@ -92,15 +94,6 @@ class CrontabReader implements CrontabReaderInterface
     public function setConfig(array $config)
     {
         $this->config = array_replace($this->defaultConfig, $config);
-    }
-
-    /**
-     * @required
-     * @param ShellWrapperInterface $shellWrapper
-     */
-    public function setShellWrapper(ShellWrapperInterface $shellWrapper): void
-    {
-        $this->shellWrapper = $shellWrapper;
     }
 
 }

@@ -58,9 +58,7 @@ class SyncCommandTest extends TestCase
             ->method('injectCronjobs')
             ->willThrowException(new WriteException('test fail'));
 
-        $cmd = new SyncJobsCommand();
-        $cmd->setCrontabEditor($this->editor);
-        $cmd->setCrontabEntryGenerator($this->entryGenerator);
+        $cmd = new SyncJobsCommand($this->entryGenerator, $this->editor);
 
         $app = new Application();
         $app->add($cmd);
@@ -70,7 +68,7 @@ class SyncCommandTest extends TestCase
 
         $this->assertStringContainsString('Can\'t write to crontab.', $tester->getDisplay());
         $this->assertStringContainsString('test fail', $tester->getDisplay());
-        $this->assertEquals(SyncJobsCommand::STATUS_NOT_WRITABLE, $tester->getStatusCode());
+        $this->assertEquals(SyncJobsCommand::EXITCODE_NOT_WRITABLE, $tester->getStatusCode());
     }
 
     public function testAccessDenied()
@@ -79,9 +77,7 @@ class SyncCommandTest extends TestCase
             ->method('injectCronjobs')
             ->willThrowException(new AccessDeniedException('test fail'));
 
-        $cmd = new SyncJobsCommand();
-        $cmd->setCrontabEditor($this->editor);
-        $cmd->setCrontabEntryGenerator($this->entryGenerator);
+        $cmd = new SyncJobsCommand($this->entryGenerator, $this->editor);
 
         $app = new Application();
         $app->add($cmd);
@@ -91,7 +87,7 @@ class SyncCommandTest extends TestCase
 
         $this->assertStringContainsString('Can\'t access crontab.', $tester->getDisplay());
         $this->assertStringContainsString('test fail', $tester->getDisplay());
-        $this->assertEquals(SyncJobsCommand::STATUS_ACCESS_DENIED, $tester->getStatusCode());
+        $this->assertEquals(SyncJobsCommand::EXITCODE_ACCESS_DENIED, $tester->getStatusCode());
     }
 
     public function testSuccessfulSync()
@@ -99,9 +95,7 @@ class SyncCommandTest extends TestCase
         $this->editor->expects($this->once())
             ->method('injectCronjobs');
 
-        $cmd = new SyncJobsCommand();
-        $cmd->setCrontabEditor($this->editor);
-        $cmd->setCrontabEntryGenerator($this->entryGenerator);
+        $cmd = new SyncJobsCommand($this->entryGenerator, $this->editor);
 
         $app = new Application();
         $app->add($cmd);

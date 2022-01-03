@@ -32,8 +32,7 @@ class DumpCommandTest extends TestCase
             ->method('generateEntries')
             ->willReturn(['Line1', 'Line2']);
 
-        $cmd = new DumpJobsCommand();
-        $cmd->setCrontabEntryGenerator($generator);
+        $cmd = new DumpJobsCommand($generator);
 
         $app = new Application();
         $app->add($cmd);

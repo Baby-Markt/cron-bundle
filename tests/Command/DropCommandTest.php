@@ -48,8 +48,7 @@ class DropCommandTest extends TestCase
             ->method('removeCronjobs')
             ->willThrowException(new WriteException('test fail'));
 
-        $cmd = new DropJobsCommand();
-        $cmd->setCrontabEditor($this->crontabEditor);
+        $cmd = new DropJobsCommand($this->crontabEditor);
 
         $app = new Application();
         $app->add($cmd);
@@ -59,7 +58,7 @@ class DropCommandTest extends TestCase
 
         $this->assertStringContainsString('Can\'t write to crontab.', $tester->getDisplay());
         $this->assertStringContainsString('test fail', $tester->getDisplay());
-        $this->assertEquals(DropJobsCommand::STATUS_NOT_WRITABLE, $tester->getStatusCode());
+        $this->assertEquals(DropJobsCommand::EXITCODE_NOT_WRITABLE, $tester->getStatusCode());
     }
 
     public function testAccessDenied()
@@ -68,8 +67,7 @@ class DropCommandTest extends TestCase
             ->method('removeCronjobs')
             ->willThrowException(new AccessDeniedException('test fail'));
 
-        $cmd = new DropJobsCommand();
-        $cmd->setCrontabEditor($this->crontabEditor);
+        $cmd = new DropJobsCommand($this->crontabEditor);
 
         $app = new Application();
         $app->add($cmd);
@@ -79,7 +77,7 @@ class DropCommandTest extends TestCase
 
         $this->assertStringContainsString('Can\'t access crontab.', $tester->getDisplay());
         $this->assertStringContainsString('test fail', $tester->getDisplay());
-        $this->assertEquals(DropJobsCommand::STATUS_ACCESS_DENIED, $tester->getStatusCode());
+        $this->assertEquals(DropJobsCommand::EXITCODE_ACCESS_DENIED, $tester->getStatusCode());
     }
 
     public function testSuccessfulDrop()
@@ -88,8 +86,7 @@ class DropCommandTest extends TestCase
         $this->crontabEditor->expects($this->once())
             ->method('removeCronjobs');
 
-        $cmd = new DropJobsCommand();
-        $cmd->setCrontabEditor($this->crontabEditor);
+        $cmd = new DropJobsCommand($this->crontabEditor);
 
         $app = new Application();
         $app->add($cmd);

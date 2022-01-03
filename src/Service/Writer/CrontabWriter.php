@@ -15,7 +15,6 @@ class CrontabWriter implements CrontabWriterInterface
 
     /**
      * Default configuration.
-     * @var array
      */
     protected array $defaultConfig = [
         'tmpPath' => '/tmp',
@@ -26,21 +25,14 @@ class CrontabWriter implements CrontabWriterInterface
 
     /**
      * Custom configuration.
-     * @var array
      */
     protected array $config = [];
 
-    /**
-     * @var ShellWrapperInterface
-     */
-    protected ShellWrapperInterface $shellWrapper;
+    protected ShellWrapperInterface $shell;
 
-    /**
-     * CrontabWriter constructor.
-     * @param array $config
-     */
-    public function __construct(array $config = [])
+    public function __construct(ShellWrapperInterface $shell, array $config = [])
     {
+        $this->shell = $shell;
         $this->setConfig($config);
     }
 
@@ -71,17 +63,17 @@ class CrontabWriter implements CrontabWriterInterface
             // Write lines to file.
             file_put_contents($tmpFile, implode(PHP_EOL, $lines));
 
-            $result = $this->shellWrapper->execute($this->getCronCommand() . ' ' . $tmpFile);
+            $result = $this->shell->execute($this->getCronCommand() . ' ' . $tmpFile);
 
             unlink($tmpFile);
 
         } else {
             // If no lines should be added to crontab, clear crontab for current user.
-            $result = $this->shellWrapper->execute($this->getCronCommand() . ' -r');
+            $result = $this->shell->execute($this->getCronCommand() . ' -r');
         }
 
-        if ($this->shellWrapper->isFailed()) {
-            throw new AccessDeniedException($result, $this->shellWrapper->getErrorCode());
+        if ($this->shell->isFailed()) {
+            throw new AccessDeniedException($result, $this->shell->getErrorCode());
         }
     }
 
@@ -104,30 +96,12 @@ class CrontabWriter implements CrontabWriterInterface
     }
 
     /**
-     * @return array|null
-     * @codeCoverageIgnore
-     */
-    public function getConfig(): ?array
-    {
-        return $this->config;
-    }
-
-    /**
      * @param array $config
      * return $this
      */
     public function setConfig(array $config): void
     {
         $this->config = array_replace($this->defaultConfig, $config);
-    }
-
-    /**
-     * @required
-     * @param ShellWrapperInterface $shellWrapper
-     */
-    public function setShellWrapper(ShellWrapperInterface $shellWrapper): void
-    {
-        $this->shellWrapper = $shellWrapper;
     }
 
 }

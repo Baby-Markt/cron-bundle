@@ -16,11 +16,16 @@ class DropJobsCommand extends Command
     protected static $defaultName = 'babymarkt-cron:drop';
     protected static $defaultDescription = 'Drops all configured cronjobs from crontab.';
 
-    const
-        STATUS_NOT_WRITABLE = 1,
-        STATUS_ACCESS_DENIED = 2;
+    const EXITCODE_NOT_WRITABLE = 1;
+    const EXITCODE_ACCESS_DENIED = 2;
 
-    protected ?CrontabEditor $crontabEditor;
+    protected CrontabEditor $crontabEditor;
+
+    public function __construct(CrontabEditor $crontabEditor)
+    {
+        $this->crontabEditor = $crontabEditor;
+        parent::__construct();
+    }
 
     /**
      * @inheritDoc
@@ -36,24 +41,15 @@ class DropJobsCommand extends Command
         } catch (WriteException $e) {
             $io->error('Can\'t write to crontab.');
             $output->writeln($e->getMessage());
-            return self::STATUS_NOT_WRITABLE;
+            return self::EXITCODE_NOT_WRITABLE;
 
         } catch (AccessDeniedException $e) {
             $io->error('Can\'t access crontab.');
             $output->writeln($e->getMessage());
-            return self::STATUS_ACCESS_DENIED;
+            return self::EXITCODE_ACCESS_DENIED;
         }
 
         return 0;
-    }
-
-    /**
-     * @required
-     * @param CrontabEditor $crontabEditor
-     */
-    public function setCrontabEditor(CrontabEditor $crontabEditor): void
-    {
-        $this->crontabEditor = $crontabEditor;
     }
 
 }

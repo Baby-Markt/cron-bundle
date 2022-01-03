@@ -13,7 +13,13 @@ class DumpJobsCommand extends Command
     protected static $defaultName = 'babymarkt-cron:dump';
     protected static $defaultDescription = 'Shows a list of all configured cronjobs.';
 
-    protected ?CrontabEntryGenerator $cronEntryGenerator;
+    protected CrontabEntryGenerator $cronEntryGenerator;
+
+    public function __construct(CrontabEntryGenerator $cronEntryGenerator)
+    {
+        $this->cronEntryGenerator = $cronEntryGenerator;
+        parent::__construct();
+    }
 
     /**
      * @inheritDoc
@@ -27,15 +33,6 @@ class DumpJobsCommand extends Command
         }
 
         return 0;
-    }
-
-    /**
-     * @required
-     * @param CrontabEntryGenerator $cronEntryGenerator
-     */
-    public function setCrontabEntryGenerator(CrontabEntryGenerator $cronEntryGenerator): void
-    {
-        $this->cronEntryGenerator = $cronEntryGenerator;
     }
 
 }

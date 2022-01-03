@@ -63,53 +63,44 @@ class CrontabWriterTest extends TestCase
             $this->assertEquals(implode(PHP_EOL, $lines), trim($vfsContent));
         });
 
-        $writer = new CrontabWriter($config);
-        $writer->setShellWrapper($shell);
-        $writer->write($lines);
+        (new CrontabWriter($shell, $config))->write($lines);
     }
 
     /**
      * @param ShellWrapperInterface $shell
      * @param ContainerBuilder $container
-     * @param $lines
+     * @param array $lines
      * @dataProvider commandGenerationData
      */
     public function testCommandGeneration(ShellWrapperInterface $shell, ContainerBuilder $container, array $lines)
     {
         $config = $container->getParameter('babymarkt_cron.options.crontab');
 
-        $writer = new CrontabWriter($config);
-        $writer->setShellWrapper($shell);
-        $writer->write($lines);
+        (new CrontabWriter($shell, $config))->write($lines);
     }
 
-    /**
-     * @return array[]
-     */
-    public function commandGenerationData(): array
+    public function commandGenerationData(): \Generator
     {
         // The container has to be cloned because each getShell() call creates a new instance with different settings.
-        return [
-            [
-                $this->getShell([], false, 0, true),
-                $this->container,
-                []
-            ],
-            [
-                $this->getShell(['sudo' => true]),
-                $this->container,
-                ['test']
-            ],
-            [
-                $this->getShell(['user' => 'testuser']),
-                $this->container,
-                ['test']
-            ],
-            [
-                $this->getShell(['bin' => '/check/this/out/crontab']),
-                $this->container,
-                ['test']
-            ]
+        yield [
+            $this->getShell([], false, 0, true),
+            $this->container,
+            []
+        ];
+        yield [
+            $this->getShell(['sudo' => true]),
+            $this->container,
+            ['test']
+        ];
+        yield [
+            $this->getShell(['user' => 'testuser']),
+            $this->container,
+            ['test']
+        ];
+        yield [
+            $this->getShell(['bin' => '/check/this/out/crontab']),
+            $this->container,
+            ['test']
         ];
     }
 
@@ -120,10 +111,9 @@ class CrontabWriterTest extends TestCase
         $shell = $this->getShell([], true, 1);
 
         $config = $this->container->getParameter('babymarkt_cron.options.crontab');
+        $lines  = ['test'];
 
-        $writer = new CrontabWriter($config);
-        $writer->setShellWrapper($shell);
-        $writer->write(['test']);
+        (new CrontabWriter($shell, $config))->write($lines);
     }
 
     public function testNotWritable()
@@ -139,10 +129,9 @@ class CrontabWriterTest extends TestCase
         $root->chmod(0444);
 
         $config = $container->getParameter('babymarkt_cron.options.crontab');
+        $lines  = ['test'];
 
-        $writer = new CrontabWriter($config);
-        $writer->setShellWrapper(new ShellWrapper());
-        $writer->write(['test']);
+        (new CrontabWriter(new ShellWrapper(), $config))->write($lines);
     }
 
     /**
@@ -199,6 +188,7 @@ class CrontabWriterTest extends TestCase
     /**
      * Sets up the fixture, for example, open a network connection.
      * This method is called before a test is executed.
+     * @throws \org\bovigo\vfs\vfsStreamException
      */
     protected function setUp(): void
     {

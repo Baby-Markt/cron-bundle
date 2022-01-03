@@ -33,7 +33,7 @@ class CrontabReaderTest extends TestCase
     /**
      * @var ContainerBuilder
      */
-    protected $container;
+    protected ContainerBuilder $container;
 
     /**
      * Sets up the fixture, for example, open a network connection.
@@ -45,9 +45,7 @@ class CrontabReaderTest extends TestCase
 
         $config = $this->container->getParameter('babymarkt_cron.options.crontab');
 
-        $reader = new CrontabReader($config);
-        $reader->setShellWrapper($shell);
-        $result = $reader->read();
+        $result = (new CrontabReader($shell, $config))->read();
 
         $this->assertEquals($this->loadStaticFixture('crontab.txt'), implode(PHP_EOL, $result));
     }
@@ -60,9 +58,7 @@ class CrontabReaderTest extends TestCase
 
         $config = $this->container->getParameter('babymarkt_cron.options.crontab');
 
-        $reader = new CrontabReader($config);
-        $reader->setShellWrapper($shell);
-        $reader->read();
+        (new CrontabReader($shell, $config))->read();
     }
 
     /**
@@ -74,9 +70,7 @@ class CrontabReaderTest extends TestCase
 
         $config = $this->container->getParameter('babymarkt_cron.options.crontab');
 
-        $reader = new CrontabReader($config);
-        $reader->setShellWrapper($shell);
-        $reader->read();
+        (new CrontabReader($shell, $config))->read();
     }
 
     /**
@@ -88,9 +82,7 @@ class CrontabReaderTest extends TestCase
 
         $config = $this->container->getParameter('babymarkt_cron.options.crontab');
 
-        $reader = new CrontabReader($config);
-        $reader->setShellWrapper($shell);
-        $reader->read();
+        (new CrontabReader($shell, $config))->read();
     }
 
     /**
@@ -102,9 +94,7 @@ class CrontabReaderTest extends TestCase
 
         $config = $this->container->getParameter('babymarkt_cron.options.crontab');
 
-        $reader = new CrontabReader($config);
-        $reader->setShellWrapper($shell);
-        $reader->read();
+        (new CrontabReader($shell, $config))->read();
     }
 
     /**
@@ -159,8 +149,7 @@ class CrontabReaderTest extends TestCase
     }
 
     /**
-     * @param array $config
-     * @return ContainerBuilder
+     * @throws \Exception
      */
     protected function getContainer(array $config = []): ContainerBuilder
     {
