@@ -15,8 +15,16 @@ class ValidateJobsCommand extends Command
     protected static $defaultName = 'babymarkt-cron:validate';
     protected static $defaultDescription = 'Validates the configured cron jobs against some simple rules.';
 
-    protected ?DefinitionChecker $definitionChecker = null;
-    protected array $definitions = [];
+    protected DefinitionChecker $definitionChecker;
+    protected array $definitions;
+
+    public function __construct(DefinitionChecker $definitionChecker, array $definitions)
+    {
+        $this->definitionChecker = $definitionChecker;
+        $this->definitions       = $definitions;
+
+        parent::__construct();
+    }
 
     /**
      * @inheritDoc
@@ -28,7 +36,7 @@ class ValidateJobsCommand extends Command
         $errorFound = false;
         $io         = new SymfonyStyle($input, $output);
 
-        if (count((array)$this->definitions)) {
+        if (count($this->definitions)) {
             $resultList = [];
 
             ksort($this->definitions);
@@ -70,23 +78,5 @@ class ValidateJobsCommand extends Command
         }
 
         return (int)$errorFound;
-    }
-
-    /**
-     * @required
-     * @param DefinitionChecker $definitionChecker
-     */
-    public function setDefinitionChecker(DefinitionChecker $definitionChecker): void
-    {
-        $this->definitionChecker = $definitionChecker;
-    }
-
-    /**
-     * @param array $definitions
-     * @required
-     */
-    public function setDefinitions(array $definitions): void
-    {
-        $this->definitions = $definitions;
     }
 }

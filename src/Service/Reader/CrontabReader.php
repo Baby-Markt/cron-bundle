@@ -17,7 +17,7 @@ class CrontabReader implements CrontabReaderInterface
      * Default configuration.
      * @var array
      */
-    protected $defaultConfig = [
+    protected array $defaultConfig = [
         'bin'  => '/usr/bin/crontab',
         'user' => null,
         'sudo' => false
@@ -27,12 +27,12 @@ class CrontabReader implements CrontabReaderInterface
      * Custom configuration.
      * @var array
      */
-    protected $config = [];
+    protected array $config = [];
 
     /**
      * @var ShellWrapperInterface
      */
-    protected $shellWrapper;
+    protected ShellWrapperInterface $shellWrapper;
 
     /**
      * CrontabReader constructor.
@@ -81,7 +81,7 @@ class CrontabReader implements CrontabReaderInterface
      * @return array
      * @codeCoverageIgnore
      */
-    public function getConfig()
+    public function getConfig(): array
     {
         return $this->config;
     }
@@ -90,9 +90,9 @@ class CrontabReader implements CrontabReaderInterface
      * @param array $config
      * return $this
      */
-    public function setConfig($config)
+    public function setConfig(array $config)
     {
-        $this->config = array_replace($this->defaultConfig, (array)$config);
+        $this->config = array_replace($this->defaultConfig, $config);
     }
 
     /**

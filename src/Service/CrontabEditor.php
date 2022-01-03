@@ -9,27 +9,27 @@ use Babymarkt\Symfony\CronBundle\Service\Reader\CrontabReaderInterface;
 use Babymarkt\Symfony\CronBundle\Service\Writer\CrontabWriterInterface;
 
 /**
- * The crontab editor provides the capabilities to manage cron's in the system crontab.
+ * The crontab editor provides the capabilities to manage cronjobs in the system crontab.
  * @package Babymarkt\Symfony\CronBundle\Service
  */
 class CrontabEditor
 {
 
     /**
-     * A string identifies a application cron's block within the crontab.
+     * A string identifies a application cronjobs block within the crontab.
      * @var string
      */
-    protected $identifier;
+    protected string $identifier;
 
     /**
      * @var CrontabReaderInterface
      */
-    protected $reader;
+    protected CrontabReaderInterface $reader;
 
     /**
      * @var CrontabWriterInterface
      */
-    protected $writer;
+    protected CrontabWriterInterface $writer;
 
     /**
      * @param string $identifier Crontab block identifier.
@@ -54,7 +54,7 @@ class CrontabEditor
         // Remove old cron entries.
         $crontab = $this->purgeOldCronjobs($crontab);
 
-        // Add the new cron's block to crontab lines.
+        // Add the new cronjobs block to crontab lines.
         $crontab[] = $this->generateStartLine();
         $crontab += $cronjobs;
         $crontab[] = $this->generateEndLine();
@@ -77,7 +77,7 @@ class CrontabEditor
     }
 
     /**
-     * Removes the old cronjobs with same cron's block identifier.
+     * Removes the old cronjobs with same cronjobs block identifier.
      */
     protected function purgeOldCronjobs($crontab): array
     {

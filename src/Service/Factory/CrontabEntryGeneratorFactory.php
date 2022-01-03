@@ -17,7 +17,7 @@ class CrontabEntryGeneratorFactory
      * Cron configuration
      * @var Definition[]
      */
-    protected $definitions;
+    protected array $definitions;
 
     /**
      * Basedir of the console script.
@@ -33,7 +33,7 @@ class CrontabEntryGeneratorFactory
     /**
      * @var string
      */
-    protected $environment;
+    protected string $environment;
 
     /**
      * ListGenerator constructor.
@@ -42,7 +42,7 @@ class CrontabEntryGeneratorFactory
      * @param string $basedir
      * @param string $environment
      */
-    public function __construct(array $definitions, array $outputOptions, $basedir, $environment)
+    public function __construct(array $definitions, array $outputOptions, string $basedir, string $environment)
     {
         $this->definitions   = $definitions;
         $this->outputOptions = $outputOptions;
@@ -53,7 +53,7 @@ class CrontabEntryGeneratorFactory
     /**
      * @return CrontabEntryGenerator
      */
-    public function create()
+    public function create(): CrontabEntryGenerator
     {
         $definitions = [];
 

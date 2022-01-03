@@ -9,21 +9,22 @@ use Symfony\Component\Console\Application;
 
 /**
  * Checks the given definition against some simple rules.
- * @package Babymarkt\Symfony\CronBundle\Service
  */
 class DefinitionChecker
 {
     const RESULT_INCORRECT_COMMAND = 'incorrectCommand';
 
-    /**
-     * @var Application
-     */
-    protected $application;
+    protected Application $application;
+    protected ?string $result = null;
 
     /**
-     * @var string
+     * @param Application $application
      */
-    protected $result;
+    public function __construct(Application $application)
+    {
+        $this->application = $application;
+    }
+
 
     /**
      * Checks a single definition.

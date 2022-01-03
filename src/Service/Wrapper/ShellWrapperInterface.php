@@ -14,20 +14,20 @@ interface ShellWrapperInterface
      * @param string $command
      * @return string
      */
-    public function execute($command);
+    public function execute(string $command): string;
 
     /**
      * @return array
      */
-    public function getOutput();
+    public function getOutput(): array;
 
     /**
      * @return int
      */
-    public function getErrorCode();
+    public function getErrorCode(): int;
 
     /**
      * @return boolean TRUE if the error code is not 0, otherwise FALSE.
      */
-    public function isFailed();
+    public function isFailed(): bool;
 }

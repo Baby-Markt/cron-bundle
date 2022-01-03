@@ -35,8 +35,7 @@ class DefinitionCheckerTest extends TestCase
         $application = new Application();
         $application->add($command);
 
-        $this->checker = new DefinitionChecker();
-        $this->checker->setApplication($application);
+        $this->checker = new DefinitionChecker($application);
     }
 
     public function testValidDefinition()

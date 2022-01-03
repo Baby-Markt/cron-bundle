@@ -39,9 +39,7 @@ class ValidateCommandTest extends TestCase
             'test' => ['command' => 'some:command']
         ];
 
-        $cmd = new ValidateJobsCommand();
-        $cmd->setDefinitions($definitions);
-        $cmd->setDefinitionChecker($checkerStub);
+        $cmd = new ValidateJobsCommand($checkerStub, $definitions);
 
         $app = new Application();
         $app->add($cmd);
@@ -74,9 +72,7 @@ class ValidateCommandTest extends TestCase
             'test' => ['command' => 'some:command']
         ];
 
-        $cmd = new ValidateJobsCommand();
-        $cmd->setDefinitions($definitions);
-        $cmd->setDefinitionChecker($checkerStub);
+        $cmd = new ValidateJobsCommand($checkerStub, $definitions);
 
         $app = new Application();
         $app->add($cmd);
@@ -106,9 +102,7 @@ class ValidateCommandTest extends TestCase
             'test' => ['command' => 'some:command', 'disabled' => true]
         ];
 
-        $cmd = new ValidateJobsCommand();
-        $cmd->setDefinitions($definitions);
-        $cmd->setDefinitionChecker($checkerStub);
+        $cmd = new ValidateJobsCommand($checkerStub, $definitions);
 
         $app = new Application();
         $app->add($cmd);
@@ -131,8 +125,7 @@ class ValidateCommandTest extends TestCase
         $checkerStub->expects($this->never())->method('check');
         $checkerStub->expects($this->never())->method('getResult');
 
-        $cmd = new ValidateJobsCommand();
-        $cmd->setDefinitionChecker($checkerStub);
+        $cmd = new ValidateJobsCommand($checkerStub, []);
 
         $app = new Application();
         $app->add($cmd);

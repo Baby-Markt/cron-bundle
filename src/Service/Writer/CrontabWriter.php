@@ -18,7 +18,7 @@ class CrontabWriter implements CrontabWriterInterface
      * Default configuration.
      * @var array
      */
-    protected $defaultConfig = [
+    protected array $defaultConfig = [
         'tmpPath' => '/tmp',
         'bin'     => '/usr/bin/crontab',
         'user'    => null,
@@ -29,12 +29,12 @@ class CrontabWriter implements CrontabWriterInterface
      * Custom configuration.
      * @var array
      */
-    protected $config = [];
+    protected array $config = [];
 
     /**
      * @var ShellWrapperInterface
      */
-    protected $shellWrapper;
+    protected ShellWrapperInterface $shellWrapper;
 
     /**
      * CrontabWriter constructor.
@@ -70,7 +70,7 @@ class CrontabWriter implements CrontabWriterInterface
             }
 
             // Write lines to file.
-            file_put_contents($tmpFile, implode(PHP_EOL, (array)$lines));
+            file_put_contents($tmpFile, implode(PHP_EOL, $lines));
 
             $result = $this->shellWrapper->execute($this->getCronCommand() . ' ' . $tmpFile);
 

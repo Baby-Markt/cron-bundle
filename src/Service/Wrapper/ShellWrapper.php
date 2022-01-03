@@ -11,23 +11,21 @@ class ShellWrapper implements ShellWrapperInterface
 {
 
     /**
-     * Output lines as an array.
-     * @var array
+     * Output lines of the command execution.
      */
-    protected $output;
+    protected array $output = [];
 
     /**
      * Return status.
-     * @var int
      */
-    protected $errorCode;
+    protected int $errorCode = 0;
 
     /**
      * @see http://php.net/manual/de/function.exec.php
      * @param string $command
      * @return string The last output line.
      */
-    public function execute($command): string
+    public function execute(string $command): string
     {
         return exec($command, $this->output, $this->errorCode);
     }

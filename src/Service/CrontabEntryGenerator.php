@@ -16,7 +16,7 @@ class CrontabEntryGenerator
      * Cron configuration
      * @var Definition[]
      */
-    protected $definitions;
+    protected array $definitions;
 
     /**
      * Basedir of the console script.
@@ -27,17 +27,17 @@ class CrontabEntryGenerator
     /**
      * @var array
      */
-    protected $outputOptions;
+    protected array $outputOptions;
 
     /**
      * @var string
      */
-    protected $environment;
+    protected string $environment;
 
     /**
      * @var string
      */
-    protected $script = 'bin/console';
+    protected string $script = 'bin/console';
 
     /**
      * ListGenerator constructor.
@@ -97,7 +97,7 @@ class CrontabEntryGenerator
      * @param array $arguments
      * @return string
      */
-    protected function getArgumentsString(array $arguments)
+    protected function getArgumentsString(array $arguments): string
     {
         if (count($arguments) > 0) {
             return implode(' ', $arguments);
@@ -114,7 +114,7 @@ class CrontabEntryGenerator
      * @param string|int $weekdays
      * @return string
      */
-    protected function getIntervalString($minutes, $hours, $days, $months, $weekdays)
+    protected function getIntervalString($minutes, $hours, $days, $months, $weekdays): string
     {
         return implode(' ', [$minutes, $hours, $days, $months, $weekdays]);
     }
