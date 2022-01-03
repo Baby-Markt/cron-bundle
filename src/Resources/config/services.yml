@@ -9,35 +9,35 @@ services:
     resource: '../../Command/'
     tags: [ { name: console.command } ]
 
-  Babymarkt\Symfony\CronBundle\Service\Factory\CrontabEntryGeneratorFactory:
+  Babymarkt\Symfony\CronBundle\Crontab\Factory\CrontabEntryGeneratorFactory:
     arguments:
       - '%babymarkt_cron.definitions%'
       - '%babymarkt_cron.options.output%'
       - '%babymarkt_cron.options.working_dir%'
       - '%kernel.environment%'
 
-  Babymarkt\Symfony\CronBundle\Service\CrontabEntryGenerator:
-    factory: [ '@Babymarkt\Symfony\CronBundle\Service\Factory\CrontabEntryGeneratorFactory', create ]
+  Babymarkt\Symfony\CronBundle\Crontab\CrontabEntryGenerator:
+    factory: [ '@Babymarkt\Symfony\CronBundle\Crontab\Factory\CrontabEntryGeneratorFactory', create ]
     calls:
       - [ setScript, [ '%babymarkt_cron.options.script%' ] ]
 
-  Babymarkt\Symfony\CronBundle\Service\Writer\CrontabWriterInterface:
-    class: Babymarkt\Symfony\CronBundle\Service\Writer\CrontabWriter
+  Babymarkt\Symfony\CronBundle\Crontab\Writer\CrontabWriterInterface:
+    class: Babymarkt\Symfony\CronBundle\Crontab\Writer\CrontabWriter
     arguments:
       - '%babymarkt_cron.options.crontab%'
 
-  Babymarkt\Symfony\CronBundle\Service\Reader\CrontabReaderInterface:
-    class: Babymarkt\Symfony\CronBundle\Service\Reader\CrontabReader
+  Babymarkt\Symfony\CronBundle\Crontab\Reader\CrontabReaderInterface:
+    class: Babymarkt\Symfony\CronBundle\Crontab\Reader\CrontabReader
     arguments:
       - '%babymarkt_cron.options.crontab%'
 
-  Babymarkt\Symfony\CronBundle\Service\CrontabEditor:
+  Babymarkt\Symfony\CronBundle\Crontab\CrontabEditor:
     arguments:
       - '%babymarkt_cron.options.id%'
 
   Babymarkt\Symfony\CronBundle\Shell\ShellWrapperInterface:
     class: Babymarkt\Symfony\CronBundle\Shell\ShellWrapper
 
-  Babymarkt\Symfony\CronBundle\Service\DefinitionChecker: ~
+  Babymarkt\Symfony\CronBundle\Crontab\DefinitionChecker: ~
 
 
