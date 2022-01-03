@@ -1,12 +1,5 @@
 <?php
 declare(strict_types=1);
-/*
- * Copyright (c) 2015 Babymarkt.de GmbH - All Rights Reserved
- *
- * All information contained herein is, and remains the property of Baby-Markt.de
- * and is protected by copyright law. Unauthorized copying of this file or any parts,
- * via any medium is strictly prohibited.
- */
 
 namespace Babymarkt\Symfony\CronBundle\Tests\Writer;
 
@@ -24,10 +17,6 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-/**
- * Class CrontabWriterTest
- * @package Babymarkt\Symfony\CronBundle\Tests\Writer
- */
 class CrontabWriterTest extends TestCase
 {
     use StaticsLoaderTrait, ContainerTrait;
@@ -35,10 +24,7 @@ class CrontabWriterTest extends TestCase
     const ROOT_DIR = '/root/dir';
     const ENVIRONMENT = 'test';
 
-    /**
-     * @var ContainerBuilder
-     */
-    protected $container;
+    protected ContainerBuilder $container;
 
     /**
      * Sets up the fixture, for example, open a network connection.

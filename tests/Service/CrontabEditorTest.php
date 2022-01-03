@@ -1,9 +1,7 @@
 <?php
 declare(strict_types=1);
 
-
 namespace Babymarkt\Symfony\CronBundle\Tests\Service;
-
 
 use Babymarkt\Symfony\CronBundle\Service\CrontabEditor;
 use Babymarkt\Symfony\CronBundle\Service\Reader\CrontabReaderInterface;

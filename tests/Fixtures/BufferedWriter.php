@@ -6,16 +6,9 @@ namespace Babymarkt\Symfony\CronBundle\Tests\Fixtures;
 use Babymarkt\Symfony\CronBundle\Exception\AccessDeniedException;
 use Babymarkt\Symfony\CronBundle\Service\Writer\CrontabWriterInterface;
 
-/**
- * Class BufferedWriter
- * @package Babymarkt\Symfony\CronBundle\Tests\Fixtures
- */
 class BufferedWriter implements CrontabWriterInterface
 {
 
-    /**
-     * @var array
-     */
     protected array $buffer = [];
 
     /**

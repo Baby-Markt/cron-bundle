@@ -8,21 +8,12 @@ use Babymarkt\Symfony\CronBundle\Service\CrontabEntryGenerator;
 use Babymarkt\Symfony\CronBundle\Tests\Fixtures\ContainerTrait;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Created by PhpStorm.
- * User: nfunke
- * Date: 05.08.15
- * Time: 13:34
- */
 class CrontabEntryGeneratorTest extends TestCase
 {
 
     use ContainerTrait;
 
-    /**
-     * @var string
-     */
-    private $root;
+    private string $root;
 
     public function testDefaultValues()
     {
