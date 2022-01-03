@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 
 namespace Babymarkt\Symfony\CronBundle\Tests\Service;
@@ -7,7 +8,6 @@ namespace Babymarkt\Symfony\CronBundle\Tests\Service;
 use Babymarkt\Symfony\CronBundle\Service\CrontabEditor;
 use Babymarkt\Symfony\CronBundle\Service\Reader\CrontabReaderInterface;
 use Babymarkt\Symfony\CronBundle\Tests\Fixtures\BufferedWriter;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class CrontabEditorTest extends TestCase
@@ -15,9 +15,6 @@ class CrontabEditorTest extends TestCase
 
     public function testRemovingCronDefinitions()
     {
-        /**
-         * @var CrontabReaderInterface|MockObject $reader
-         */
         $reader = $this->getMockBuilder(CrontabReaderInterface::class)->getMock();
         $writer = new BufferedWriter();
 
@@ -32,9 +29,7 @@ class CrontabEditorTest extends TestCase
             'row 100',
         ]);
 
-        $editor = new CrontabEditor('test');
-        $editor->setReader($reader);
-        $editor->setWriter($writer);
+        $editor = new CrontabEditor('test', $reader, $writer);
 
         $editor->removeCronjobs();
 
@@ -49,9 +44,6 @@ class CrontabEditorTest extends TestCase
 
     public function testRemovingCronjobsWithMultipleBlocks()
     {
-        /**
-         * @var CrontabReaderInterface|MockObject $reader
-         */
         $reader = $this->getMockBuilder(CrontabReaderInterface::class)->getMock();
         $writer = new BufferedWriter();
 
@@ -67,9 +59,7 @@ class CrontabEditorTest extends TestCase
             'row 3',
         ]);
 
-        $editor = new CrontabEditor('test');
-        $editor->setReader($reader);
-        $editor->setWriter($writer);
+        $editor = new CrontabEditor('test', $reader, $writer);
 
         $editor->removeCronjobs();
 
@@ -86,9 +76,6 @@ class CrontabEditorTest extends TestCase
 
     public function testUpdateExistingCronjobsBlock()
     {
-        /**
-         * @var CrontabReaderInterface|MockObject $reader
-         */
         $reader = $this->getMockBuilder(CrontabReaderInterface::class)->getMock();
         $writer = new BufferedWriter();
 
@@ -103,9 +90,7 @@ class CrontabEditorTest extends TestCase
             'row 100',
         ]);
 
-        $editor = new CrontabEditor('test');
-        $editor->setReader($reader);
-        $editor->setWriter($writer);
+        $editor = new CrontabEditor('test', $reader, $writer);
 
         $editor->injectCronjobs([
             'cron-1' => 'the new cron definition 1',
@@ -125,9 +110,6 @@ class CrontabEditorTest extends TestCase
 
     public function testInjectingCronjobs()
     {
-        /**
-         * @var CrontabReaderInterface|MockObject $reader
-         */
         $reader = $this->getMockBuilder(CrontabReaderInterface::class)->getMock();
         $writer = new BufferedWriter();
 
@@ -136,9 +118,7 @@ class CrontabEditorTest extends TestCase
             'row 2',
         ]);
 
-        $editor = new CrontabEditor('test');
-        $editor->setReader($reader);
-        $editor->setWriter($writer);
+        $editor = new CrontabEditor('test', $reader, $writer);
 
         $editor->injectCronjobs([
             'cron-1' => 'cron definition 1',
@@ -158,9 +138,6 @@ class CrontabEditorTest extends TestCase
      */
     public function testStrposEmptyNeedle()
     {
-        /**
-         * @var CrontabReaderInterface|MockObject $reader
-         */
         $reader = $this->getMockBuilder(CrontabReaderInterface::class)->getMock();
         $writer = new BufferedWriter();
 
@@ -178,9 +155,7 @@ class CrontabEditorTest extends TestCase
             'row 100',
         ]);
 
-        $editor = new CrontabEditor('test');
-        $editor->setReader($reader);
-        $editor->setWriter($writer);
+        $editor = new CrontabEditor('test', $reader, $writer);
 
         $editor->removeCronjobs();
 

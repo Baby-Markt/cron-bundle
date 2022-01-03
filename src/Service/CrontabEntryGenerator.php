@@ -7,7 +7,6 @@ use Babymarkt\Symfony\CronBundle\Entity\Cron\Definition;
 
 /**
  * Class ListGenerator
- * @package Babymarkt\Symfony\CronBundle\DependencyInjection
  */
 class CrontabEntryGenerator
 {

@@ -3,10 +3,6 @@ declare(strict_types=1);
 
 namespace Babymarkt\Symfony\CronBundle\Service\Wrapper;
 
-/**
- * Class ExecWrapper
- * @package Babymarkt\Symfony\CronBundle\Helper
- */
 interface ShellWrapperInterface
 {
     /**

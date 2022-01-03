@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Babymarkt\Symfony\CronBundle\Tests\Fixtures;
 
@@ -15,7 +16,7 @@ class BufferedWriter implements CrontabWriterInterface
     /**
      * @var array
      */
-    protected $buffer = [];
+    protected array $buffer = [];
 
     /**
      * Writes the given content to the system crontab of the current user.

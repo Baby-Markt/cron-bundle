@@ -9,8 +9,7 @@ use Babymarkt\Symfony\CronBundle\Service\Reader\CrontabReaderInterface;
 use Babymarkt\Symfony\CronBundle\Service\Writer\CrontabWriterInterface;
 
 /**
- * The crontab editor provides the capabilities to manage cronjobs in the system crontab.
- * @package Babymarkt\Symfony\CronBundle\Service
+ * The crontab editor provides capabilities to manage cronjobs in the system crontab.
  */
 class CrontabEditor
 {
@@ -33,18 +32,22 @@ class CrontabEditor
 
     /**
      * @param string $identifier Crontab block identifier.
+     * @param CrontabReaderInterface $reader Crontab reader
+     * @param CrontabWriterInterface $writer Crontab writer
      */
-    public function __construct(string $identifier)
+    public function __construct(string $identifier, CrontabReaderInterface $reader, CrontabWriterInterface $writer)
     {
         $this->identifier = $identifier;
+        $this->reader     = $reader;
+        $this->writer     = $writer;
     }
 
     /**
      * Injects the cron entries into crontab.
      * @param array $cronjobs
-     * @todo Add a simple locking mechanism.
      * @throws AccessDeniedException if access to crontab is prohibited.
      * @throws WriteException if the temp path is not writable.
+     * @todo Add a simple locking mechanism.
      */
     public function injectCronjobs(array $cronjobs): void
     {
@@ -56,7 +59,7 @@ class CrontabEditor
 
         // Add the new cronjobs block to crontab lines.
         $crontab[] = $this->generateStartLine();
-        $crontab += $cronjobs;
+        $crontab   += $cronjobs;
         $crontab[] = $this->generateEndLine();
 
         // Write content back into crontab.
@@ -65,8 +68,8 @@ class CrontabEditor
 
     /**
      * Removes the existing cronjobs from crontab.
-     * @todo Add a simple locking mechanism.
      * @throws AccessDeniedException if access to crontab is prohibited.
+     * @todo Add a simple locking mechanism.
      */
     public function removeCronjobs(): void
     {
@@ -120,23 +123,5 @@ class CrontabEditor
     protected function generateEndLine(): string
     {
         return sprintf('###< %s ###', $this->identifier);
-    }
-
-    /**
-     * @required
-     * @param CrontabReaderInterface $reader
-     */
-    public function setReader(CrontabReaderInterface $reader): void
-    {
-        $this->reader = $reader;
-    }
-
-    /**
-     * @required
-     * @param CrontabWriterInterface $writer
-     */
-    public function setWriter(CrontabWriterInterface $writer): void
-    {
-        $this->writer = $writer;
     }
 }

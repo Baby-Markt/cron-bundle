@@ -4,8 +4,7 @@ declare(strict_types=1);
 namespace Babymarkt\Symfony\CronBundle\Service\Wrapper;
 
 /**
- * A simple exec wrapper to make testing with depending classes easier.
- * @package Babymarkt\Symfony\CronBundle\Helper
+ * A simple wrapper to encapsulate command execution and make it easier to test classes that depend on it.
  */
 class ShellWrapper implements ShellWrapperInterface
 {

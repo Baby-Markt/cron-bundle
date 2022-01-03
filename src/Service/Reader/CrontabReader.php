@@ -8,7 +8,6 @@ use Babymarkt\Symfony\CronBundle\Service\Wrapper\ShellWrapperInterface;
 
 /**
  * Read entries from system crontab.
- * @package Babymarkt\Symfony\CronBundle\Helper\CrontabEditor
  */
 class CrontabReader implements CrontabReaderInterface
 {
@@ -45,8 +44,8 @@ class CrontabReader implements CrontabReaderInterface
 
     /**
      * Reads content from system crontab of the current user.
-     * @throws AccessDeniedException if access to crontab is denied.
      * @return string[]
+     * @throws AccessDeniedException if access to crontab is denied.
      */
     public function read(): array
     {

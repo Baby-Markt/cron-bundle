@@ -6,10 +6,7 @@ namespace Babymarkt\Symfony\CronBundle\Service\Writer;
 use Babymarkt\Symfony\CronBundle\Exception\AccessDeniedException;
 use Babymarkt\Symfony\CronBundle\Exception\WriteException;
 
-/**
- * Class CrontabWriter
- * @package Babymarkt\Symfony\CronBundle\Helper\CrontabEditor
- */
+
 interface CrontabWriterInterface
 {
     /**

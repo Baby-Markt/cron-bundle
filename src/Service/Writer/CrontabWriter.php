@@ -8,8 +8,7 @@ use Babymarkt\Symfony\CronBundle\Exception\WriteException;
 use Babymarkt\Symfony\CronBundle\Service\Wrapper\ShellWrapperInterface;
 
 /**
- * Write new entries back to system crontab.
- * @package Babymarkt\Symfony\CronBundle\Helper\CrontabEditor
+ * Updates the system crontab entries.
  */
 class CrontabWriter implements CrontabWriterInterface
 {

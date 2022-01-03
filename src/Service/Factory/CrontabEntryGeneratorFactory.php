@@ -7,8 +7,8 @@ use Babymarkt\Symfony\CronBundle\Entity\Cron\Definition;
 use Babymarkt\Symfony\CronBundle\Service\CrontabEntryGenerator;
 
 /**
- * Class CrontabEntryGeneratorFactory
- * @package Babymarkt\Symfony\CronBundle\Service\Factory
+ * A factory class to create an instance of the crontab entry generator.
+ * @see CrontabEntryGenerator
  */
 class CrontabEntryGeneratorFactory
 {
