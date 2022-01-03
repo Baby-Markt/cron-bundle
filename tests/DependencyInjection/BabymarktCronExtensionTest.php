@@ -11,21 +11,9 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class BabymarktCronExtensionTest extends TestCase
 {
-
-    /**
-     * @var BabymarktCronExtension
-     */
-    private $extension;
-
-    /**
-     * @var string
-     */
-    private $root;
-
-    /**
-     * @var ContainerBuilder
-     */
-    private $container;
+    private BabymarktCronExtension $extension;
+    private string $root;
+    private ContainerBuilder $container;
 
     /**
      * Sets up the fixture, for example, open a network connection.
@@ -120,9 +108,9 @@ class BabymarktCronExtensionTest extends TestCase
 
 
     /**
-     * @param $definition
-     * @dataProvider cronDefinitionData
+     * @param array $definition
      * @throws \Exception
+     * @dataProvider cronDefinitionData
      */
     public function testDefaultCronDefinition(array $definition)
     {
