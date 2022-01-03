@@ -1,8 +1,8 @@
 # CronBundle
 A small bundle to manage cron entries in system crontab.
 
-![Build 2.x](https://github.com/Baby-Markt/cron-bundle/actions/workflows/php.yml/badge.svg?branch=2.x)
-[![codecov](https://codecov.io/gh/Baby-Markt/cron-bundle/branch/1.0.x-dev/graph/badge.svg?token=N8MOLOBNW9)](https://codecov.io/gh/Baby-Markt/cron-bundle)
+![Build 2.x](https://github.com/Baby-Markt/cron-bundle/actions/workflows/build.yml/badge.svg?branch=2.x)
+[![codecov](https://codecov.io/gh/Baby-Markt/cron-bundle/branch/2.x/graph/badge.svg?token=98FGA3PEUD)](https://codecov.io/gh/Baby-Markt/cron-bundle)
 [![Packagist Version](https://img.shields.io/packagist/v/babymarkt/cron-bundle)](https://packagist.org/packages/babymarkt/cron-bundle)
 [![License](https://img.shields.io/github/license/Baby-Markt/cron-bundle.svg)](https://github.com/Baby-Markt/cron-bundle/blob/master/LICENSE)
 ![PHP from Packagist](https://img.shields.io/packagist/php-v/babymarkt/cron-bundle)
