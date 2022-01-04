@@ -11,10 +11,10 @@ services:
 
   Babymarkt\Symfony\CronBundle\Crontab\Factory\CrontabEntryGeneratorFactory:
     arguments:
-      - $definitions: '%babymarkt_cron.definitions%'
-      - $outputOptions: '%babymarkt_cron.options.output%'
-      - $baseDir: '%babymarkt_cron.options.working_dir%'
-      - $environment: '%kernel.environment%'
+      - '%babymarkt_cron.definitions%'
+      - '%babymarkt_cron.options.output%'
+      - '%babymarkt_cron.options.working_dir%'
+      - '%kernel.environment%'
 
   Babymarkt\Symfony\CronBundle\Crontab\CrontabEntryGenerator:
     factory: [ '@Babymarkt\Symfony\CronBundle\Crontab\Factory\CrontabEntryGeneratorFactory', create ]
@@ -24,16 +24,18 @@ services:
   Babymarkt\Symfony\CronBundle\Crontab\Writer\CrontabWriterInterface:
     class: Babymarkt\Symfony\CronBundle\Crontab\Writer\CrontabWriter
     arguments:
-      - $config: '%babymarkt_cron.options.crontab%'
+      - '@Babymarkt\Symfony\CronBundle\Shell\ShellWrapperInterface'
+      - '%babymarkt_cron.options.crontab%'
 
   Babymarkt\Symfony\CronBundle\Crontab\Reader\CrontabReaderInterface:
     class: Babymarkt\Symfony\CronBundle\Crontab\Reader\CrontabReader
     arguments:
-      - $config: '%babymarkt_cron.options.crontab%'
+      - '@Babymarkt\Symfony\CronBundle\Shell\ShellWrapperInterface'
+      - '%babymarkt_cron.options.crontab%'
 
   Babymarkt\Symfony\CronBundle\Crontab\CrontabEditor:
     arguments:
-      - $identifier: '%babymarkt_cron.options.id%'
+      - '%babymarkt_cron.options.id%'
 
   Babymarkt\Symfony\CronBundle\Shell\ShellWrapperInterface:
     class: Babymarkt\Symfony\CronBundle\Shell\ShellWrapper

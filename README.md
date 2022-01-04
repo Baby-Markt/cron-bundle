@@ -36,7 +36,7 @@ babymarkt_cron:
     my_job: 'my:symfony:command'
 ```
 
-After syncing the cronjobs with the command `bin/console babymarkt_cron:sync --env=prod`, 
+After syncing the cronjobs with the command `bin/console babymarkt-cron:sync --env=prod`, 
 following entry are created in the crontab:
 ```
 ###> /your/project-dir:prod ###

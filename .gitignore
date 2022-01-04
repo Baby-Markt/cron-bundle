@@ -3,3 +3,4 @@ vendor
 phpunit.xml
 coverage.xml
 .phpunit*
+tests/Functional/Fixtures/var

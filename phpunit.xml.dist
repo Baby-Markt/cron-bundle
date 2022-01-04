@@ -13,8 +13,12 @@
          failOnWarning="true"
          verbose="true">
     <testsuites>
-        <testsuite name="babymarkt/cron-bundle">
-            <directory>tests</directory>
+        <testsuite name="babymarkt/cron-bundle/unit">
+            <directory>tests/Unit</directory>
+        </testsuite>
+        <testsuite name="babymarkt/cron-bundle/functional">
+            <directory>tests/Functional</directory>
+
         </testsuite>
     </testsuites>
 
@@ -24,4 +28,8 @@
             <directory suffix=".php">src</directory>
         </include>
     </coverage>
+
+    <php>
+        <env name="KERNEL_CLASS" value="\Babymarkt\Symfony\CronBundle\Tests\Functional\Fixtures\FunctionalTestKernel"/>
+    </php>
 </phpunit>
