@@ -27,7 +27,6 @@ return [
 
 ```
 
-
 ## Configuration
 
 Let's start with a minimal setup to run a job every minute:
@@ -37,7 +36,39 @@ babymarkt_cron:
     my_job: 'my:symfony:command'
 ```
 
-Full configuration reference with default values:
+After syncing the cronjobs with the command `bin/console babymarkt_cron:sync --env=prod`, 
+following entry are created in the crontab:
+```
+###> /your/project-dir:prod ###
+# job 'my_job' (no description)
+* * * * * cd /your/project-dir; php bin/console --env=prod my:symfony:command 2>&1 1>>/dev/null
+###< /your/project-dir:prod ###
+```
+To learn more about CRON see [CRON expression on Wikipedia](https://en.wikipedia.org/wiki/Cron#CRON_expression).
+
+### Examples
+A job running every day at 3:30 AM
+```yaml
+babymarkt_cron:
+  cronjobs:
+    my_job: 
+      command: 'my:symfony:command'
+      minutes: 30
+      hours: 3
+```
+
+A job running every Tuesday every 10 minutes between 1:00 and 4:00 AM
+```yaml
+babymarkt_cron:
+  cronjobs:
+    my_job: 
+      command: 'my:symfony:command'
+      minutes: '*/10' # or '0,10,20,30,40,50'
+      hours: '1-4'
+      weekdays: 3 # Tuesday (SUN-SAT: 0-6)
+```
+
+### Full configuration reference
 ```yaml
 babymarkt_cron:
     options:
@@ -70,7 +101,8 @@ babymarkt_cron:
         # The name of the job definition
         your-first-job-name:
             
-            # Definition of the execution time.
+            # Definition of the execution time
+            # See https://en.wikipedia.org/wiki/Cron#CRON_expression
             minutes: *
             hours: *
             days: *
@@ -78,7 +110,7 @@ babymarkt_cron:
             weekdays: *
             
             # The Symfony command to execute.
-            command: '<<the-symfony-command>>' # required
+            command: ~ # required
             
             # If TRUE, the command isn't executed.
             disabled: false
