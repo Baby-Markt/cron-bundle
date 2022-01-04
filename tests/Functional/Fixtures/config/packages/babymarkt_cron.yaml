@@ -1,0 +1,17 @@
+babymarkt_cron:
+  cronjobs:
+    my-job-int:
+      command: 'babymarkt-cron:validate'
+      minutes: 1
+      hours: 1
+      days: 1
+      months: 1
+      weekdays: 1
+
+    my-job-string:
+      command: 'babymarkt-cron:validate'
+      minutes: "1"
+      hours: "1"
+      days: "1"
+      months: "1"
+      weekdays: "1"

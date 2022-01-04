@@ -20,6 +20,15 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder('babymarkt_cron');
         $rootNode = $treeBuilder->getRootNode();
 
+        /**
+         * Casts the value to int.
+         * @param mixed $value
+         * @return string
+         */
+        $castToString = function ($value) {
+            return (string) $value;
+        };
+
         $rootNode
             ->children()
                 ->arrayNode('options')
@@ -60,11 +69,26 @@ class Configuration implements ConfigurationInterface
                             })
                         ->end()
                         ->children()
-                            ->scalarNode('minutes')->defaultValue('*')->end()
-                            ->scalarNode('hours')->defaultValue('*')->end()
-                            ->scalarNode('days')->defaultValue('*')->end()
-                            ->scalarNode('months')->defaultValue('*')->end()
-                            ->scalarNode('weekdays')->defaultValue('*')->end()
+                            ->scalarNode('minutes')
+                                ->defaultValue('*')
+                                ->validate()->always($castToString)->end()
+                            ->end()
+                            ->scalarNode('hours')
+                                ->defaultValue('*')
+                                ->validate()->always($castToString)->end()
+                            ->end()
+                            ->scalarNode('days')
+                                ->defaultValue('*')
+                                ->validate()->always($castToString)->end()
+                            ->end()
+                            ->scalarNode('months')
+                                ->defaultValue('*')
+                                ->validate()->always($castToString)->end()
+                            ->end()
+                            ->scalarNode('weekdays')
+                                ->defaultValue('*')
+                                ->validate()->always($castToString)->end()
+                            ->end()
                             ->scalarNode('command')->isRequired()->end()
                             ->scalarNode('description')->defaultNull()->end()
                             ->booleanNode('disabled')->defaultFalse()->end()
