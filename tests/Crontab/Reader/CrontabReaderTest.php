@@ -5,6 +5,7 @@ namespace Babymarkt\Symfony\CronBundle\Tests\Crontab\Reader;
 
 use Babymarkt\Symfony\CronBundle\Crontab\Reader\CrontabReader;
 use Babymarkt\Symfony\CronBundle\DependencyInjection\BabymarktCronExtension;
+use Babymarkt\Symfony\CronBundle\Exception\AccessDeniedException;
 use Babymarkt\Symfony\CronBundle\Shell\ShellWrapperInterface;
 use Babymarkt\Symfony\CronBundle\Tests\Fixtures\StaticsLoaderTrait;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -39,7 +40,7 @@ class CrontabReaderTest extends TestCase
     public function testReadWillFail()
     {
         $this->expectExceptionCode(1);
-        $this->expectException(\Babymarkt\Symfony\CronBundle\Exception\AccessDeniedException::class);
+        $this->expectException(AccessDeniedException::class);
         $shell = $this->getShell([], true, 1);
 
         $config = $this->container->getParameter('babymarkt_cron.options.crontab');
@@ -88,6 +89,8 @@ class CrontabReaderTest extends TestCase
      * @param bool $failed
      * @param int $errorCode
      * @return ShellWrapperInterface|MockObject
+     * @throws \Exception
+     * @throws \Exception
      */
     protected function getShell(array $crontabConfig, bool $failed = false, int $errorCode = 0)
     {

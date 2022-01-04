@@ -31,8 +31,6 @@ class ValidateJobsCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->definitionChecker->setApplication($this->getApplication());
-
         $errorFound = false;
         $io         = new SymfonyStyle($input, $output);
 

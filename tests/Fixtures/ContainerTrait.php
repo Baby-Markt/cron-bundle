@@ -12,16 +12,18 @@ trait ContainerTrait
     /**
      * @var string
      */
-    protected $projectDir = '/test/path';
+    protected string $projectDir = '/test/path';
 
     /**
      * @var string
      */
-    protected $environment = 'test';
+    protected string $environment = 'test';
 
     /**
      * @param array $config
      * @return ContainerBuilder
+     * @throws \Exception
+     * @throws \Exception
      */
     protected function getContainer(array $config = []): ContainerBuilder
     {

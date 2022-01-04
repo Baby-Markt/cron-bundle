@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 class DefinitionTest extends TestCase
 {
 
-    protected $properties = [
+    protected array $properties = [
         'minutes'   => "1",
         'hours'     => "1",
         'days'      => "1",

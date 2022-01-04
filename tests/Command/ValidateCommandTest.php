@@ -60,7 +60,7 @@ class ValidateCommandTest extends TestCase
 
         $checkerStub->expects($this->once())
             ->method('getResult')
-            ->willReturn(DefinitionChecker::RESULT_INCORRECT_COMMAND);
+            ->willReturn(DefinitionChecker::RESULT_COMMAND_NOT_FOUND);
 
         $definitions = [
             'test' => ['command' => 'some:command']
@@ -77,7 +77,7 @@ class ValidateCommandTest extends TestCase
         $this->assertEquals(1, $tester->getStatusCode());
         $this->assertStringContainsString('test', $tester->getDisplay());
         $this->assertStringContainsString('some:command', $tester->getDisplay());
-        $this->assertStringContainsString(DefinitionChecker::RESULT_INCORRECT_COMMAND, $tester->getDisplay());
+        $this->assertStringContainsString(DefinitionChecker::RESULT_COMMAND_NOT_FOUND, $tester->getDisplay());
     }
 
     public function testDisabledDefinition()

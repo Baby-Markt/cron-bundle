@@ -3,59 +3,49 @@ declare(strict_types=1);
 
 namespace Babymarkt\Symfony\CronBundle\Crontab;
 
+use Babymarkt\Symfony\CronBundle\DependencyInjection\Compiler\CommandDefinitionPass;
 use Babymarkt\Symfony\CronBundle\Entity\Cron\Definition;
-use Symfony\Component\Console\Application;
-
+use Symfony\Component\Console\Command\Command;
 
 /**
- * Checks the given definition against some simple rules.
+ * Checks cronjob definitions against few simple rules.
  */
 class DefinitionChecker
 {
-    const RESULT_INCORRECT_COMMAND = 'incorrectCommand';
-
-    protected Application $application;
-    protected ?string $result = null;
+    const RESULT_COMMAND_NOT_FOUND = 'unknownCommand';
 
     /**
-     * @param Application $application
+     * @var Command[]
      */
-    public function __construct(Application $application)
-    {
-        $this->application = $application;
-    }
+    protected array $commands = [];
 
+    protected ?string $result = null;
 
     /**
      * Checks a single definition.
      */
     public function check(Definition $definition): bool
     {
-        try {
-            $this->application->find($definition->getCommand());
-        } catch (\InvalidArgumentException $e) {
-            $this->result = self::RESULT_INCORRECT_COMMAND;
-            return false;
+        // Check if the command exists.
+        foreach ($this->commands as $command) {
+            if ($command->getName() == $definition->getCommand()) {
+                return true;
+            }
         }
 
-        return true;
+        $this->result = self::RESULT_COMMAND_NOT_FOUND;
+        return false;
     }
 
     /**
-     * @codeCoverageIgnore
+     * This is called by service definition.
+     * @see CommandDefinitionPass
+     * @param Command $command
+     * @return void
      */
-    public function getApplication(): Application
+    public function addCommand(Command $command)
     {
-        return $this->application;
-    }
-
-    /**
-     * @codeCoverageIgnore
-     */
-    public function setApplication(Application $application): DefinitionChecker
-    {
-        $this->application = $application;
-        return $this;
+        $this->commands[] = $command;
     }
 
     /**
@@ -64,15 +54,6 @@ class DefinitionChecker
     public function getResult(): ?string
     {
         return $this->result;
-    }
-
-    /**
-     * @codeCoverageIgnore
-     */
-    public function setResult(string $result): DefinitionChecker
-    {
-        $this->result = $result;
-        return $this;
     }
 
 }

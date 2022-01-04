@@ -12,6 +12,7 @@ use Babymarkt\Symfony\CronBundle\Tests\Fixtures\ContainerTrait;
 use Babymarkt\Symfony\CronBundle\Tests\Fixtures\StaticsLoaderTrait;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
+use org\bovigo\vfs\vfsStreamException;
 use org\bovigo\vfs\vfsStreamWrapper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -127,7 +128,7 @@ class CrontabWriterTest extends TestCase
      * @param bool $empty
      * @return ShellWrapperInterface|MockObject
      */
-    protected function getShell(array $crontabConfig = [], $failed = false, $errorCode = 0, $empty = false)
+    protected function getShell(array $crontabConfig = [], bool $failed = false, int $errorCode = 0, bool $empty = false)
     {
         $containerConfig = [
             'options' => ['crontab' => array_replace(['tmpPath' => vfsStream::url('testpath')], $crontabConfig)]
@@ -174,7 +175,7 @@ class CrontabWriterTest extends TestCase
     /**
      * Sets up the fixture, for example, open a network connection.
      * This method is called before a test is executed.
-     * @throws \org\bovigo\vfs\vfsStreamException
+     * @throws vfsStreamException
      */
     protected function setUp(): void
     {

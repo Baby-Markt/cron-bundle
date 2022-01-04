@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Babymarkt\Symfony\CronBundle\Tests\DependencyInjection;
 
 use Babymarkt\Symfony\CronBundle\DependencyInjection\BabymarktCronExtension;
-use Doctrine\Bundle\DoctrineBundle\DependencyInjection\DoctrineExtension;
 use Generator;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

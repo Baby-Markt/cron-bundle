@@ -39,14 +39,14 @@ class CrontabEntryGeneratorFactory
      * ListGenerator constructor.
      * @param array $definitions
      * @param array $outputOptions
-     * @param string $basedir
+     * @param string $baseDir
      * @param string $environment
      */
-    public function __construct(array $definitions, array $outputOptions, string $basedir, string $environment)
+    public function __construct(array $definitions, array $outputOptions, string $baseDir, string $environment)
     {
         $this->definitions   = $definitions;
         $this->outputOptions = $outputOptions;
-        $this->basedir       = realpath($basedir) ?: $basedir;
+        $this->basedir       = realpath($baseDir) ?: $baseDir;
         $this->environment   = $environment;
     }
 

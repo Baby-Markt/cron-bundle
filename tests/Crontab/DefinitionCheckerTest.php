@@ -6,7 +6,6 @@ namespace Babymarkt\Symfony\CronBundle\Tests\Crontab;
 use Babymarkt\Symfony\CronBundle\Crontab\DefinitionChecker;
 use Babymarkt\Symfony\CronBundle\Entity\Cron\Definition;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 
 class DefinitionCheckerTest extends TestCase
@@ -22,10 +21,8 @@ class DefinitionCheckerTest extends TestCase
     {
         $command = new Command('test:command');
 
-        $application = new Application();
-        $application->add($command);
-
-        $this->checker = new DefinitionChecker($application);
+        $this->checker = new DefinitionChecker();
+        $this->checker->addCommand($command);
     }
 
     public function testValidDefinition()
@@ -43,6 +40,6 @@ class DefinitionCheckerTest extends TestCase
         $validDef->setCommand('unknown:command');
 
         $this->assertFalse($this->checker->check($validDef));
-        $this->assertEquals(DefinitionChecker::RESULT_INCORRECT_COMMAND, $this->checker->getResult());
+        $this->assertEquals(DefinitionChecker::RESULT_COMMAND_NOT_FOUND, $this->checker->getResult());
     }
 }
