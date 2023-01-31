@@ -30,9 +30,7 @@
     "symfony/test-pack": "^1.0"
   },
   "autoload": {
-    "psr-4": {
-      "Babymarkt\\Symfony\\CronBundle\\": "src"
-    }
+    "psr-4": { "Babymarkt\\Symfony\\CronBundle\\": "src" }
   },
   "autoload-dev": {
     "psr-4": { "Babymarkt\\Symfony\\CronBundle\\Tests\\": "tests" }

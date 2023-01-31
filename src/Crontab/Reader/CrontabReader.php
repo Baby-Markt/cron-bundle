@@ -54,6 +54,11 @@ class CrontabReader implements CrontabReaderInterface
         $result = $this->shellWrapper->execute($this->getCronCommand() . ' -l');
 
         if ($this->shellWrapper->isFailed()) {
+            // If failed but message is 'no crontab for ...', it's fine to return 0 rows.
+            if (str_starts_with(trim(strtolower($result)), 'no crontab for')) {
+                return [];
+            }
+
             throw new AccessDeniedException($result, $this->shellWrapper->getErrorCode());
         }
 

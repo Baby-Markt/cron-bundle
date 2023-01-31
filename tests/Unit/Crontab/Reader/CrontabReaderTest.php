@@ -85,6 +85,28 @@ class CrontabReaderTest extends TestCase
     }
 
     /**
+     * Tests if the reader returns zero lines if no crontab for current user exists.
+     * @return void
+     */
+    public function testNoCrontabForUser() {
+
+        $shell = $this->getMockBuilder(ShellWrapperInterface::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['execute', 'isFailed', 'getOutput', 'getErrorCode'])
+            ->getMock();
+        $shell->method('execute')
+            ->with($this->equalTo('/usr/bin/crontab -l'))
+            ->willReturn('no crontab for user');
+        $shell->method('isFailed')
+            ->willReturn(true);
+
+        $reader = new CrontabReader($shell);
+        $result = $reader->read();
+
+        $this->assertCount(0, $result);
+    }
+
+    /**
      * @param array $crontabConfig
      * @param bool $failed
      * @param int $errorCode
@@ -152,6 +174,7 @@ class CrontabReaderTest extends TestCase
 
         return $cont;
     }
+
 
 
 }
