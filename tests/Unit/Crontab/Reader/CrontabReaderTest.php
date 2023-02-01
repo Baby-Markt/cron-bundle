@@ -92,13 +92,16 @@ class CrontabReaderTest extends TestCase
 
         $shell = $this->getMockBuilder(ShellWrapperInterface::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['execute', 'isFailed', 'getOutput', 'getErrorCode'])
+            ->onlyMethods(['execute', 'isFailed', 'getOutput', 'getErrorCode', 'getErrorOutput'])
             ->getMock();
         $shell->method('execute')
             ->with($this->equalTo('/usr/bin/crontab -l'))
-            ->willReturn('no crontab for user');
-        $shell->method('isFailed')
-            ->willReturn(true);
+            ->willReturnCallback(function () {
+                return "";
+            });
+        $shell->method('isFailed')->willReturn(true);
+        $shell->method('getOutput')->willReturn([]);
+        $shell->method('getErrorOutput')->willReturn('no crontab for');
 
         $reader = new CrontabReader($shell);
         $result = $reader->read();

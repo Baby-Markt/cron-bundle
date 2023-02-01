@@ -12,12 +12,18 @@ class ShellWrapper implements ShellWrapperInterface
     /**
      * Output lines of the command execution.
      */
-    protected array $output = [];
+    protected array $stdOut = [];
 
     /**
      * Return status.
      */
     protected int $errorCode = 0;
+
+    /**
+     * Holds the standard error output.
+     * @var string
+     */
+    protected string $stdErr;
 
     /**
      * @see http://php.net/manual/de/function.exec.php
@@ -26,7 +32,22 @@ class ShellWrapper implements ShellWrapperInterface
      */
     public function execute(string $command): string
     {
-        return exec($command, $this->output, $this->errorCode);
+        $descriptorspec = array(
+            0 => array("pipe", "r"),  // stdin
+            1 => array("pipe", "w"),  // stdout
+            2 => array("pipe", "w"),  // stderr
+        );
+        $process = proc_open($command, $descriptorspec, $pipes);
+
+        $this->stdOut = explode(PHP_EOL, stream_get_contents($pipes[1]));
+        fclose($pipes[1]);
+
+        $this->stdErr = stream_get_contents($pipes[2]);
+        fclose($pipes[2]);
+
+        $this->errorCode = proc_close($process);
+
+        return $this->stdOut[0];
     }
 
     /**
@@ -35,7 +56,7 @@ class ShellWrapper implements ShellWrapperInterface
      */
     public function getOutput(): array
     {
-        return $this->output;
+        return $this->stdOut;
     }
 
     /**
@@ -44,7 +65,7 @@ class ShellWrapper implements ShellWrapperInterface
      */
     public function getOutputString(): string
     {
-        return trim(implode(PHP_EOL, $this->output));
+        return trim(implode(PHP_EOL, $this->stdOut));
     }
 
     /**
@@ -61,5 +82,10 @@ class ShellWrapper implements ShellWrapperInterface
     public function isFailed(): bool
     {
         return $this->errorCode != 0;
+    }
+
+    public function getErrorOutput(): ?string
+    {
+        return $this->stdErr;
     }
 }

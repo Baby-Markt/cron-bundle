@@ -23,6 +23,11 @@ interface ShellWrapperInterface
     public function getErrorCode(): int;
 
     /**
+     * @return string
+     */
+    public function getErrorOutput(): ?string;
+
+    /**
      * @return boolean TRUE if the error code is not 0, otherwise FALSE.
      */
     public function isFailed(): bool;

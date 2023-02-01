@@ -55,7 +55,7 @@ class CrontabReader implements CrontabReaderInterface
 
         if ($this->shellWrapper->isFailed()) {
             // If failed but message is 'no crontab for ...', it's fine to return 0 rows.
-            if (str_starts_with(trim(strtolower($result)), 'no crontab for')) {
+            if (str_starts_with(trim(strtolower($this->shellWrapper->getErrorOutput()??"")), 'no crontab for')) {
                 return [];
             }
 
