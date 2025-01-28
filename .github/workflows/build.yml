@@ -11,8 +11,9 @@ jobs:
     name: Test with php ${{ matrix.php_version }}
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        php_version: ['7.4', '8.0', '8.1', '8.2']
+        php_version: ['7.4', '8.0', '8.1', '8.2', '8.3', '8.4']
 
     steps:
     - uses: actions/checkout@v2
@@ -45,7 +46,7 @@ jobs:
         ENABLE_SECOND_LEVEL_CACHE: 0
 
     - name: Upload coverage file
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: phpunit-php${{ matrix.php_version }}-coverage
         path: coverage*.xml
@@ -58,16 +59,16 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           fetch-depth: 2
 
       - name: Download coverage files
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           path: reports
 
       - name: Upload to Codecov
-        uses: codecov/codecov-action@v2.1.0
+        uses: codecov/codecov-action@v5
         with:
           directory: reports
